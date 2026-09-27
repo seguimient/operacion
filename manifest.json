@@ -1,0 +1,21 @@
+{
+  "name": "Control Operacional Vehicular",
+  "short_name": "Control Vehicular",
+  "description": "Sistema empresarial de inspección pre-operacional vehicular, auditoría y taller.",
+  "lang": "es",
+  "dir": "ltr",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#eef2f7",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
