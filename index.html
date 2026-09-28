@@ -4,10 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Control Operacional Vehicular · Sistema Empresarial</title>
+<meta name="description" content="Sistema empresarial de inspección pre-operacional vehicular con firma digital, evidencia fotográfica y exportación a Excel.">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" type="image/svg+xml" href="icon.svg">
+<link rel="manifest" href="manifest.json">
+<script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
 <style>
-/* ============================================================
-BASE & VARIABLES
-============================================================ */
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
 --verde:#16a34a;--verde-bg:#dcfce7;--verde-bd:#4ade80;
@@ -18,36 +20,21 @@ BASE & VARIABLES
 --bg:#eef2f7;--card:#fff;--texto:#0f172a;--muted:#64748b;
 --borde:#e2e8f0;--sombra:0 10px 30px rgba(15,23,42,.08);
 --sombra-lg:0 20px 50px rgba(15,23,42,.14);
---radio:18px;--radio-sm:12px;
---t-fast:.18s cubic-bezier(.4,0,.2,1);
---t:.3s cubic-bezier(.4,0,.2,1);
---t-slow:.5s cubic-bezier(.4,0,.2,1);
+--radio:18px;--t:.3s cubic-bezier(.4,0,.2,1);--t-fast:.18s cubic-bezier(.4,0,.2,1);
 }
 html{scroll-behavior:smooth}
-body{
-font-family:"Inter","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;
-background:var(--bg);color:var(--texto);min-height:100vh;
-background-image:
-radial-gradient(ellipse at 8% -10%,#dbeafe 0%,transparent 45%),
-radial-gradient(ellipse at 92% 8%,#ede9fe 0%,transparent 42%),
-radial-gradient(ellipse at 50% 110%,#cffafe 0%,transparent 45%);
-background-attachment:fixed;
--webkit-font-smoothing:antialiased;
-}
+body{font-family:"Inter","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;background:var(--bg);color:var(--texto);min-height:100vh;background-image:radial-gradient(ellipse at 8% -10%,#dbeafe 0%,transparent 45%),radial-gradient(ellipse at 92% 8%,#ede9fe 0%,transparent 42%),radial-gradient(ellipse at 50% 110%,#cffafe 0%,transparent 45%);background-attachment:fixed;-webkit-font-smoothing:antialiased}
 img{max-width:100%}
 button,input,select,textarea{font-family:inherit;font-size:14px}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:8px;border:2px solid transparent;background-clip:padding-box}
-::-webkit-scrollbar-thumb:hover{background:#94a3b8;background-clip:padding-box;border:2px solid transparent}
 
-/* ============================================================
-KEYFRAMES
-============================================================ */
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 @keyframes pop{0%{transform:scale(.82);opacity:0}60%{transform:scale(1.04)}100%{transform:scale(1);opacity:1}}
 @keyframes slideInRight{from{opacity:0;transform:translateX(80px)}to{opacity:1;transform:none}}
+@keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:1000px}}
 @keyframes pulseRing{0%{box-shadow:0 0 0 0 currentColor;opacity:1}100%{box-shadow:0 0 0 14px transparent;opacity:0}}
 @keyframes shine{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
@@ -55,53 +42,19 @@ KEYFRAMES
 @keyframes gradientMove{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes rowIn{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
 
-/* ============================================================
-APP LAYOUT
-============================================================ */
 .app{max-width:1440px;margin:0 auto;padding:18px 16px 100px}
 
-/* ============================================================
-TOPBAR
-============================================================ */
-.topbar{
-background:linear-gradient(125deg,#0b1120 0%,#1e293b 40%,#312e81 75%,#4c1d95 100%);
-background-size:200% 200%;
-animation:fadeUp .55s ease,gradientMove 14s ease infinite;
-color:#fff;border-radius:22px;padding:20px 26px;
-display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;
-box-shadow:0 18px 44px rgba(15,23,42,.32);
-position:relative;overflow:hidden;
-}
-.topbar::after{
-content:"";position:absolute;inset:0;pointer-events:none;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);
-background-size:200% 100%;animation:shine 6s linear infinite;
-}
-.brand{display:flex;align-items:center;gap:15px;z-index:1;position:relative}
-.logo{
-width:56px;height:56px;border-radius:17px;
-background:linear-gradient(135deg,#3b82f6,#8b5cf6,#ec4899);
-background-size:200% 200%;animation:pop .6s ease,gradientMove 6s ease infinite;
-display:grid;place-items:center;font-size:27px;
-box-shadow:0 10px 24px rgba(99,102,241,.5);
-transition:transform var(--t);
-}
-.logo:hover{transform:rotate(-8deg) scale(1.05)}
+.topbar{background:linear-gradient(125deg,#0b1120 0%,#1e293b 40%,#312e81 75%,#4c1d95 100%);background-size:200% 200%;animation:fadeUp .55s ease,gradientMove 14s ease infinite;color:#fff;border-radius:22px;padding:20px 26px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;box-shadow:0 18px 44px rgba(15,23,42,.32);position:relative;overflow:hidden}
+.topbar::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.1),transparent);background-size:200% 100%;animation:shine 6s linear infinite}
+.brand{display:flex;align-items:center;gap:15px;z-index:1;position:relative;cursor:pointer;transition:transform var(--t)}
+.brand:hover{transform:scale(1.02)}
+.logo{width:56px;height:56px;border-radius:17px;background:linear-gradient(135deg,#3b82f6,#8b5cf6,#ec4899);background-size:200% 200%;animation:pop .6s ease,gradientMove 6s ease infinite;display:grid;place-items:center;font-size:27px;box-shadow:0 10px 24px rgba(99,102,241,.5);transition:transform var(--t)}
+.brand:hover .logo{transform:rotate(-8deg) scale(1.05)}
 .brand h1{font-size:20.5px;letter-spacing:.3px;font-weight:800}
 .brand p{font-size:12.5px;color:#c7d2fe;margin-top:3px;font-weight:500}
-
-.status-global{
-display:flex;align-items:center;gap:11px;z-index:1;position:relative;
-background:rgba(255,255,255,.11);backdrop-filter:blur(12px);
-border:1px solid rgba(255,255,255,.2);
-padding:11px 20px;border-radius:60px;font-weight:700;font-size:13.5px;
-transition:all var(--t);cursor:default;
-}
+.status-global{display:flex;align-items:center;gap:11px;z-index:1;position:relative;background:rgba(255,255,255,.11);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.2);padding:11px 20px;border-radius:60px;font-weight:700;font-size:13.5px;transition:all var(--t);cursor:pointer}
 .status-global:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.2)}
-.status-global .dot{
-width:13px;height:13px;border-radius:50%;background:#94a3b8;
-transition:all var(--t);position:relative;
-}
+.status-global .dot{width:13px;height:13px;border-radius:50%;background:#94a3b8;transition:all var(--t);position:relative}
 .status-global.verde{background:rgba(22,163,74,.22);border-color:#22c55e;box-shadow:0 0 22px rgba(34,197,94,.28)}
 .status-global.verde .dot{background:#22c55e;animation:pulseRing 1.9s infinite;color:#22c55e}
 .status-global.amarillo{background:rgba(245,158,11,.22);border-color:#fbbf24;box-shadow:0 0 22px rgba(251,191,36,.28)}
@@ -109,108 +62,107 @@ transition:all var(--t);position:relative;
 .status-global.rojo{background:rgba(220,38,38,.25);border-color:#ef4444;box-shadow:0 0 22px rgba(239,68,68,.32)}
 .status-global.rojo .dot{background:#ef4444;animation:pulseRing 1s infinite;color:#ef4444}
 
-/* ============================================================
-TABS
-============================================================ */
-.tabs{
-display:flex;gap:6px;flex-wrap:wrap;margin:20px 0;
-background:rgba(255,255,255,.85);backdrop-filter:blur(14px);
-padding:8px;border-radius:18px;
-box-shadow:var(--sombra);animation:fadeUp .65s ease;
-position:sticky;top:10px;z-index:50;
-border:1px solid rgba(255,255,255,.6);
-}
-.tab{
-border:none;background:transparent;padding:11px 21px;border-radius:13px;
-font-weight:700;color:var(--muted);cursor:pointer;
-transition:all var(--t);display:flex;align-items:center;gap:8px;font-size:13.5px;
-position:relative;overflow:hidden;
-}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:20px 0;background:rgba(255,255,255,.85);backdrop-filter:blur(14px);padding:8px;border-radius:18px;box-shadow:var(--sombra);animation:fadeUp .65s ease;position:sticky;top:10px;z-index:50;border:1px solid rgba(255,255,255,.6)}
+.tab{border:none;background:transparent;padding:11px 21px;border-radius:13px;font-weight:700;color:var(--muted);cursor:pointer;transition:all var(--t);display:flex;align-items:center;gap:8px;font-size:13.5px;position:relative;overflow:hidden}
 .tab:hover{background:#f1f5f9;color:var(--texto);transform:translateY(-2px)}
-.tab.active{
-background:linear-gradient(135deg,var(--acento),var(--acento2));
-color:#fff;box-shadow:0 10px 22px rgba(37,99,235,.35);
-transform:translateY(-1px);
-}
-.tab .num{
-background:rgba(0,0,0,.08);border-radius:6px;padding:2px 8px;font-size:11px;
-transition:all var(--t);
-}
-.tab.active .num{background:rgba(255,255,255,.25)}
+.tab.active{background:linear-gradient(135deg,var(--acento),var(--acento2));color:#fff;box-shadow:0 10px 22px rgba(37,99,235,.35);transform:translateY(-1px)}
 
-/* ============================================================
-PANELES
-============================================================ */
 .panel{display:none}
 .panel.active{display:block;animation:fadeUp .5s ease}
 
-/* ============================================================
-CARDS
-============================================================ */
-.card{
-background:var(--card);border-radius:var(--radio);padding:26px;
-box-shadow:var(--sombra);margin-bottom:20px;
-animation:fadeUp .55s ease;border:1px solid rgba(226,232,240,.9);
-transition:box-shadow var(--t),transform var(--t);
-}
+.card{background:var(--card);border-radius:var(--radio);padding:26px;box-shadow:var(--sombra);margin-bottom:20px;animation:fadeUp .55s ease;border:1px solid rgba(226,232,240,.9);transition:box-shadow var(--t)}
 .card:hover{box-shadow:var(--sombra-lg)}
-.card-title{
-display:flex;align-items:center;gap:12px;font-size:16px;font-weight:800;
-margin-bottom:20px;padding-bottom:14px;border-bottom:2px dashed var(--borde);
-color:#1e293b;
-}
-.card-title span.ico{
-width:38px;height:38px;border-radius:12px;display:grid;place-items:center;
-background:linear-gradient(135deg,#dbeafe,#ede9fe);font-size:18px;
-transition:transform var(--t);
-}
+.card-title{display:flex;align-items:center;gap:12px;font-size:16px;font-weight:800;margin-bottom:20px;padding-bottom:14px;border-bottom:2px dashed var(--borde);color:#1e293b}
+.card-title span.ico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#dbeafe,#ede9fe);font-size:18px;transition:transform var(--t)}
 .card:hover .card-title span.ico{transform:rotate(-8deg) scale(1.06)}
 .card-title small{font-weight:500;color:var(--muted);font-size:12px;margin-left:auto}
 
-/* ============================================================
-FORM
-============================================================ */
+/* HERO / HOME */
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#1e3a8a 0%,#4c1d95 50%,#be185d 100%);background-size:200% 200%;animation:gradientMove 12s ease infinite;color:#fff;border-radius:24px;padding:38px 32px;margin-bottom:22px;box-shadow:0 24px 60px rgba(30,58,138,.35)}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.15),transparent 40%),radial-gradient(circle at 85% 80%,rgba(255,255,255,.1),transparent 45%)}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);background-size:200% 100%;animation:shine 5s linear infinite}
+.hero-content{position:relative;z-index:2;max-width:760px}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);padding:6px 14px;border-radius:60px;font-size:11.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px;border:1px solid rgba(255,255,255,.25)}
+.hero h1{font-size:32px;font-weight:900;letter-spacing:-.5px;line-height:1.15;margin-bottom:10px}
+.hero p{font-size:15px;color:#e0e7ff;line-height:1.6;margin-bottom:24px;max-width:560px}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap}
+.btn-hero{border:none;padding:14px 26px;border-radius:14px;font-weight:800;cursor:pointer;transition:all var(--t);display:inline-flex;align-items:center;gap:9px;font-size:14px}
+.btn-hero.primary{background:#fff;color:#1e3a8a;box-shadow:0 12px 30px rgba(0,0,0,.25)}
+.btn-hero.primary:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 18px 40px rgba(0,0,0,.35)}
+.btn-hero.ghost{background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.3);backdrop-filter:blur(8px)}
+.btn-hero.ghost:hover{background:rgba(255,255,255,.25);transform:translateY(-3px)}
+
+.quick-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:22px}
+.quick-card{background:#fff;border-radius:18px;padding:22px;cursor:pointer;box-shadow:var(--sombra);border:1.5px solid var(--borde);transition:all var(--t);position:relative;overflow:hidden;animation:fadeUp .5s ease both}
+.quick-card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--acento),var(--acento2));transform:scaleX(0);transform-origin:left;transition:transform var(--t)}
+.quick-card:hover{transform:translateY(-6px);box-shadow:var(--sombra-lg);border-color:var(--acento)}
+.quick-card:hover::before{transform:scaleX(1)}
+.quick-card .q-ico{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;font-size:24px;margin-bottom:14px;background:linear-gradient(135deg,#dbeafe,#ede9fe);transition:transform var(--t)}
+.quick-card:hover .q-ico{transform:rotate(-8deg) scale(1.1)}
+.quick-card h3{font-size:15.5px;font-weight:800;color:#0f172a;margin-bottom:6px}
+.quick-card p{font-size:12.5px;color:var(--muted);line-height:1.55}
+.quick-card .q-arrow{position:absolute;bottom:20px;right:22px;font-size:18px;color:var(--acento);opacity:0;transform:translateX(-10px);transition:all var(--t)}
+.quick-card:hover .q-arrow{opacity:1;transform:translateX(0)}
+
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px;margin-bottom:22px}
+.kpi{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--sombra);transition:all var(--t);position:relative;overflow:hidden;cursor:pointer;border:1.5px solid transparent}
+.kpi:hover{transform:translateY(-5px);box-shadow:var(--sombra-lg);border-color:var(--borde)}
+.kpi .k-ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;margin-bottom:12px}
+.kpi .k-val{font-size:30px;font-weight:900;line-height:1;letter-spacing:-1px;margin-bottom:4px}
+.kpi .k-lbl{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:800}
+.kpi .k-sub{font-size:11px;color:var(--muted);margin-top:6px;font-weight:600}
+.kpi.total .k-ico{background:#dbeafe;color:#1e40af}
+.kpi.total .k-val{color:#1e40af}
+.kpi.verde .k-ico{background:var(--verde-bg);color:#15803d}
+.kpi.verde .k-val{color:#15803d}
+.kpi.amarillo .k-ico{background:var(--amarillo-bg);color:#b45309}
+.kpi.amarillo .k-val{color:#b45309}
+.kpi.rojo .k-ico{background:var(--rojo-bg);color:#b91c1c}
+.kpi.rojo .k-val{color:#b91c1c}
+
+.recent-list{display:flex;flex-direction:column;gap:10px}
+.recent-item{display:flex;align-items:center;gap:14px;padding:14px 18px;background:linear-gradient(135deg,#fbfdff,#f1f5f9);border:1.5px solid var(--borde);border-radius:14px;cursor:pointer;transition:all var(--t);position:relative;overflow:hidden}
+.recent-item::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--muted);transition:width var(--t)}
+.recent-item.verde::before{background:var(--verde)}
+.recent-item.amarillo::before{background:var(--amarillo)}
+.recent-item.rojo::before{background:var(--rojo)}
+.recent-item:hover{transform:translateX(6px);box-shadow:0 10px 24px rgba(15,23,42,.1);border-color:var(--acento)}
+.recent-item:hover::before{width:8px}
+.recent-ico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;background:#fff;border:1.5px solid var(--borde);font-size:19px;flex-shrink:0}
+.recent-info{flex:1;min-width:0}
+.recent-info .r-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px}
+.recent-info .r-reg{font-weight:800;font-size:13px;color:#0f172a}
+.recent-info .r-sub{font-size:11.5px;color:var(--muted);font-weight:600}
+.recent-info .r-sub b{color:#334155}
+.recent-go{color:var(--acento);font-size:18px;opacity:.4;transition:all var(--t)}
+.recent-item:hover .recent-go{opacity:1;transform:translateX(4px)}
+
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;counter-reset:step}
+.step{position:relative;padding:22px 18px 20px;background:linear-gradient(155deg,#fbfdff,#eff6ff);border-radius:16px;border:1.5px solid var(--borde);transition:all var(--t)}
+.step:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(37,99,235,.15);border-color:var(--acento)}
+.step::before{counter-increment:step;content:counter(step);position:absolute;top:-12px;left:18px;width:34px;height:34px;border-radius:11px;background:linear-gradient(135deg,var(--acento),var(--acento2));color:#fff;display:grid;place-items:center;font-weight:900;font-size:15px;box-shadow:0 8px 18px rgba(37,99,235,.35)}
+.step h4{font-size:14px;font-weight:800;color:#0f172a;margin:10px 0 6px}
+.step p{font-size:12px;color:var(--muted);line-height:1.55}
+
 .grid-3{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
 .field{display:flex;flex-direction:column;gap:7px;animation:fadeUp .45s ease both}
 .field label{font-size:12.5px;font-weight:700;color:#475569;letter-spacing:.2px}
 .field label .req{color:var(--rojo)}
-input,select,textarea{
-padding:12px 14px;border:1.5px solid var(--borde);border-radius:12px;
-background:#f8fafc;transition:all var(--t);color:var(--texto);width:100%;
-}
+input,select,textarea{padding:12px 14px;border:1.5px solid var(--borde);border-radius:12px;background:#f8fafc;transition:all var(--t);color:var(--texto);width:100%}
 input:hover,select:hover,textarea:hover{border-color:#cbd5e1;background:#fff}
-input:focus,select:focus,textarea:focus{
-outline:none;border-color:var(--acento);background:#fff;
-box-shadow:0 0 0 4px rgba(37,99,235,.13);transform:translateY(-2px);
-}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--acento);background:#fff;box-shadow:0 0 0 4px rgba(37,99,235,.13);transform:translateY(-2px)}
 textarea{resize:vertical;min-height:96px;line-height:1.55}
-select{cursor:pointer;appearance:none;
-background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-background-repeat:no-repeat;background-position:right 12px center;background-size:17px;padding-right:36px;}
-select optgroup{
-font-weight:800;font-size:12px;color:#0f172a;background:#e2e8f0;
-letter-spacing:.3px;
-}
+select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-size:17px;padding-right:36px}
+select optgroup{font-weight:800;font-size:12px;color:#0f172a;background:#e2e8f0;letter-spacing:.3px}
 select option{padding:6px;font-weight:500;color:#334155;background:#fff}
 
-/* ============================================================
-BOTONES
-============================================================ */
-.btn{
-border:none;padding:12px 22px;border-radius:13px;font-weight:700;cursor:pointer;
-transition:all var(--t);display:inline-flex;align-items:center;gap:8px;font-size:13.5px;
-letter-spacing:.2px;position:relative;overflow:hidden;white-space:nowrap;
-}
-.btn::after{
-content:"";position:absolute;top:50%;left:50%;width:0;height:0;
-background:rgba(255,255,255,.35);border-radius:50%;transform:translate(-50%,-50%);
-transition:width .55s,height .55s;
-}
-.btn:active::after{width:320px;height:320px;transition:0s}
+.btn{border:none;padding:12px 22px;border-radius:13px;font-weight:700;cursor:pointer;transition:all var(--t);display:inline-flex;align-items:center;gap:8px;font-size:13.5px;letter-spacing:.2px;position:relative;overflow:hidden;white-space:nowrap}
 .btn:hover{transform:translateY(-2px);box-shadow:0 12px 26px rgba(0,0,0,.18)}
 .btn:active{transform:translateY(0) scale(.98)}
 .btn-primary{background:linear-gradient(135deg,var(--acento),var(--acento2));color:#fff}
 .btn-success{background:linear-gradient(135deg,#16a34a,#059669);color:#fff}
+.btn-excel{background:linear-gradient(135deg,#1d6f42,#217346);color:#fff}
+.btn-excel:hover{box-shadow:0 12px 26px rgba(29,111,66,.35)}
 .btn-warn{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff}
 .btn-danger{background:linear-gradient(135deg,#dc2626,#b91c1c);color:#fff}
 .btn-ghost{background:#f1f5f9;color:#334155;border:1.5px solid var(--borde)}
@@ -219,31 +171,30 @@ transition:width .55s,height .55s;
 .btn-sm{padding:7px 14px;font-size:12px;border-radius:10px}
 .btn-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}
 
-/* ============================================================
-TABLAS
-============================================================ */
 .table-wrap{overflow-x:auto;border-radius:16px;border:1px solid var(--borde)}
 table{width:100%;border-collapse:collapse;font-size:13.5px;background:#fff;min-width:660px}
-thead th{
-background:linear-gradient(135deg,#1e293b,#334155);color:#fff;
-padding:14px 15px;text-align:left;font-size:11.5px;letter-spacing:.7px;
-text-transform:uppercase;font-weight:800;position:sticky;top:0;z-index:2;
-}
+thead th{background:linear-gradient(135deg,#1e293b,#334155);color:#fff;padding:14px 15px;text-align:left;font-size:11.5px;letter-spacing:.7px;text-transform:uppercase;font-weight:800;position:sticky;top:0;z-index:2}
 tbody td{padding:13px 15px;border-bottom:1px solid #f1f5f9;vertical-align:middle}
-tbody tr{transition:background var(--t-fast),transform var(--t-fast);animation:rowIn .4s ease both}
-tbody tr:hover{background:#f8fafc;transform:translateX(2px)}
+tbody tr{transition:background var(--t-fast);animation:rowIn .4s ease both}
 tbody tr:last-child td{border-bottom:none}
 .item-name{font-weight:600;color:#334155}
+.inv-row{cursor:pointer;transition:all var(--t-fast)}
+.inv-row:hover{background:#f0f7ff !important;transform:translateX(3px)}
+.inv-row:hover .item-name{color:var(--acento)}
+.inv-row.expanded{background:#eff6ff !important;box-shadow:inset 4px 0 0 var(--acento)}
+.inv-row td:first-child{position:relative;padding-left:36px !important}
+.inv-row td:first-child::before{content:"▸";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--acento);font-weight:900;font-size:14px;transition:transform var(--t)}
+.inv-row.expanded td:first-child::before{transform:translateY(-50%) rotate(90deg)}
+.inv-detail-row{background:#f8fafc !important}
+.inv-detail-row td{padding:0 !important;border-bottom:2px solid var(--acento) !important}
+.inv-detail{padding:18px 24px;background:linear-gradient(135deg,#f0f7ff,#ede9fe);animation:slideDown .3s ease}
+.inv-detail h4{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--acento);font-weight:800;margin-bottom:10px}
+.inv-detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.inv-detail-item{background:#fff;padding:12px 14px;border-radius:10px;border:1px solid var(--borde);box-shadow:0 4px 12px rgba(15,23,42,.04)}
+.inv-detail-item .k{font-size:10px;text-transform:uppercase;color:var(--muted);font-weight:800;letter-spacing:.5px;margin-bottom:5px}
+.inv-detail-item .v{font-size:13px;font-weight:700;color:#0f172a;word-break:break-word}
 
-/* ============================================================
-BADGES
-============================================================ */
-.badge{
-display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:60px;
-font-size:11.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;
-transition:transform var(--t-fast);
-}
-.badge:hover{transform:scale(1.05)}
+.badge{display:inline-flex;align-items:center;gap:6px;padding:5px 13px;border-radius:60px;font-size:11.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase}
 .badge.verde{background:var(--verde-bg);color:#15803d;border:1px solid #86efac}
 .badge.amarillo{background:var(--amarillo-bg);color:#b45309;border:1px solid #fcd34d}
 .badge.rojo{background:var(--rojo-bg);color:#b91c1c;border:1px solid #fca5a5}
@@ -251,47 +202,10 @@ transition:transform var(--t-fast);
 .badge.azul{background:var(--azul-bg);color:#0369a1;border:1px solid #7dd3fc}
 .badge .bdot{width:8px;height:8px;border-radius:50%;background:currentColor}
 
-/* ============================================================
-ESTADO BANNER
-============================================================ */
-.estado-banner{
-margin-top:20px;border-radius:18px;padding:20px 24px;display:flex;
-align-items:center;gap:18px;transition:all var(--t);border:2px solid transparent;
-animation:fadeUp .45s ease;position:relative;overflow:hidden;
-}
-.estado-banner::before{
-content:"";position:absolute;inset:0;opacity:.35;pointer-events:none;
-background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);
-background-size:220% 100%;animation:shine 3.5s linear infinite;
-}
-.estado-banner .big{
-width:60px;height:60px;border-radius:18px;display:grid;place-items:center;
-font-size:28px;background:rgba(255,255,255,.65);flex-shrink:0;
-animation:float 3.6s ease-in-out infinite;
-}
-.estado-banner h3{font-size:16px;margin-bottom:4px;font-weight:800}
-.estado-banner p{font-size:13px;opacity:.9;line-height:1.55}
-.estado-banner.verde{background:var(--verde-bg);border-color:var(--verde-bd);color:#14532d}
-.estado-banner.amarillo{background:var(--amarillo-bg);border-color:var(--amarillo-bd);color:#78350f}
-.estado-banner.rojo{background:var(--rojo-bg);border-color:var(--rojo-bd);color:#7f1d1d}
-
-/* ============================================================
-DASHBOARD
-============================================================ */
-.dash{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-gap:16px;margin-top:22px;
-}
-.chart-card{
-background:linear-gradient(155deg,#fbfdff,#eff6ff);
-border:1px solid var(--borde);border-radius:16px;padding:18px;
-transition:all var(--t);position:relative;overflow:hidden;
-}
+.dash{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:22px}
+.chart-card{background:linear-gradient(155deg,#fbfdff,#eff6ff);border:1px solid var(--borde);border-radius:16px;padding:18px;transition:all var(--t);position:relative;overflow:hidden}
 .chart-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(15,23,42,.12)}
-.chart-card h5{
-font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);
-font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;
-}
+.chart-card h5{font-size:11px;text-transform:uppercase;letter-spacing:.9px;color:var(--muted);font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between}
 .chart-card h5 span{color:var(--texto);font-size:14px}
 .donut-wrap{display:flex;align-items:center;gap:14px}
 .donut-wrap svg{flex-shrink:0}
@@ -302,11 +216,7 @@ font-weight:800;margin-bottom:12px;display:flex;justify-content:space-between;
 .bar-row{display:flex;align-items:center;gap:10px;font-size:11.5px;font-weight:600;color:#475569}
 .bar-row .lbl{width:78px;flex-shrink:0}
 .bar-track{flex:1;height:10px;background:#e2e8f0;border-radius:60px;overflow:hidden;position:relative}
-.bar-fill{
-height:100%;border-radius:60px;width:0;
-animation:barFill 1.1s cubic-bezier(.4,0,.2,1) forwards;
-background-size:200% 100%;
-}
+.bar-fill{height:100%;border-radius:60px;width:0;animation:barFill 1.1s cubic-bezier(.4,0,.2,1) forwards}
 .bar-fill.verde{background:linear-gradient(90deg,#16a34a,#4ade80,#16a34a)}
 .bar-fill.amarillo{background:linear-gradient(90deg,#f59e0b,#fcd34d,#f59e0b)}
 .bar-fill.rojo{background:linear-gradient(90deg,#dc2626,#f87171,#dc2626)}
@@ -315,25 +225,23 @@ background-size:200% 100%;
 .gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
 .gauge-wrap .gauge-label{font-size:12.5px;font-weight:800;letter-spacing:.3px}
 
-/* ============================================================
-NOVEDADES
-============================================================ */
-.nov-form{
-background:linear-gradient(135deg,#f8fafc,#eef2f7);
-border-radius:18px;padding:20px;border:1.5px dashed #cbd5e1;margin-bottom:22px;
-transition:border-color var(--t);
-}
+/* FIRMA DIGITAL */
+.signature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.signature-pad{background:linear-gradient(155deg,#fbfdff,#f1f5f9);border:2px dashed var(--borde);border-radius:16px;padding:16px;transition:all var(--t)}
+.signature-pad:hover{border-color:var(--acento);background:#f0f7ff}
+.signature-pad.firmado{border-style:solid;border-color:var(--verde);background:linear-gradient(155deg,#f0fdf4,#dcfce7)}
+.signature-pad label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.7px;color:#475569;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between}
+.signature-pad label .check{color:var(--verde);font-size:13px;opacity:0;transition:opacity var(--t)}
+.signature-pad.firmado label .check{opacity:1}
+.signature-canvas{width:100%;height:150px;background:#fff;border-radius:12px;display:block;cursor:crosshair;touch-action:none;box-shadow:inset 0 0 0 1px var(--borde);background-image:linear-gradient(0deg,transparent 96%,#e2e8f0 96%);background-size:100% 30px;background-position:0 100%}
+.signature-actions{display:flex;gap:8px;margin-top:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.signature-hint{font-size:10.5px;color:var(--muted);font-weight:600}
+
+/* NOVEDADES */
+.nov-form{background:linear-gradient(135deg,#f8fafc,#eef2f7);border-radius:18px;padding:20px;border:1.5px dashed #cbd5e1;margin-bottom:22px;transition:border-color var(--t)}
 .nov-form:hover{border-color:#94a3b8}
-.novedad-card{
-border:1.5px solid var(--borde);border-left:6px solid var(--muted);
-border-radius:14px;padding:17px;margin-bottom:14px;background:#fff;
-transition:all var(--t);animation:slideInRight .45s ease both;
-position:relative;
-}
-.novedad-card:hover{
-box-shadow:0 14px 34px rgba(15,23,42,.12);transform:translateX(4px);
-border-left-width:8px;
-}
+.novedad-card{border:1.5px solid var(--borde);border-left:6px solid var(--muted);border-radius:14px;padding:17px;margin-bottom:14px;background:#fff;transition:all var(--t);animation:slideInRight .45s ease both;position:relative;cursor:pointer}
+.novedad-card:hover{box-shadow:0 14px 34px rgba(15,23,42,.12);transform:translateX(4px)}
 .novedad-card.critica{border-left-color:var(--rojo);background:linear-gradient(90deg,#fff7f7,#fff)}
 .novedad-card.moderada{border-left-color:var(--amarillo);background:linear-gradient(90deg,#fffdf5,#fff)}
 .novedad-card.leve{border-left-color:var(--azul);background:linear-gradient(90deg,#f7fdff,#fff)}
@@ -341,195 +249,114 @@ border-left-width:8px;
 .nov-head .tipo{font-weight:800;font-size:14.5px;color:#1e293b}
 .nov-desc{font-size:13.5px;color:#475569;line-height:1.7;white-space:pre-wrap}
 .fotos-grid{display:flex;gap:10px;flex-wrap:wrap;margin-top:13px}
-.foto-thumb{
-position:relative;width:112px;height:90px;border-radius:12px;overflow:hidden;
-border:2px solid var(--borde);cursor:pointer;transition:all var(--t);
-animation:pop .4s ease both;box-shadow:0 4px 12px rgba(0,0,0,.06);
-}
+.foto-thumb{position:relative;width:112px;height:90px;border-radius:12px;overflow:hidden;border:2px solid var(--borde);cursor:pointer;transition:all var(--t);animation:pop .4s ease both;box-shadow:0 4px 12px rgba(0,0,0,.06)}
 .foto-thumb:hover{transform:scale(1.08) rotate(1.5deg);border-color:var(--acento);z-index:3;box-shadow:0 10px 24px rgba(37,99,235,.25)}
 .foto-thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform var(--t)}
-.foto-thumb:hover img{transform:scale(1.06)}
-.foto-thumb .del{
-position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;
-background:rgba(220,38,38,.94);color:#fff;border:none;cursor:pointer;
-font-size:13px;line-height:1;display:grid;place-items:center;
-opacity:0;transition:all var(--t);transform:scale(.7);
-}
+.foto-thumb .del{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(220,38,38,.94);color:#fff;border:none;cursor:pointer;font-size:13px;line-height:1;display:grid;place-items:center;opacity:0;transition:all var(--t);transform:scale(.7)}
 .foto-thumb:hover .del{opacity:1;transform:scale(1)}
-.foto-thumb .del:hover{background:#b91c1c;transform:scale(1.15) rotate(90deg)}
-.upload-box{
-border:2px dashed #cbd5e1;border-radius:16px;padding:24px;text-align:center;
-cursor:pointer;transition:all var(--t);background:#fff;position:relative;overflow:hidden;
-}
-.upload-box::before{
-content:"";position:absolute;inset:0;opacity:0;
-background:linear-gradient(90deg,transparent,rgba(37,99,235,.08),transparent);
-background-size:200% 100%;transition:opacity var(--t);
-}
-.upload-box:hover{border-color:var(--acento);background:#f0f7ff;transform:translateY(-3px);box-shadow:0 12px 28px rgba(37,99,235,.15)}
-.upload-box:hover::before{opacity:1;animation:shine 1.6s linear infinite}
+
+.upload-box{border:2px dashed #cbd5e1;border-radius:16px;padding:22px;text-align:center;transition:all var(--t);background:#fff;position:relative;overflow:hidden}
+.upload-box:hover{border-color:var(--acento);background:#f0f7ff;box-shadow:0 12px 28px rgba(37,99,235,.15)}
 .upload-box .up-ico{font-size:32px;display:block;margin-bottom:8px;transition:transform var(--t)}
 .upload-box:hover .up-ico{transform:scale(1.15) translateY(-3px)}
 .upload-box p{font-size:12.5px;color:var(--muted);position:relative}
 .upload-box p strong{color:var(--texto)}
-.empty{
-text-align:center;padding:42px 22px;color:var(--muted);font-size:13.5px;
-animation:fadeUp .45s ease;
+.upload-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.upload-btn{
+display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+border:2px dashed #cbd5e1;border-radius:16px;padding:22px 16px;cursor:pointer;
+background:#fff;transition:all var(--t);text-align:center;
 }
+.upload-btn:hover{border-color:var(--acento);background:#f0f7ff;transform:translateY(-3px);box-shadow:0 12px 28px rgba(37,99,235,.15)}
+.upload-btn .ub-ico{font-size:32px;transition:transform var(--t)}
+.upload-btn:hover .ub-ico{transform:scale(1.15) rotate(-5deg)}
+.upload-btn .ub-title{font-size:13.5px;font-weight:800;color:var(--texto)}
+.upload-btn .ub-sub{font-size:11px;color:var(--muted);font-weight:600}
+
+.empty{text-align:center;padding:42px 22px;color:var(--muted);font-size:13.5px;animation:fadeUp .45s ease}
 .empty .e-ico{font-size:46px;display:block;margin-bottom:12px;opacity:.55;animation:float 3.5s ease-in-out infinite}
 
-/* ============================================================
-STATS
-============================================================ */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:15px;margin-bottom:20px}
-.stat{
-background:#fff;border-radius:16px;padding:20px;box-shadow:var(--sombra);
-border-left:6px solid var(--acento);transition:all var(--t);
-animation:fadeUp .5s ease both;position:relative;overflow:hidden;cursor:default;
-}
-.stat::after{
-content:"";position:absolute;top:-30px;right:-30px;width:100px;height:100px;
-border-radius:50%;background:currentColor;opacity:.06;transition:transform var(--t-slow);
-}
+.stat{background:#fff;border-radius:16px;padding:20px;box-shadow:var(--sombra);border-left:6px solid var(--acento);transition:all var(--t);animation:fadeUp .5s ease both;position:relative;overflow:hidden;cursor:pointer}
 .stat:hover{transform:translateY(-5px);box-shadow:var(--sombra-lg)}
-.stat:hover::after{transform:scale(1.6)}
 .stat h4{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:800}
 .stat .val{font-size:32px;font-weight:900;margin-top:8px;line-height:1;letter-spacing:-1px}
-.stat.v{border-left-color:var(--verde);color:var(--verde)}.stat.v .val{color:var(--verde)}
-.stat.a{border-left-color:var(--amarillo);color:#d97706}.stat.a .val{color:#d97706}
-.stat.r{border-left-color:var(--rojo);color:var(--rojo)}.stat.r .val{color:var(--rojo)}
-.stat.t{border-left-color:#334155;color:#334155}.stat.t .val{color:#334155}
+.stat.v{border-left-color:var(--verde)}.stat.v .val{color:var(--verde)}
+.stat.a{border-left-color:var(--amarillo)}.stat.a .val{color:#d97706}
+.stat.r{border-left-color:var(--rojo)}.stat.r .val{color:var(--rojo)}
+.stat.t{border-left-color:#334155}.stat.t .val{color:#334155}
 
-/* ============================================================
-TOAST
-============================================================ */
-#toast{
-position:fixed;bottom:26px;right:26px;z-index:9999;
-display:flex;flex-direction:column;gap:10px;pointer-events:none;
-}
-.toast-msg{
-background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;
-padding:15px 22px;border-radius:14px;font-size:13.5px;font-weight:600;
-box-shadow:0 16px 40px rgba(0,0,0,.35);
-animation:slideInRight .4s cubic-bezier(.4,0,.2,1);
-display:flex;align-items:center;gap:11px;border-left:5px solid var(--acento);
-max-width:360px;backdrop-filter:blur(10px);
-}
+#toast{position:fixed;bottom:26px;right:26px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
+.toast-msg{background:linear-gradient(135deg,#0f172a,#1e293b);color:#fff;padding:15px 22px;border-radius:14px;font-size:13.5px;font-weight:600;box-shadow:0 16px 40px rgba(0,0,0,.35);animation:slideInRight .4s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:11px;border-left:5px solid var(--acento);max-width:360px;backdrop-filter:blur(10px)}
 .toast-msg.ok{border-left-color:#22c55e}
 .toast-msg.err{border-left-color:#ef4444}
 .toast-msg.warn{border-left-color:#f59e0b}
 
-/* ============================================================
-MODAL
-============================================================ */
-.modal{
-position:fixed;inset:0;background:rgba(15,23,42,.76);backdrop-filter:blur(6px);
-z-index:9000;display:none;align-items:center;justify-content:center;padding:20px;
-}
+.modal{position:fixed;inset:0;background:rgba(15,23,42,.76);backdrop-filter:blur(6px);z-index:9000;display:none;align-items:center;justify-content:center;padding:20px}
 .modal.open{display:flex;animation:fadeIn .28s ease}
-.modal-box{
-background:#fff;border-radius:22px;max-width:1000px;width:100%;
-max-height:92vh;display:flex;flex-direction:column;overflow:hidden;
-animation:pop .35s cubic-bezier(.4,0,.2,1);box-shadow:0 34px 80px rgba(0,0,0,.45);
-}
-.modal-head{
-padding:18px 24px;background:linear-gradient(135deg,#0f172a,#312e81);color:#fff;
-display:flex;align-items:center;justify-content:space-between;gap:14px;
-}
+.modal-box{background:#fff;border-radius:22px;max-width:1000px;width:100%;max-height:92vh;display:flex;flex-direction:column;overflow:hidden;animation:pop .35s cubic-bezier(.4,0,.2,1);box-shadow:0 34px 80px rgba(0,0,0,.45)}
+.modal-head{padding:18px 24px;background:linear-gradient(135deg,#0f172a,#312e81);color:#fff;display:flex;align-items:center;justify-content:space-between;gap:14px}
 .modal-head h3{font-size:16px;font-weight:700}
 .modal-body{padding:24px;overflow-y:auto;flex:1;background:#f1f5f9}
 .modal-foot{padding:16px 24px;border-top:1px solid var(--borde);display:flex;gap:10px;justify-content:flex-end;background:#fff;flex-wrap:wrap}
-.close-x{
-background:rgba(255,255,255,.15);border:none;color:#fff;width:36px;height:36px;
-border-radius:11px;cursor:pointer;font-size:18px;transition:all var(--t);
-}
+.close-x{background:rgba(255,255,255,.15);border:none;color:#fff;width:36px;height:36px;border-radius:11px;cursor:pointer;font-size:18px;transition:all var(--t)}
 .close-x:hover{background:rgba(255,255,255,.3);transform:rotate(90deg) scale(1.05)}
 
-/* ============================================================
-INFORME EMPRESARIAL
-============================================================ */
-.rep{
-font-family:"Inter","Segoe UI",Arial,sans-serif;color:#111;
-font-size:12px;line-height:1.5;background:#fff;padding:10px;
-}
+.detail-hero{background:linear-gradient(135deg,#0f172a,#312e81);color:#fff;border-radius:16px;padding:24px;margin-bottom:18px;position:relative;overflow:hidden}
+.detail-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);background-size:200% 100%;animation:shine 5s linear infinite}
+.detail-hero h2{font-size:19px;font-weight:900;margin-bottom:6px;position:relative;z-index:2}
+.detail-hero p{font-size:13px;color:#c7d2fe;position:relative;z-index:2}
+.detail-badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;position:relative;z-index:2}
+.detail-body{background:#fff;border-radius:14px;padding:20px;border:1px solid var(--borde);margin-bottom:14px}
+.detail-body h4{font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.detail-body h4::before{content:"";width:4px;height:14px;background:var(--acento);border-radius:2px}
+.detail-body .text{font-size:13.5px;color:#334155;line-height:1.7;white-space:pre-wrap}
+.detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px}
+.detail-grid .dg-item{background:#f8fafc;padding:11px 13px;border-radius:10px;border:1px solid var(--borde)}
+.detail-grid .dg-item .k{font-size:9.5px;text-transform:uppercase;color:var(--muted);font-weight:800;letter-spacing:.5px;margin-bottom:4px}
+.detail-grid .dg-item .v{font-size:13px;font-weight:700;color:#0f172a;word-break:break-word}
+.detail-photos{display:flex;flex-wrap:wrap;gap:10px}
+.detail-photos .dp-item{width:150px;height:120px;border-radius:12px;overflow:hidden;border:2px solid var(--borde);cursor:pointer;transition:all var(--t);box-shadow:0 6px 16px rgba(15,23,42,.08)}
+.detail-photos .dp-item:hover{transform:scale(1.05) rotate(1deg);border-color:var(--acento)}
+.detail-photos .dp-item img{width:100%;height:100%;object-fit:cover;display:block}
+
+/* INFORME */
+.rep{font-family:"Inter","Segoe UI",Arial,sans-serif;color:#111;font-size:12px;line-height:1.5;background:#fff;padding:10px}
 .rep *{box-sizing:border-box}
-.rep-head{
-display:flex;justify-content:space-between;align-items:flex-start;gap:20px;
-border-bottom:4px solid #0f172a;padding-bottom:16px;margin-bottom:20px;flex-wrap:wrap;
-position:relative;
-}
-.rep-head::after{
-content:"";position:absolute;bottom:-4px;left:0;width:30%;height:4px;background:#2563eb;
-}
+.rep-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:4px solid #0f172a;padding-bottom:16px;margin-bottom:20px;flex-wrap:wrap;position:relative}
+.rep-head::after{content:"";position:absolute;bottom:-4px;left:0;width:30%;height:4px;background:#2563eb}
 .rep-empresa{display:flex;align-items:center;gap:14px}
-.rep-empresa .rlogo{
-width:56px;height:56px;border-radius:14px;
-background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;
-display:grid;place-items:center;font-size:26px;font-weight:900;
-}
+.rep-empresa .rlogo{width:56px;height:56px;border-radius:14px;background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff;display:grid;place-items:center;font-size:26px;font-weight:900}
 .rep-empresa h1{font-size:16px;font-weight:900;letter-spacing:.3px;color:#0f172a;margin-bottom:2px}
 .rep-empresa .rsub{font-size:10.5px;color:#64748b;font-weight:600;letter-spacing:.3px}
 .rep-empresa .rtitle{font-size:13px;font-weight:900;margin-top:6px;letter-spacing:.5px;color:#1e293b}
-.rep-meta{
-text-align:right;font-size:10.5px;color:#475569;line-height:1.7;
-background:#f8fafc;padding:10px 14px;border-radius:10px;border:1px solid #e2e8f0;
-}
+.rep-meta{text-align:right;font-size:10.5px;color:#475569;line-height:1.7;background:#f8fafc;padding:10px 14px;border-radius:10px;border:1px solid #e2e8f0}
 .rep-meta strong{color:#0f172a}
-.rep-meta .codigo{
-font-family:"Courier New",monospace;font-size:10px;color:#2563eb;
-word-break:break-all;max-width:220px;
-}
-.rep-estado-box{
-margin:14px 0 20px;padding:16px 22px;border-radius:12px;
-display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
-}
+.rep-meta .codigo{font-family:"Courier New",monospace;font-size:10px;color:#2563eb;word-break:break-all;max-width:220px}
+.rep-estado-box{margin:14px 0 20px;padding:16px 22px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;page-break-inside:avoid}
 .rep-estado-box .eb-left{display:flex;align-items:center;gap:14px}
 .rep-estado-box .eb-ico{font-size:32px}
 .rep-estado-box .eb-titulo{font-size:11px;text-transform:uppercase;letter-spacing:1px;font-weight:800;opacity:.85}
 .rep-estado-box .eb-texto{font-size:15px;font-weight:900;letter-spacing:.3px;margin-top:2px}
 .rep-estado-box .eb-motivos{font-size:10.5px;font-weight:600;opacity:.9;margin-top:4px;max-width:600px}
-.rep-estado-box .eb-sello{
-border:3px double currentColor;border-radius:10px;padding:8px 18px;
-font-size:16px;font-weight:900;letter-spacing:2px;text-transform:uppercase;
-transform:rotate(-4deg);opacity:.9;
-}
-.rep-sec{margin-bottom:22px;page-break-inside:avoid}
-.rep-sec h2{
-font-size:11.5px;text-transform:uppercase;letter-spacing:1.1px;color:#0f172a;
-background:linear-gradient(90deg,#e2e8f0,#f1f5f9);padding:8px 14px;border-radius:8px;
-margin-bottom:12px;display:flex;align-items:center;gap:9px;font-weight:900;
-border-left:4px solid #2563eb;
-}
-.rep-sec h2 .num{
-background:#0f172a;color:#fff;width:20px;height:20px;border-radius:6px;
-display:grid;place-items:center;font-size:10.5px;font-weight:900;
-}
+.rep-estado-box .eb-sello{border:3px double currentColor;border-radius:10px;padding:8px 18px;font-size:16px;font-weight:900;letter-spacing:2px;text-transform:uppercase;transform:rotate(-4deg);opacity:.9}
+.rep-sec{margin-bottom:22px}
+.rep-sec h2{font-size:11.5px;text-transform:uppercase;letter-spacing:1.1px;color:#0f172a;background:linear-gradient(90deg,#e2e8f0,#f1f5f9);padding:8px 14px;border-radius:8px;margin-bottom:12px;display:flex;align-items:center;gap:9px;font-weight:900;border-left:4px solid #2563eb;page-break-after:avoid}
+.rep-sec h2 .num{background:#0f172a;color:#fff;width:20px;height:20px;border-radius:6px;display:grid;place-items:center;font-size:10.5px;font-weight:900}
 .rep-sec h2 small{margin-left:auto;font-size:10px;color:#64748b;font-weight:600;text-transform:none;letter-spacing:0}
 .rep-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .rep-grid.g4{grid-template-columns:repeat(4,1fr)}
 .rep-grid.g2{grid-template-columns:repeat(2,1fr)}
-.rep-item{
-border:1px solid #dbe2ea;border-radius:8px;padding:8px 11px;
-background:linear-gradient(155deg,#fbfdff,#f1f5f9);
-}
+.rep-item{border:1px solid #dbe2ea;border-radius:8px;padding:8px 11px;background:linear-gradient(155deg,#fbfdff,#f1f5f9);page-break-inside:avoid}
 .rep-item .k{font-size:9px;text-transform:uppercase;color:#64748b;font-weight:800;letter-spacing:.5px}
 .rep-item .v{font-size:12px;font-weight:700;margin-top:3px;word-break:break-word;color:#0f172a}
 .rep table{width:100%;border-collapse:collapse;font-size:11px;min-width:0}
-.rep thead th{
-background:#0f172a;color:#fff;padding:8px 10px;font-size:9.5px;
-letter-spacing:.6px;text-transform:uppercase;font-weight:800;text-align:left;
-}
+.rep thead th{background:#0f172a;color:#fff;padding:8px 10px;font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;font-weight:800;text-align:left}
 .rep tbody td{padding:7px 10px;border-bottom:1px solid #e5e9f0;vertical-align:top}
-.rep tbody tr:nth-child(even){background:#f8fafc}
-.rep-charts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:8px}
-.rep-chart-box{
-border:1px solid #dbe2ea;border-radius:10px;padding:12px;background:#fbfdff;
-page-break-inside:avoid;
-}
-.rep-chart-box h4{
-font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#475569;
-font-weight:800;margin-bottom:10px;text-align:center;
-}
+.rep tbody tr{page-break-inside:avoid}
+.rep-charts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:8px;page-break-inside:avoid}
+.rep-chart-box{border:1px solid #dbe2ea;border-radius:10px;padding:12px;background:#fbfdff;page-break-inside:avoid}
+.rep-chart-box h4{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#475569;font-weight:800;margin-bottom:10px;text-align:center}
 .rep-bars{display:flex;flex-direction:column;gap:7px}
 .rep-bar-row{display:flex;align-items:center;gap:8px;font-size:10px;font-weight:700;color:#334155}
 .rep-bar-row .lbl{width:70px;flex-shrink:0;font-size:9.5px}
@@ -539,59 +366,35 @@ font-weight:800;margin-bottom:10px;text-align:center;
 .rep-bar-row .fill.verde{background:linear-gradient(90deg,#16a34a,#4ade80)}
 .rep-bar-row .fill.amarillo{background:linear-gradient(90deg,#f59e0b,#fcd34d)}
 .rep-bar-row .fill.rojo{background:linear-gradient(90deg,#dc2626,#f87171)}
-.rep-bar-row .fill.gris{background:linear-gradient(90deg,#64748b,#cbd5e1)}
 .rep-bar-row .fill.azul{background:linear-gradient(90deg,#0369a1,#7dd3fc)}
-.rep-nov{
-border:1px solid #dbe2ea;border-left:5px solid #64748b;border-radius:8px;
-padding:11px 14px;margin-bottom:10px;page-break-inside:avoid;
-background:#fbfdff;
-}
+.rep-nov{border:1px solid #dbe2ea;border-left:5px solid #64748b;border-radius:8px;padding:11px 14px;margin-bottom:10px;page-break-inside:avoid;background:#fbfdff}
 .rep-nov.critica{border-left-color:#dc2626;background:#fff6f6}
 .rep-nov.moderada{border-left-color:#f59e0b;background:#fffcf3}
 .rep-nov.leve{border-left-color:#0ea5e9;background:#f7fdff}
 .rep-nov .nhead{font-weight:900;font-size:11.5px;margin-bottom:6px;color:#0f172a;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-.rep-nov .nhead .tag{
-background:#0f172a;color:#fff;padding:2px 8px;border-radius:5px;font-size:9px;
-letter-spacing:.5px;text-transform:uppercase;
-}
+.rep-nov .nhead .tag{background:#0f172a;color:#fff;padding:2px 8px;border-radius:5px;font-size:9px;letter-spacing:.5px;text-transform:uppercase}
 .rep-nov .ndesc{font-size:10.5px;color:#334155;line-height:1.6;white-space:pre-wrap}
-.rep-fotos{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.rep-fotos{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;page-break-inside:avoid}
 .rep-fotos img{width:110px;height:84px;object-fit:cover;border-radius:6px;border:1px solid #cbd5e1;background:#fff}
-.rep-firmas{
-display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:50px;
-page-break-inside:avoid;
-}
-.rep-firmas.f4{grid-template-columns:repeat(4,1fr)}
-.rep-firma{text-align:center;font-size:9.5px;color:#334155;}
+.rep-firmas{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:50px;page-break-inside:avoid}
+.rep-firma{text-align:center;font-size:9.5px;color:#334155}
+.rep-firma .fsign{height:60px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:4px}
+.rep-firma .fsign img{max-height:58px;max-width:100%;object-fit:contain}
 .rep-firma .fspace{height:52px}
 .rep-firma .flinea{border-top:1.5px solid #334155;padding-top:6px;font-weight:700;color:#0f172a;font-size:10px}
 .rep-firma .fcargo{font-size:9px;color:#64748b;margin-top:2px;font-weight:600;letter-spacing:.3px}
-.rep-pie{
-margin-top:30px;border-top:2px solid #0f172a;padding-top:10px;
-font-size:9px;color:#64748b;text-align:center;line-height:1.6;
-}
-.rep-pie .hash{
-font-family:"Courier New",monospace;font-size:8.5px;color:#2563eb;
-margin-top:4px;letter-spacing:.3px;word-break:break-all;
-}
-.rep-portada{
-text-align:center;padding:60px 30px;border:3px double #0f172a;border-radius:14px;
-margin-bottom:30px;page-break-after:always;
-}
+.rep-firma .fmeta{font-size:8.5px;color:#94a3b8;margin-top:3px;font-weight:600}
+.rep-pie{margin-top:30px;border-top:2px solid #0f172a;padding-top:10px;font-size:9px;color:#64748b;text-align:center;line-height:1.6}
+.rep-pie .hash{font-family:"Courier New",monospace;font-size:8.5px;color:#2563eb;margin-top:4px;letter-spacing:.3px;word-break:break-all}
+.rep-portada{text-align:center;padding:60px 30px;border:3px double #0f172a;border-radius:14px;margin-bottom:30px;page-break-after:always}
 .rep-portada h1{font-size:26px;letter-spacing:2px;color:#0f172a;margin-bottom:10px;font-weight:900}
 .rep-portada h2{font-size:15px;color:#2563eb;letter-spacing:3px;margin-bottom:26px;font-weight:700}
-.rep-portada .pbox{
-display:inline-block;padding:18px 40px;border-radius:12px;
-border:2px solid #0f172a;margin:20px 0;
-}
+.rep-portada .pbox{display:inline-block;padding:18px 40px;border-radius:12px;border:2px solid #0f172a;margin:20px 0}
 .rep-portada .pbox .pl{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:#64748b;font-weight:800}
 .rep-portada .pbox .pv{font-size:22px;font-weight:900;color:#0f172a;margin-top:5px}
 .rep-portada .pinfo{margin-top:30px;font-size:12px;color:#334155;line-height:1.9}
 .rep-portada .pinfo b{color:#0f172a}
 
-/* ============================================================
-PRINT
-============================================================ */
 #printArea{display:none}
 @media print{
 @page{size:A4 portrait;margin:11mm 9mm}
@@ -599,18 +402,19 @@ body{background:#fff !important;background-image:none !important}
 #app,#toast,.modal{display:none !important}
 #printArea{display:block !important}
 .rep{font-size:10.5px;padding:0}
-.rep-sec{page-break-inside:avoid}
+.rep-sec h2{page-break-after:avoid;break-after:avoid}
+.rep tbody tr,.rep-item,.rep-nov,.rep-chart-box,.rep-fotos,.rep-firmas,.rep-estado-box,.rep-firma{page-break-inside:avoid}
 .rep-fotos img{width:100px;height:76px}
 .rep-portada{page-break-after:always}
 }
 
-/* ============================================================
-RESPONSIVE
-============================================================ */
 @media(max-width:820px){
 .rep-charts{grid-template-columns:1fr 1fr}
-.rep-grid{grid-template-columns:repeat(2,1fr)}
+.rep-grid,.rep-grid.g4{grid-template-columns:repeat(2,1fr)}
 .rep-firmas{grid-template-columns:1fr 1fr;gap:34px}
+.hero{padding:28px 22px}
+.hero h1{font-size:24px}
+.hero p{font-size:13.5px}
 }
 @media(max-width:720px){
 .topbar{padding:16px;border-radius:18px}
@@ -619,140 +423,163 @@ RESPONSIVE
 .brand .logo{width:48px;height:48px;font-size:22px}
 .card{padding:18px;border-radius:16px}
 .tabs{gap:4px;padding:6px;border-radius:14px}
-.tab{padding:10px 14px;font-size:12px}
-.tab .num{display:none}
+.tab{padding:10px 12px;font-size:11.5px}
 .dash{grid-template-columns:1fr}
 .rep-grid,.rep-grid.g4{grid-template-columns:1fr 1fr}
 .rep-charts{grid-template-columns:1fr}
-.rep-firmas,.rep-firmas.f4{grid-template-columns:1fr}
+.rep-firmas{grid-template-columns:1fr}
 .status-global{font-size:12px;padding:9px 15px}
 .rep-head{flex-direction:column}
 .rep-meta{text-align:left;width:100%}
+.hero h1{font-size:20px}
+.hero{padding:24px 18px}
+.hero-actions .btn-hero{width:100%;justify-content:center}
+.quick-grid{grid-template-columns:1fr}
+.upload-buttons{grid-template-columns:1fr}
+.signature-canvas{height:130px}
 }
 </style>
 </head>
 <body>
 
-<!-- ==================== APP ==================== -->
 <div class="app" id="app">
 
-<!-- TOPBAR -->
 <header class="topbar">
-<div class="brand">
+<div class="brand" onclick="irTab('inicio')" title="Ir al inicio">
 <div class="logo">🚗</div>
 <div>
 <h1>Control Operacional Vehicular</h1>
-<p>Sistema Empresarial de Inspección · Auditoría y Taller</p>
+<p>Sistema Empresarial · Firma digital · Excel · Evidencia</p>
 </div>
 </div>
-<div class="status-global" id="statusGlobal">
+<div class="status-global" id="statusGlobal" onclick="irTab('inventario')" title="Ver inventario">
 <span class="dot"></span>
 <span id="statusTexto">Sin evaluar</span>
 </div>
 </header>
 
-<!-- TABS -->
-<nav class="tabs" id="tabs">
-<button class="tab active" data-tab="datos">🚙 <span class="num">1</span> Vehículo</button>
-<button class="tab" data-tab="inventario">🧰 <span class="num">2</span> Inventario</button>
-<button class="tab" data-tab="novedades">⚠️ <span class="num">3</span> Novedades</button>
-<button class="tab" data-tab="registros">📋 <span class="num">4</span> Registros</button>
+<nav class="tabs" id="tabs" role="tablist">
+<button class="tab active" data-tab="inicio">🏠 Inicio</button>
+<button class="tab" data-tab="datos">🚙 Vehículo</button>
+<button class="tab" data-tab="inventario">🧰 Inventario</button>
+<button class="tab" data-tab="novedades">⚠️ Novedades</button>
+<button class="tab" data-tab="registros">📋 Registros</button>
 </nav>
 
-<!-- ============ PANEL 1: DATOS ============ -->
-<section class="panel active" id="panel-datos">
-<div class="card">
-<div class="card-title">
-<span class="ico">🏢</span> Información Corporativa y de Auditoría
-<small>Encabezado del informe</small>
-</div>
-<div class="grid-3">
-<div class="field">
-<label>Empresa / Compañía</label>
-<input id="empresa" placeholder="Ej: Transportes del Norte S.A.S." value="Transportes del Norte S.A.S.">
-</div>
-<div class="field">
-<label>Sede / Centro de operación</label>
-<input id="sede" placeholder="Ej: Sede Principal — Bogotá" value="Sede Principal — Bogotá">
-</div>
-<div class="field">
-<label>Área / Departamento</label>
-<input id="area" placeholder="Ej: Flota y Transporte" value="Flota y Transporte">
-</div>
-<div class="field">
-<label>Código del formato</label>
-<input id="codFormato" placeholder="Ej: FT-FLT-001" value="FT-FLT-001">
+<!-- ============ INICIO ============ -->
+<section class="panel active" id="panel-inicio">
+<div class="hero">
+<div class="hero-content">
+<div class="hero-badge">⚡ Sistema Empresarial v4.0</div>
+<h1>Control Operacional Vehicular</h1>
+<p>Inspecciones completas con firma digital, evidencia fotográfica, exportación a Excel e informes imprimibles con trazabilidad de auditoría.</p>
+<div class="hero-actions">
+<button class="btn-hero primary" onclick="nuevaInspeccion()">🚀 Nueva inspección</button>
+<button class="btn-hero ghost" onclick="irTab('registros')">📋 Ver historial</button>
 </div>
 </div>
+</div>
+
+<div class="kpi-grid">
+<div class="kpi total" onclick="irTab('registros')"><div class="k-ico">📊</div><div class="k-val" id="homeTotal">0</div><div class="k-lbl">Total registros</div><div class="k-sub">Historial completo</div></div>
+<div class="kpi verde" onclick="filtrarEstadoHome('verde')"><div class="k-ico">✅</div><div class="k-val" id="homeVerde">0</div><div class="k-lbl">Aptos</div><div class="k-sub">Listos para operar</div></div>
+<div class="kpi amarillo" onclick="filtrarEstadoHome('amarillo')"><div class="k-ico">🟡</div><div class="k-val" id="homeAmarillo">0</div><div class="k-lbl">Requieren revisión</div><div class="k-sub">Programar mantenimiento</div></div>
+<div class="kpi rojo" onclick="filtrarEstadoHome('rojo')"><div class="k-ico">⛔</div><div class="k-val" id="homeRojo">0</div><div class="k-lbl">No aptos</div><div class="k-sub">Fuera de servicio</div></div>
 </div>
 
 <div class="card">
-<div class="card-title">
-<span class="ico">🚙</span> Datos del Vehículo, Conductor y Responsables
-<small>Los campos con * son obligatorios</small>
+<div class="card-title"><span class="ico">⚡</span> Acciones rápidas <small>Atajos principales</small></div>
+<div class="quick-grid">
+<div class="quick-card" onclick="nuevaInspeccion()"><div class="q-ico">🚀</div><h3>Nueva inspección</h3><p>Iniciar un nuevo registro desde cero.</p><span class="q-arrow">→</span></div>
+<div class="quick-card" onclick="irTab('datos')"><div class="q-ico">👤</div><h3>Datos y firmas</h3><p>Conductor, vehículo y firma digital.</p><span class="q-arrow">→</span></div>
+<div class="quick-card" onclick="irTab('inventario')"><div class="q-ico">🧰</div><h3>Evaluar inventario</h3><p>Revisar los 22 accesorios e implementos.</p><span class="q-arrow">→</span></div>
+<div class="quick-card" onclick="irTab('novedades')"><div class="q-ico">⚠️</div><h3>Registrar novedad</h3><p>Documentar daños con evidencia fotográfica.</p><span class="q-arrow">→</span></div>
+<div class="quick-card" onclick="irTab('registros')"><div class="q-ico">📊</div><h3>Exportar a Excel</h3><p>Descargar los registros en formato .xlsx.</p><span class="q-arrow">→</span></div>
+<div class="quick-card" onclick="irTab('registros')"><div class="q-ico">🖨️</div><h3>Informe general</h3><p>Imprimir toda la flota consolidada.</p><span class="q-arrow">→</span></div>
 </div>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="ico">🕐</span> Actividad reciente <small>Últimos 5 registros</small></div>
+<div class="recent-list" id="homeRecent"></div>
+</div>
+
+<div class="card">
+<div class="card-title"><span class="ico">🎯</span> Flujo de trabajo <small>5 pasos simples</small></div>
+<div class="steps-grid">
+<div class="step"><h4>Datos y firmas</h4><p>Conductor, placa, responsables + firma digital.</p></div>
+<div class="step"><h4>Inventario</h4><p>Evaluar los 22 accesorios obligatorios.</p></div>
+<div class="step"><h4>Novedades</h4><p>Registrar daños con fotos (cámara o galería).</p></div>
+<div class="step"><h4>Guardar</h4><p>Calcular estado y guardar con hash de verificación.</p></div>
+<div class="step"><h4>Exportar</h4><p>Excel, informe imprimible o PDF con firmas.</p></div>
+</div>
+</div>
+</section>
+
+<!-- ============ DATOS ============ -->
+<section class="panel" id="panel-datos">
+<div class="card">
+<div class="card-title"><span class="ico">🏢</span> Información Corporativa y de Auditoría <small>Encabezado del informe</small></div>
 <div class="grid-3">
-<div class="field">
-<label>Nombre del conductor <span class="req">*</span></label>
-<input id="conductor" placeholder="Ej: Juan Pérez Gómez">
+<div class="field"><label>Empresa / Compañía</label><input id="empresa" value="Transportes del Norte S.A.S."></div>
+<div class="field"><label>Sede / Centro de operación</label><input id="sede" value="Sede Principal — Bogotá"></div>
+<div class="field"><label>Área / Departamento</label><input id="area" value="Flota y Transporte"></div>
+<div class="field"><label>Código del formato</label><input id="codFormato" value="FT-FLT-001"></div>
 </div>
-<div class="field">
-<label>Documento / Cédula</label>
-<input id="cedula" placeholder="Ej: 1.098.456.789">
-</div>
-<div class="field">
-<label>Licencia de conducción</label>
-<input id="licencia" placeholder="Ej: C1 - 1145223344">
 </div>
 
-<div class="field">
-<label>Marca <span class="req">*</span></label>
-<input id="marca" placeholder="Ej: Toyota">
-</div>
-<div class="field">
-<label>Modelo <span class="req">*</span></label>
-<input id="modelo" placeholder="Ej: Hilux 4x4">
-</div>
-<div class="field">
-<label>Placa <span class="req">*</span></label>
-<input id="placa" placeholder="Ej: ABC-123" style="text-transform:uppercase">
-</div>
-
-<div class="field">
-<label>Año</label>
-<input id="anio" type="number" placeholder="2020" min="1950" max="2100">
-</div>
-<div class="field">
-<label>Kilometraje actual</label>
-<input id="km" type="number" placeholder="120500" min="0">
-</div>
-<div class="field">
-<label>Tipo de operación</label>
+<div class="card">
+<div class="card-title"><span class="ico">🚙</span> Datos del Vehículo, Conductor y Responsables <small>Los campos con * son obligatorios</small></div>
+<div class="grid-3">
+<div class="field"><label>Nombre del conductor <span class="req">*</span></label><input id="conductor" placeholder="Ej: Juan Pérez Gómez"></div>
+<div class="field"><label>Documento / Cédula</label><input id="cedula" placeholder="Ej: 1.098.456.789"></div>
+<div class="field"><label>Licencia de conducción</label><input id="licencia" placeholder="Ej: C1 - 1145223344"></div>
+<div class="field"><label>Marca <span class="req">*</span></label><input id="marca" placeholder="Ej: Toyota"></div>
+<div class="field"><label>Modelo <span class="req">*</span></label><input id="modelo" placeholder="Ej: Hilux 4x4"></div>
+<div class="field"><label>Placa <span class="req">*</span></label><input id="placa" placeholder="Ej: ABC-123" style="text-transform:uppercase"></div>
+<div class="field"><label>Año</label><input id="anio" type="number" placeholder="2020" min="1950" max="2100"></div>
+<div class="field"><label>Kilometraje actual</label><input id="km" type="number" placeholder="120500" min="0"></div>
+<div class="field"><label>Tipo de operación</label>
 <select id="operacion">
-<option>Transporte de personal</option>
-<option>Transporte de carga</option>
-<option>Servicio técnico / mantenimiento</option>
-<option>Operación de campo / obra</option>
-<option>Ruta intermunicipal</option>
-<option>Otro</option>
+<option>Transporte de personal</option><option>Transporte de carga</option><option>Servicio técnico / mantenimiento</option><option>Operación de campo / obra</option><option>Ruta intermunicipal</option><option>Otro</option>
 </select>
 </div>
+<div class="field"><label>Fecha de inspección</label><input id="fecha" type="date"></div>
+<div class="field"><label>Hora de inspección</label><input id="hora" type="time"></div>
+<div class="field"><label>Jefe de Taller</label><input id="jefeTaller" placeholder="Ej: Ing. Andrés Molina"></div>
+<div class="field"><label>Jefe Inmediato / Supervisor</label><input id="jefeInmediato" placeholder="Ej: Lic. Marcela Torres"></div>
+</div>
+</div>
 
-<div class="field">
-<label>Fecha de inspección</label>
-<input id="fecha" type="date">
+<div class="card">
+<div class="card-title"><span class="ico">✍️</span> Firmas digitales <small>Conductor · Jefe de taller · Jefe inmediato</small></div>
+<p style="font-size:12.5px;color:var(--muted);margin-bottom:16px;padding:10px 14px;background:#eff6ff;border-radius:10px;border-left:3px solid var(--acento)">
+💡 <strong>Tip:</strong> Firme con el mouse o con el dedo (en pantallas táctiles). Cada firma quedará estampada en el informe.
+</p>
+<div class="signature-grid">
+<div class="signature-pad" id="pad-conductor">
+<label>✍️ Conductor responsable <span class="check">✓ Firmado</span></label>
+<canvas class="signature-canvas" id="sign-conductor"></canvas>
+<div class="signature-actions">
+<span class="signature-hint" id="hint-conductor">Firme aquí</span>
+<button class="btn btn-ghost btn-sm" onclick="clearSignature('conductor')" type="button">🧹 Limpiar</button>
 </div>
-<div class="field">
-<label>Hora de inspección</label>
-<input id="hora" type="time">
 </div>
-<div class="field">
-<label>Jefe de Taller</label>
-<input id="jefeTaller" placeholder="Ej: Ing. Andrés Molina">
+<div class="signature-pad" id="pad-jefeTaller">
+<label>✍️ Jefe de Taller <span class="check">✓ Firmado</span></label>
+<canvas class="signature-canvas" id="sign-jefeTaller"></canvas>
+<div class="signature-actions">
+<span class="signature-hint" id="hint-jefeTaller">Firme aquí</span>
+<button class="btn btn-ghost btn-sm" onclick="clearSignature('jefeTaller')" type="button">🧹 Limpiar</button>
 </div>
-<div class="field">
-<label>Jefe Inmediato / Supervisor</label>
-<input id="jefeInmediato" placeholder="Ej: Lic. Marcela Torres">
+</div>
+<div class="signature-pad" id="pad-jefeInmediato">
+<label>✍️ Jefe Inmediato <span class="check">✓ Firmado</span></label>
+<canvas class="signature-canvas" id="sign-jefeInmediato"></canvas>
+<div class="signature-actions">
+<span class="signature-hint" id="hint-jefeInmediato">Firme aquí</span>
+<button class="btn btn-ghost btn-sm" onclick="clearSignature('jefeInmediato')" type="button">🧹 Limpiar</button>
+</div>
 </div>
 </div>
 </div>
@@ -769,22 +596,16 @@ RESPONSIVE
 </div>
 </section>
 
-<!-- ============ PANEL 2: INVENTARIO ============ -->
+<!-- ============ INVENTARIO ============ -->
 <section class="panel" id="panel-inventario">
 <div class="card">
-<div class="card-title">
-<span class="ico">🧰</span> Inventario de Accesorios e Implementos
-<small id="invResumen">0 ítems evaluados</small>
-</div>
+<div class="card-title"><span class="ico">🧰</span> Inventario de Accesorios e Implementos <small id="invResumen">0 ítems evaluados</small></div>
+<p style="font-size:12.5px;color:var(--muted);margin-bottom:14px;padding:10px 14px;background:#eff6ff;border-radius:10px;border-left:3px solid var(--acento)">
+💡 <strong>Tip:</strong> Haz clic en cualquier fila para ver el detalle expandido.
+</p>
 <div class="table-wrap">
 <table>
-<thead>
-<tr>
-<th style="width:38%">Accesorio / Implemento</th>
-<th style="width:22%">Estado</th>
-<th style="width:40%">Observación</th>
-</tr>
-</thead>
+<thead><tr><th style="width:38%">Accesorio / Implemento</th><th style="width:22%">Estado</th><th style="width:40%">Observación</th></tr></thead>
 <tbody id="inventarioBody"></tbody>
 </table>
 </div>
@@ -795,12 +616,9 @@ RESPONSIVE
 <div class="donut-wrap">
 <svg width="90" height="90" viewBox="0 0 100 100">
 <circle cx="50" cy="50" r="40" fill="none" stroke="#e2e8f0" stroke-width="14"/>
-<circle id="donutBueno" cx="50" cy="50" r="40" fill="none" stroke="#16a34a" stroke-width="14"
-stroke-dasharray="0 251" stroke-dashoffset="0" transform="rotate(-90 50 50)" stroke-linecap="round"/>
-<circle id="donutRegular" cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="14"
-stroke-dasharray="0 251" stroke-dashoffset="0" transform="rotate(-90 50 50)" stroke-linecap="round"/>
-<circle id="donutMalo" cx="50" cy="50" r="40" fill="none" stroke="#dc2626" stroke-width="14"
-stroke-dasharray="0 251" stroke-dashoffset="0" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+<circle id="donutBueno" cx="50" cy="50" r="40" fill="none" stroke="#16a34a" stroke-width="14" stroke-dasharray="0 251" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+<circle id="donutRegular" cx="50" cy="50" r="40" fill="none" stroke="#f59e0b" stroke-width="14" stroke-dasharray="0 251" transform="rotate(-90 50 50)" stroke-linecap="round"/>
+<circle id="donutMalo" cx="50" cy="50" r="40" fill="none" stroke="#dc2626" stroke-width="14" stroke-dasharray="0 251" transform="rotate(-90 50 50)" stroke-linecap="round"/>
 <text x="50" y="54" text-anchor="middle" font-size="16" font-weight="900" fill="#0f172a" id="donutPct">0%</text>
 </svg>
 <div class="legend">
@@ -810,33 +628,20 @@ stroke-dasharray="0 251" stroke-dashoffset="0" transform="rotate(-90 50 50)" str
 </div>
 </div>
 </div>
-
 <div class="chart-card">
 <h5>Novedades por severidad <span id="dashNovTotal">0</span></h5>
 <div class="bar-chart">
-<div class="bar-row"><span class="lbl">Críticas</span>
-<div class="bar-track"><div class="bar-fill rojo" id="barCrit" style="width:0%"></div></div>
-<span class="val" id="barCritVal">0</span>
-</div>
-<div class="bar-row"><span class="lbl">Moderadas</span>
-<div class="bar-track"><div class="bar-fill amarillo" id="barMod" style="width:0%"></div></div>
-<span class="val" id="barModVal">0</span>
-</div>
-<div class="bar-row"><span class="lbl">Leves</span>
-<div class="bar-track"><div class="bar-fill gris" id="barLev" style="width:0%"></div></div>
-<span class="val" id="barLevVal">0</span>
+<div class="bar-row"><span class="lbl">Críticas</span><div class="bar-track"><div class="bar-fill rojo" id="barCrit" style="width:0%"></div></div><span class="val" id="barCritVal">0</span></div>
+<div class="bar-row"><span class="lbl">Moderadas</span><div class="bar-track"><div class="bar-fill amarillo" id="barMod" style="width:0%"></div></div><span class="val" id="barModVal">0</span></div>
+<div class="bar-row"><span class="lbl">Leves</span><div class="bar-track"><div class="bar-fill gris" id="barLev" style="width:0%"></div></div><span class="val" id="barLevVal">0</span></div>
 </div>
 </div>
-</div>
-
 <div class="chart-card">
 <h5>Índice de aptitud <span id="dashScore">0%</span></h5>
 <div class="gauge-wrap">
 <svg width="130" height="90" viewBox="0 0 140 90">
 <path d="M 15 80 A 55 55 0 0 1 125 80" fill="none" stroke="#e2e8f0" stroke-width="12" stroke-linecap="round"/>
-<path id="gaugeArc" d="M 15 80 A 55 55 0 0 1 125 80" fill="none"
-stroke="#16a34a" stroke-width="12" stroke-linecap="round"
-stroke-dasharray="173" stroke-dashoffset="173"/>
+<path id="gaugeArc" d="M 15 80 A 55 55 0 0 1 125 80" fill="none" stroke="#16a34a" stroke-width="12" stroke-linecap="round" stroke-dasharray="173" stroke-dashoffset="173"/>
 <text x="70" y="76" text-anchor="middle" font-size="18" font-weight="900" fill="#0f172a" id="gaugePct">0%</text>
 </svg>
 <div class="gauge-label" id="gaugeLabel">Sin evaluar</div>
@@ -851,159 +656,46 @@ stroke-dasharray="173" stroke-dashoffset="173"/>
 </div>
 </section>
 
-<!-- ============ PANEL 3: NOVEDADES ============ -->
+<!-- ============ NOVEDADES ============ -->
 <section class="panel" id="panel-novedades">
 <div class="card">
-<div class="card-title">
-<span class="ico">⚠️</span> Registro de Novedades, Daños y Pruebas
-<small>Fisuras · Desgastes · Fugas · Pérdidas · Pruebas de revisión</small>
-</div>
+<div class="card-title"><span class="ico">⚠️</span> Registro de Novedades, Daños y Pruebas <small>Fisuras · Desgastes · Fugas · Pruebas</small></div>
 
 <div class="nov-form">
 <div class="grid-3">
 <div class="field">
 <label>Tipo de hallazgo</label>
 <select id="novTipo">
-<optgroup label="🔩 Daños estructurales y carrocería">
-<option>Fisura / Grieta</option>
-<option>Abolladura / Deformación</option>
-<option>Corrosión / Óxido</option>
-<option>Daño de carrocería</option>
-<option>Daño en chasis / estructura</option>
-<option>Parachoques dañado</option>
-<option>Capó / maletero dañado</option>
-<option>Puertas / cerraduras</option>
-<option>Guardafangos / salpicaderas</option>
-</optgroup>
-<optgroup label="🪟 Vidrios y espejos">
-<option>Parabrisas fisurado / estrellado</option>
-<option>Vidrios laterales / traseros</option>
-<option>Espejos retrovisores</option>
-<option>Espejos laterales</option>
-</optgroup>
-<optgroup label="💡 Iluminación y sistema eléctrico">
-<option>Falla eléctrica</option>
-<option>Faros / luces delanteras</option>
-<option>Luces traseras / de freno</option>
-<option>Direccionales / intermitentes</option>
-<option>Luces de emergencia / estroboscópicas</option>
-<option>Alternador / batería</option>
-<option>Tablero / instrumentos</option>
-<option>Bocina / pito</option>
-<option>Limpiaparabrisas / plumillas</option>
-<option>Fusibles / relés</option>
-<option>Cableado / arnés</option>
-</optgroup>
-<optgroup label="⚙️ Motor y transmisión">
-<option>Falla mecánica</option>
-<option>Fuga de fluidos</option>
-<option>Ruido anormal</option>
-<option>Sobrecalentamiento</option>
-<option>Motor / culata</option>
-<option>Radiador / refrigeración</option>
-<option>Bomba de agua / termostato</option>
-<option>Transmisión / caja de cambios</option>
-<option>Embrague / clutch</option>
-<option>Caja de transferencia</option>
-<option>Diferencial</option>
-<option>Cardán / ejes</option>
-<option>Inyectores / bomba de combustible</option>
-<option>Turbo / compresor</option>
-<option>Correa / cadena de distribución</option>
-<option>Filtros (aire, aceite, combustible)</option>
-<option>Sistema de escape / catalizador</option>
-<option>Bujías / bobinas</option>
-</optgroup>
-<optgroup label="🛑 Frenos y dirección">
-<option>Sistema de frenos</option>
-<option>Frenos ABS</option>
-<option>Pastillas / discos de freno</option>
-<option>Tambores / bandas</option>
-<option>Líquido de frenos / fugas</option>
-<option>Freno de mano</option>
-<option>Sistema de dirección</option>
-<option>Dirección hidráulica</option>
-<option>Rótulas / terminales</option>
-<option>Volante / columna</option>
-</optgroup>
-<optgroup label="🛞 Suspensión y llantas">
-<option>Llantas / ruedas</option>
-<option>Desgaste irregular de llantas</option>
-<option>Pinchadura / pérdida de aire</option>
-<option>Suspensión delantera</option>
-<option>Suspensión trasera</option>
-<option>Amortiguadores</option>
-<option>Resortes / muelles</option>
-<option>Rines / aros</option>
-<option>Bujes / cauchos</option>
-<option>Alineación / balanceo</option>
-</optgroup>
-<optgroup label="🪑 Interior y accesorios">
-<option>Tapicería / asientos</option>
-<option>Cinturones de seguridad</option>
-<option>Airbags</option>
-<option>Aire acondicionado / ventilación</option>
-<option>Calefacción</option>
-<option>Radio / multimedia</option>
-<option>Consola / guantera</option>
-<option>Alfombras / acabados</option>
-<option>Accesorio perdido / faltante</option>
-</optgroup>
-<optgroup label="🛡️ Seguridad y documentación">
-<option>Extintor</option>
-<option>Botiquín</option>
-<option>Kit de carretera</option>
-<option>Triángulos / conos</option>
-<option>Documentación vencida / faltante</option>
-<option>SOAT / tecnomecánica</option>
-<option>Placas / rotulación</option>
-<option>Publicidad / avisos</option>
-</optgroup>
-<optgroup label="🔬 Pruebas y otros">
-<option>Prueba / Revisión requerida</option>
-<option>Prueba de ruta</option>
-<option>Revisión de emisiones</option>
-<option>Diagnóstico por escáner</option>
-<option>Otro</option>
-</optgroup>
+<optgroup label="🔩 Daños estructurales y carrocería"><option>Fisura / Grieta</option><option>Abolladura / Deformación</option><option>Corrosión / Óxido</option><option>Daño de carrocería</option><option>Daño en chasis / estructura</option><option>Parachoques dañado</option><option>Capó / maletero dañado</option><option>Puertas / cerraduras</option><option>Guardafangos / salpicaderas</option></optgroup>
+<optgroup label="🪟 Vidrios y espejos"><option>Parabrisas fisurado / estrellado</option><option>Vidrios laterales / traseros</option><option>Espejos retrovisores</option><option>Espejos laterales</option></optgroup>
+<optgroup label="💡 Iluminación y sistema eléctrico"><option>Falla eléctrica</option><option>Faros / luces delanteras</option><option>Luces traseras / de freno</option><option>Direccionales / intermitentes</option><option>Luces de emergencia / estroboscópicas</option><option>Alternador / batería</option><option>Tablero / instrumentos</option><option>Bocina / pito</option><option>Limpiaparabrisas / plumillas</option><option>Fusibles / relés</option><option>Cableado / arnés</option></optgroup>
+<optgroup label="⚙️ Motor y transmisión"><option>Falla mecánica</option><option>Fuga de fluidos</option><option>Ruido anormal</option><option>Sobrecalentamiento</option><option>Motor / culata</option><option>Radiador / refrigeración</option><option>Bomba de agua / termostato</option><option>Transmisión / caja de cambios</option><option>Embrague / clutch</option><option>Caja de transferencia</option><option>Diferencial</option><option>Cardán / ejes</option><option>Inyectores / bomba de combustible</option><option>Turbo / compresor</option><option>Correa / cadena de distribución</option><option>Filtros (aire, aceite, combustible)</option><option>Sistema de escape / catalizador</option><option>Bujías / bobinas</option></optgroup>
+<optgroup label="🛑 Frenos y dirección"><option>Sistema de frenos</option><option>Frenos ABS</option><option>Pastillas / discos de freno</option><option>Tambores / bandas</option><option>Líquido de frenos / fugas</option><option>Freno de mano</option><option>Sistema de dirección</option><option>Dirección hidráulica</option><option>Rótulas / terminales</option><option>Volante / columna</option></optgroup>
+<optgroup label="🛞 Suspensión y llantas"><option>Llantas / ruedas</option><option>Desgaste irregular de llantas</option><option>Pinchadura / pérdida de aire</option><option>Suspensión delantera</option><option>Suspensión trasera</option><option>Amortiguadores</option><option>Resortes / muelles</option><option>Rines / aros</option><option>Bujes / cauchos</option><option>Alineación / balanceo</option></optgroup>
+<optgroup label="🪑 Interior y accesorios"><option>Tapicería / asientos</option><option>Cinturones de seguridad</option><option>Airbags</option><option>Aire acondicionado / ventilación</option><option>Calefacción</option><option>Radio / multimedia</option><option>Consola / guantera</option><option>Alfombras / acabados</option><option>Accesorio perdido / faltante</option></optgroup>
+<optgroup label="🛡️ Seguridad y documentación"><option>Extintor</option><option>Botiquín</option><option>Kit de carretera</option><option>Triángulos / conos</option><option>Documentación vencida / faltante</option><option>SOAT / tecnomecánica</option><option>Placas / rotulación</option><option>Publicidad / avisos</option></optgroup>
+<optgroup label="🔬 Pruebas y otros"><option>Prueba / Revisión requerida</option><option>Prueba de ruta</option><option>Revisión de emisiones</option><option>Diagnóstico por escáner</option><option>Otro</option></optgroup>
 </select>
 </div>
-<div class="field">
-<label>Severidad</label>
+<div class="field"><label>Severidad</label>
 <select id="novSeveridad">
 <option value="Leve">🟦 Leve — seguimiento</option>
 <option value="Moderada">🟡 Moderada — programar revisión</option>
 <option value="Crítica">🔴 Crítica — no apto para operar</option>
 </select>
 </div>
-<div class="field">
-<label>Ubicación / Componente</label>
-<input id="novUbicacion" placeholder="Ej: Llanta delantera derecha">
-</div>
-<div class="field">
-<label>Acción recomendada</label>
+<div class="field"><label>Ubicación / Componente</label><input id="novUbicacion" placeholder="Ej: Llanta delantera derecha"></div>
+<div class="field"><label>Acción recomendada</label>
 <select id="novAccion">
-<option>Reemplazo inmediato</option>
-<option>Programar mantenimiento</option>
-<option>Ajuste / calibración</option>
-<option>Monitoreo periódico</option>
-<option>Reparación en taller</option>
-<option>Revisión externa especializada</option>
+<option>Reemplazo inmediato</option><option>Programar mantenimiento</option><option>Ajuste / calibración</option><option>Monitoreo periódico</option><option>Reparación en taller</option><option>Revisión externa especializada</option>
 </select>
 </div>
-<div class="field">
-<label>Prioridad</label>
+<div class="field"><label>Prioridad</label>
 <select id="novPrioridad">
-<option value="Baja">Baja</option>
-<option value="Media" selected>Media</option>
-<option value="Alta">Alta</option>
-<option value="Urgente">Urgente</option>
+<option value="Baja">Baja</option><option value="Media" selected>Media</option><option value="Alta">Alta</option><option value="Urgente">Urgente</option>
 </select>
 </div>
-<div class="field">
-<label>Costo estimado (opcional)</label>
-<input id="novCosto" type="number" placeholder="Ej: 250000" min="0">
-</div>
+<div class="field"><label>Costo estimado (opcional)</label><input id="novCosto" type="number" placeholder="Ej: 250000" min="0"></div>
 </div>
 
 <div class="field" style="margin-top:16px">
@@ -1013,12 +705,20 @@ stroke-dasharray="173" stroke-dashoffset="173"/>
 
 <div class="field" style="margin-top:16px">
 <label>Registro fotográfico (máx. 4 fotos por novedad)</label>
-<div class="upload-box" onclick="document.getElementById('novFotos').click()">
-<span class="up-ico">📷</span>
-<p><strong>Haga clic o arrastre imágenes aquí</strong></p>
-<p>Comprimidas automáticamente · JPG / PNG</p>
+<div class="upload-buttons">
+<button type="button" class="upload-btn" onclick="document.getElementById('novFotosCamara').click()">
+<span class="ub-ico">📷</span>
+<span class="ub-title">Tomar foto</span>
+<span class="ub-sub">Abrir cámara</span>
+</button>
+<button type="button" class="upload-btn" onclick="document.getElementById('novFotosGaleria').click()">
+<span class="ub-ico">🖼️</span>
+<span class="ub-title">Galería</span>
+<span class="ub-sub">Elegir del dispositivo</span>
+</button>
 </div>
-<input type="file" id="novFotos" accept="image/*" multiple hidden>
+<input type="file" id="novFotosCamara" accept="image/*" capture="environment" hidden>
+<input type="file" id="novFotosGaleria" accept="image/*" multiple hidden>
 <div class="fotos-grid" id="fotosPreview"></div>
 </div>
 
@@ -1037,28 +737,21 @@ stroke-dasharray="173" stroke-dashoffset="173"/>
 </div>
 </section>
 
-<!-- ============ PANEL 4: REGISTROS ============ -->
+<!-- ============ REGISTROS ============ -->
 <section class="panel" id="panel-registros">
 <div class="stats">
-<div class="stat t"><h4>Total registros</h4><div class="val" id="statTotal">0</div></div>
-<div class="stat v"><h4>Aptos (verde)</h4><div class="val" id="statVerde">0</div></div>
-<div class="stat a"><h4>Por revisar (amarillo)</h4><div class="val" id="statAmarillo">0</div></div>
-<div class="stat r"><h4>No aptos (rojo)</h4><div class="val" id="statRojo">0</div></div>
+<div class="stat t" onclick="document.getElementById('filtroEstado').value='';renderTablaRegistros()"><h4>Total registros</h4><div class="val" id="statTotal">0</div></div>
+<div class="stat v" onclick="document.getElementById('filtroEstado').value='verde';renderTablaRegistros()"><h4>Aptos (verde)</h4><div class="val" id="statVerde">0</div></div>
+<div class="stat a" onclick="document.getElementById('filtroEstado').value='amarillo';renderTablaRegistros()"><h4>Por revisar (amarillo)</h4><div class="val" id="statAmarillo">0</div></div>
+<div class="stat r" onclick="document.getElementById('filtroEstado').value='rojo';renderTablaRegistros()"><h4>No aptos (rojo)</h4><div class="val" id="statRojo">0</div></div>
 </div>
 
 <div class="card">
-<div class="card-title">
-<span class="ico">📋</span> Historial de Registros Operacionales
-<small id="tablaInfo">0 resultados</small>
-</div>
+<div class="card-title"><span class="ico">📋</span> Historial de Registros Operacionales <small id="tablaInfo">0 resultados</small></div>
 
 <div class="grid-3" style="margin-bottom:18px">
-<div class="field">
-<label>🔍 Buscar (placa, conductor, registro, marca)</label>
-<input id="buscar" placeholder="Escriba para filtrar..." oninput="renderTablaRegistros()">
-</div>
-<div class="field">
-<label>Filtrar por estado</label>
+<div class="field"><label>🔍 Buscar (placa, conductor, registro, marca)</label><input id="buscar" placeholder="Escriba para filtrar..." oninput="renderTablaRegistros()"></div>
+<div class="field"><label>Filtrar por estado</label>
 <select id="filtroEstado" onchange="renderTablaRegistros()">
 <option value="">Todos los estados</option>
 <option value="verde">🟢 Aptos</option>
@@ -1066,39 +759,29 @@ stroke-dasharray="173" stroke-dashoffset="173"/>
 <option value="rojo">🔴 No aptos</option>
 </select>
 </div>
-<div class="field">
-<label>Acciones generales</label>
-<button class="btn btn-print" onclick="imprimirTodos()">🖨️ Informe general (portada + todos)</button>
+<div class="field"><label>Exportar</label>
+<button class="btn btn-excel" onclick="exportarExcel()">📊 Descargar Excel</button>
 </div>
 </div>
 
 <div class="table-wrap">
 <table>
-<thead>
-<tr>
-<th>N.º Registro</th>
-<th>Fecha</th>
-<th>Placa</th>
-<th>Vehículo</th>
-<th>Conductor</th>
-<th>Estado</th>
-<th>Novedades</th>
-<th style="text-align:center">Acciones</th>
-</tr>
-</thead>
+<thead><tr><th>N.º Registro</th><th>Fecha</th><th>Placa</th><th>Vehículo</th><th>Conductor</th><th>Estado</th><th>Novedades</th><th style="text-align:center">Acciones</th></tr></thead>
 <tbody id="tablaRegistros"></tbody>
 </table>
 </div>
 
 <div class="btn-row">
 <button class="btn btn-ghost" onclick="irTab('datos')">← Nuevo registro</button>
-<button class="btn btn-danger" onclick="borrarTodo()">🗑️ Borrar todo el historial</button>
+<button class="btn btn-excel" onclick="exportarExcel()">📊 Exportar todo a Excel</button>
+<button class="btn btn-print" onclick="imprimirTodos()">🖨️ Informe general</button>
+<button class="btn btn-danger" onclick="borrarTodo()">🗑️ Borrar historial</button>
 </div>
 </div>
 </section>
 </div>
 
-<!-- ==================== MODAL ==================== -->
+<!-- MODAL -->
 <div class="modal" id="modal">
 <div class="modal-box">
 <div class="modal-head">
@@ -1106,136 +789,142 @@ stroke-dasharray="173" stroke-dashoffset="173"/>
 <button class="close-x" onclick="cerrarModal()">✕</button>
 </div>
 <div class="modal-body" id="modalBody"></div>
-<div class="modal-foot">
+<div class="modal-foot" id="modalFoot">
 <button class="btn btn-ghost" onclick="cerrarModal()">Cerrar</button>
-<button class="btn btn-print" onclick="imprimirDesdeModal()">🖨️ Imprimir este informe</button>
+<button class="btn btn-print" onclick="imprimirDesdeModal()">🖨️ Imprimir</button>
 </div>
 </div>
 </div>
 
-<!-- ==================== TOAST ==================== -->
 <div id="toast"></div>
-
-<!-- ==================== PRINT AREA ==================== -->
 <div id="printArea"></div>
 
 <script>
 /* ============================================================
 DATOS BASE
 ============================================================ */
-const INVENTARIO_ITEMS = [
-"Extintor (vigente y con presión)",
-"Botiquín de primeros auxilios",
-"Llanta de repuesto",
-"Gato hidráulico",
-"Cruceta / llave de ruedas",
-"Triángulos de seguridad",
-"Conos de señalización",
-"Caja de herramientas básica",
-"Linterna / iluminación auxiliar",
-"Cables pasa corriente",
-"Kit de carretera completo",
-"Cinturones de seguridad (todos)",
-"Espejos retrovisores (laterales y central)",
-"Luces delanteras (bajas y altas)",
-"Luces traseras y de freno",
-"Direccionales y luces de emergencia",
-"Limpiaparabrisas y plumillas",
-"Bocina / pito",
-"Tapicería y asientos",
-"Aire acondicionado / ventilación",
-"Documentos: SOAT, tecnomecánica, licencia",
-"Placas y rotulación visibles"
-];
-
+const INVENTARIO_ITEMS = ["Extintor (vigente y con presión)","Botiquín de primeros auxilios","Llanta de repuesto","Gato hidráulico","Cruceta / llave de ruedas","Triángulos de seguridad","Conos de señalización","Caja de herramientas básica","Linterna / iluminación auxiliar","Cables pasa corriente","Kit de carretera completo","Cinturones de seguridad (todos)","Espejos retrovisores (laterales y central)","Luces delanteras (bajas y altas)","Luces traseras y de freno","Direccionales y luces de emergencia","Limpiaparabrisas y plumillas","Bocina / pito","Tapicería y asientos","Aire acondicionado / ventilación","Documentos: SOAT, tecnomecánica, licencia","Placas y rotulación visibles"];
 const STORAGE_KEY = "registros_operacionales_vehiculos_v3";
-
-let novedades = [];
-let fotosTemporales = [];
-let registros = [];
-let registroParaImprimir = null;
-let contadorRegistro = 0;
+let novedades = [], fotosTemporales = [], registros = [], registroParaImprimir = null, contadorRegistro = 0, invExpandido = null;
+let firmas = { conductor: null, jefeTaller: null, jefeInmediato: null };
+let firmaDirty = { conductor: false, jefeTaller: false, jefeInmediato: false };
 
 /* ============================================================
 UTILIDADES
 ============================================================ */
 function escapeHtml(str){
 if(str === undefined || str === null) return "";
-return String(str)
-.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
 }
-function ahora(){
-const d = new Date();
-const pad = n => String(n).padStart(2,"0");
-return {
-fecha:`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`,
-hora:`${pad(d.getHours())}:${pad(d.getMinutes())}`
-};
-}
-function fechaBonita(iso){
-if(!iso) return "—";
-const [y,m,d] = iso.split("-");
-return `${d}/${m}/${y}`;
-}
-function fechaHoraCompleta(iso){
-try{
-const d = new Date(iso);
-return d.toLocaleString("es-CO",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"});
-}catch(e){ return iso; }
-}
-function money(n){
-if(!n && n !== 0) return "—";
-const num = Number(n);
-if(isNaN(num)) return "—";
-return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(num);
-}
-function hashCode(str){
-let h = 0;
-for(let i=0;i<str.length;i++){
-h = ((h<<5) - h) + str.charCodeAt(i);
-h |= 0;
-}
-return Math.abs(h).toString(36).toUpperCase().padStart(8,"0");
-}
-function generarCodigoRegistro(){
-const d = new Date();
-const pad = n => String(n).padStart(2,"0");
-const ymd = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}`;
-contadorRegistro = (contadorRegistro + 1) % 1000;
-const seq = String(contadorRegistro).padStart(3,"0");
-return `REG-${ymd}-${seq}`;
-}
-function toast(mensaje, tipo="ok", duracion=3200){
-const cont = document.getElementById("toast");
-const el = document.createElement("div");
-el.className = `toast-msg ${tipo}`;
-const ico = tipo==="ok" ? "✅" : tipo==="err" ? "❌" : "⚠️";
-el.innerHTML = `<span>${ico}</span><span>${escapeHtml(mensaje)}</span>`;
-cont.appendChild(el);
-setTimeout(()=>{
-el.style.transition = ".4s";
-el.style.opacity = "0";
-el.style.transform = "translateX(80px)";
-setTimeout(()=>el.remove(), 400);
-}, duracion);
-}
+function ahora(){ const d=new Date(); const p=n=>String(n).padStart(2,"0"); return {fecha:`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`,hora:`${p(d.getHours())}:${p(d.getMinutes())}`}; }
+function fechaBonita(iso){ if(!iso) return "—"; const [y,m,d]=iso.split("-"); return `${d}/${m}/${y}`; }
+function fechaHoraCompleta(iso){ try{ return new Date(iso).toLocaleString("es-CO",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}); }catch(e){ return iso; } }
+function money(n){ if(!n && n!==0) return "—"; const num=Number(n); if(isNaN(num)) return "—"; return new Intl.NumberFormat("es-CO",{style:"currency",currency:"COP",maximumFractionDigits:0}).format(num); }
+function hashCode(str){ let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str.charCodeAt(i); h|=0; } return Math.abs(h).toString(36).toUpperCase().padStart(8,"0"); }
+function generarCodigoRegistro(){ const d=new Date(); const p=n=>String(n).padStart(2,"0"); const ymd=`${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}`; contadorRegistro=(contadorRegistro+1)%1000; return `REG-${ymd}-${String(contadorRegistro).padStart(3,"0")}`; }
+function toast(msg,tipo="ok",dur=3200){ const c=document.getElementById("toast"); const el=document.createElement("div"); el.className=`toast-msg ${tipo}`; const ico=tipo==="ok"?"✅":tipo==="err"?"❌":"⚠️"; el.innerHTML=`<span>${ico}</span><span>${escapeHtml(msg)}</span>`; c.appendChild(el); setTimeout(()=>{el.style.transition=".4s";el.style.opacity="0";el.style.transform="translateX(80px)";setTimeout(()=>el.remove(),400);},dur); }
 
 /* ============================================================
 NAVEGACIÓN
 ============================================================ */
-document.querySelectorAll(".tab").forEach(btn=>{
-btn.addEventListener("click", ()=> irTab(btn.dataset.tab));
-});
+document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>irTab(b.dataset.tab)));
 function irTab(nombre){
 document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.tab===nombre));
 document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active", p.id===`panel-${nombre}`));
-window.scrollTo({top:0, behavior:"smooth"});
-if(nombre === "registros") renderTablaRegistros();
-if(nombre === "novedades") renderNovedades();
-actualizarEstadoGlobal();
-actualizarCharts();
+window.scrollTo({top:0,behavior:"smooth"});
+if(nombre==="registros") renderTablaRegistros();
+if(nombre==="novedades") renderNovedades();
+if(nombre==="inicio") renderHome();
+actualizarEstadoGlobal(); actualizarCharts();
 }
+function nuevaInspeccion(){ limpiarFormulario(true); irTab("datos"); toast("Nueva inspección lista.","ok"); }
+function filtrarEstadoHome(estado){ document.getElementById("filtroEstado").value=estado; irTab("registros"); renderTablaRegistros(); }
+
+/* ============================================================
+FIRMA DIGITAL
+============================================================ */
+function initSignaturePad(tipo){
+const canvas = document.getElementById(`sign-${tipo}`);
+const ctx = canvas.getContext("2d");
+ctx.strokeStyle = "#0f172a";
+ctx.lineWidth = 2.6;
+ctx.lineCap = "round";
+ctx.lineJoin = "round";
+let drawing = false, lastX = 0, lastY = 0, hasDrawn = false;
+
+function resizeCanvas(){
+const rect = canvas.getBoundingClientRect();
+const dpr = window.devicePixelRatio || 1;
+canvas.width = rect.width * dpr;
+canvas.height = rect.height * dpr;
+ctx.scale(dpr, dpr);
+ctx.strokeStyle = "#0f172a";
+ctx.lineWidth = 2.6;
+ctx.lineCap = "round";
+ctx.lineJoin = "round";
+}
+resizeCanvas();
+window.addEventListener("resize", ()=>{
+const data = canvas.toDataURL();
+resizeCanvas();
+if(hasDrawn){ const img=new Image(); img.onload=()=>ctx.drawImage(img,0,0,canvas.width/(window.devicePixelRatio||1),canvas.height/(window.devicePixelRatio||1)); img.src=data; }
+});
+
+function getPos(e){
+const rect = canvas.getBoundingClientRect();
+return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+}
+function start(e){
+e.preventDefault();
+drawing = true; hasDrawn = true;
+canvas.setPointerCapture(e.pointerId);
+const p = getPos(e);
+lastX = p.x; lastY = p.y;
+ctx.beginPath(); ctx.arc(p.x, p.y, 1.3, 0, Math.PI*2); ctx.fillStyle="#0f172a"; ctx.fill();
+}
+function move(e){
+if(!drawing) return;
+e.preventDefault();
+const p = getPos(e);
+ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y); ctx.stroke();
+lastX = p.x; lastY = p.y;
+}
+function end(e){ drawing = false; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} finalizarFirma(tipo, hasDrawn); }
+
+canvas.addEventListener("pointerdown", start);
+canvas.addEventListener("pointermove", move);
+canvas.addEventListener("pointerup", end);
+canvas.addEventListener("pointercancel", end);
+canvas.addEventListener("pointerleave", e=>{ if(drawing) end(e); });
+
+canvas._hasDrawn = ()=>hasDrawn;
+canvas._reset = ()=>{ hasDrawn = false; firmas[tipo] = null; firmaDirty[tipo] = false; };
+}
+function finalizarFirma(tipo, hasDrawn){
+if(hasDrawn){
+firmas[tipo] = document.getElementById(`sign-${tipo}`).toDataURL("image/png");
+firmaDirty[tipo] = true;
+const pad = document.getElementById(`pad-${tipo}`);
+pad.classList.add("firmado");
+document.getElementById(`hint-${tipo}`).textContent = "✓ Firma registrada";
+} else {
+firmas[tipo] = null;
+firmaDirty[tipo] = false;
+document.getElementById(`pad-${tipo}`).classList.remove("firmado");
+document.getElementById(`hint-${tipo}`).textContent = "Firme aquí";
+}
+}
+function clearSignature(tipo){
+const canvas = document.getElementById(`sign-${tipo}`);
+const ctx = canvas.getContext("2d");
+ctx.clearRect(0, 0, canvas.width, canvas.height);
+if(canvas._reset) canvas._reset();
+firmas[tipo] = null; firmaDirty[tipo] = false;
+document.getElementById(`pad-${tipo}`).classList.remove("firmado");
+document.getElementById(`hint-${tipo}`).textContent = "Firme aquí";
+toast("Firma eliminada","warn");
+}
+function limpiarTodasLasFirmas(){ ["conductor","jefeTaller","jefeInmediato"].forEach(t=>{ const c=document.getElementById(`sign-${t}`); const ctx=c.getContext("2d"); ctx.clearRect(0,0,c.width,c.height); if(c._reset) c._reset(); firmas[t]=null; firmaDirty[t]=false; document.getElementById(`pad-${t}`).classList.remove("firmado"); document.getElementById(`hint-${t}`).textContent="Firme aquí"; }); }
 
 /* ============================================================
 INVENTARIO
@@ -1243,37 +932,43 @@ INVENTARIO
 function renderInventario(){
 const tbody = document.getElementById("inventarioBody");
 tbody.innerHTML = INVENTARIO_ITEMS.map((item, i)=>`
-<tr style="animation-delay:${i*18}ms">
+<tr class="inv-row" data-idx="${i}" onclick="toggleInvRow(${i})" style="animation-delay:${i*18}ms">
 <td class="item-name">${escapeHtml(item)}</td>
-<td>
-<select class="inv-estado" data-item="${i}"
-onchange="actualizarEstadoGlobal(); actualizarResumenInv(); actualizarCharts();">
-<option value="Bueno">✅ Bueno</option>
-<option value="Regular">🟡 Regular</option>
-<option value="Malo">🟠 Malo</option>
-<option value="Faltante">🔴 Faltante</option>
-<option value="No aplica">➖ No aplica</option>
+<td onclick="event.stopPropagation()">
+<select class="inv-estado" data-item="${i}" onchange="actualizarEstadoGlobal(); actualizarResumenInv(); actualizarCharts();">
+<option value="Bueno">✅ Bueno</option><option value="Regular">🟡 Regular</option><option value="Malo">🟠 Malo</option><option value="Faltante">🔴 Faltante</option><option value="No aplica">➖ No aplica</option>
 </select>
 </td>
-<td><input class="inv-obs" data-item="${i}" placeholder="Observación opcional..."></td>
+<td onclick="event.stopPropagation()"><input class="inv-obs" data-item="${i}" placeholder="Observación opcional..." onchange="actualizarResumenInv()"></td>
 </tr>
+<tr class="inv-detail-row" id="inv-detail-${i}" style="display:none"><td colspan="3"><div class="inv-detail"><h4>📋 Detalle del ítem #${i+1}</h4><div class="inv-detail-grid" id="inv-detail-content-${i}"></div></div></td></tr>
 `).join("");
 actualizarResumenInv();
 }
-function leerInventario(){
-return INVENTARIO_ITEMS.map((item, i)=>{
+function toggleInvRow(i){
+if(invExpandido === i){ document.getElementById(`inv-detail-${i}`).style.display="none"; document.querySelector(`.inv-row[data-idx="${i}"]`).classList.remove("expanded"); invExpandido=null; return; }
+if(invExpandido !== null){ const prev=document.getElementById(`inv-detail-${invExpandido}`); if(prev) prev.style.display="none"; const pr=document.querySelector(`.inv-row[data-idx="${invExpandido}"]`); if(pr) pr.classList.remove("expanded"); }
+const det = document.getElementById(`inv-detail-${i}`);
+det.style.display = "table-row";
+document.querySelector(`.inv-row[data-idx="${i}"]`).classList.add("expanded");
+const item = INVENTARIO_ITEMS[i];
 const sel = document.querySelector(`.inv-estado[data-item="${i}"]`);
 const obs = document.querySelector(`.inv-obs[data-item="${i}"]`);
-return { item, estado: sel ? sel.value : "Bueno", obs: obs ? obs.value.trim() : "" };
-});
+const estado = sel ? sel.value : "Bueno";
+const observacion = obs ? obs.value.trim() : "";
+const estadoIcono = estado==="Bueno"?"✅":estado==="Regular"?"🟡":estado==="Malo"?"🟠":estado==="Faltante"?"🔴":"➖";
+const estadoColor = estado==="Bueno"?"#15803d":estado==="Regular"?"#b45309":(estado==="Malo"||estado==="Faltante")?"#b91c1c":"#475569";
+document.getElementById(`inv-detail-content-${i}`).innerHTML = `
+<div class="inv-detail-item"><div class="k">Ítem #</div><div class="v">${i+1} de ${INVENTARIO_ITEMS.length}</div></div>
+<div class="inv-detail-item"><div class="k">Accesorio / Implemento</div><div class="v">${escapeHtml(item)}</div></div>
+<div class="inv-detail-item"><div class="k">Estado actual</div><div class="v" style="color:${estadoColor}">${estadoIcono} ${escapeHtml(estado)}</div></div>
+<div class="inv-detail-item"><div class="k">Observación registrada</div><div class="v">${escapeHtml(observacion || "Sin observación")}</div></div>
+<div class="inv-detail-item"><div class="k">Recomendación</div><div class="v">${estado==="Bueno"?"Mantener en óptimas condiciones":estado==="Regular"?"Programar revisión preventiva":estado==="Malo"?"Reemplazo o reparación requerida":estado==="Faltante"?"Reposición inmediata obligatoria":"No aplica para este vehículo"}</div></div>
+`;
+invExpandido = i;
 }
-function actualizarResumenInv(){
-const inv = leerInventario();
-const malos = inv.filter(i=>i.estado==="Malo" || i.estado==="Faltante").length;
-const regulares = inv.filter(i=>i.estado==="Regular").length;
-document.getElementById("invResumen").textContent =
-`${inv.length} ítems · ${malos} mal/faltantes · ${regulares} regulares`;
-}
+function leerInventario(){ return INVENTARIO_ITEMS.map((item, i)=>{ const sel=document.querySelector(`.inv-estado[data-item="${i}"]`); const obs=document.querySelector(`.inv-obs[data-item="${i}"]`); return {item, estado: sel?sel.value:"Bueno", obs: obs?obs.value.trim():""}; }); }
+function actualizarResumenInv(){ const inv=leerInventario(); const m=inv.filter(i=>i.estado==="Malo"||i.estado==="Faltante").length; const r=inv.filter(i=>i.estado==="Regular").length; document.getElementById("invResumen").textContent=`${inv.length} ítems · ${m} mal/faltantes · ${r} regulares`; }
 
 /* ============================================================
 FOTOS
@@ -1284,423 +979,273 @@ const reader = new FileReader();
 reader.onload = e=>{
 const img = new Image();
 img.onload = ()=>{
-let w = img.width, h = img.height;
-if(w > h && w > maxDim){ h = Math.round(h*maxDim/w); w = maxDim; }
-else if(h >= w && h > maxDim){ w = Math.round(w*maxDim/h); h = maxDim; }
-const canvas = document.createElement("canvas");
-canvas.width = w; canvas.height = h;
-const ctx = canvas.getContext("2d");
-ctx.drawImage(img, 0, 0, w, h);
-resolve(canvas.toDataURL("image/jpeg", calidad));
+let w=img.width, h=img.height;
+if(w>h && w>maxDim){ h=Math.round(h*maxDim/w); w=maxDim; }
+else if(h>=w && h>maxDim){ w=Math.round(w*maxDim/h); h=maxDim; }
+const canvas=document.createElement("canvas"); canvas.width=w; canvas.height=h;
+const ctx=canvas.getContext("2d"); ctx.drawImage(img,0,0,w,h);
+resolve(canvas.toDataURL("image/jpeg",calidad));
 };
-img.onerror = reject;
-img.src = e.target.result;
+img.onerror = reject; img.src = e.target.result;
 };
-reader.onerror = reject;
-reader.readAsDataURL(file);
+reader.onerror = reject; reader.readAsDataURL(file);
 });
 }
-document.getElementById("novFotos").addEventListener("change", async (e)=>{
-const files = Array.from(e.target.files);
+async function procesarArchivosFotos(files){
 if(!files.length) return;
 const espacio = 4 - fotosTemporales.length;
 if(espacio <= 0){ toast("Máximo 4 fotos por novedad","warn"); return; }
-for(const f of files.slice(0, espacio)){
-try{ fotosTemporales.push(await comprimirImagen(f)); }catch(err){}
-}
-e.target.value = "";
+for(const f of files.slice(0, espacio)){ try{ fotosTemporales.push(await comprimirImagen(f)); }catch(err){} }
 renderFotosPreview();
-});
-function renderFotosPreview(){
-const cont = document.getElementById("fotosPreview");
-if(!fotosTemporales.length){ cont.innerHTML = ""; return; }
-cont.innerHTML = fotosTemporales.map((f,i)=>`
-<div class="foto-thumb" style="animation-delay:${i*70}ms">
-<img src="${f}" alt="Foto ${i+1}">
-<button class="del" onclick="eliminarFotoTemp(${i})" title="Eliminar">✕</button>
-</div>
-`).join("");
+toast(`${Math.min(files.length, espacio)} foto(s) cargada(s)`,"ok");
 }
-function eliminarFotoTemp(i){
-fotosTemporales.splice(i,1);
-renderFotosPreview();
-}
+document.getElementById("novFotosCamara").addEventListener("change", async e=>{ const files=Array.from(e.target.files); e.target.value=""; await procesarArchivosFotos(files); });
+document.getElementById("novFotosGaleria").addEventListener("change", async e=>{ const files=Array.from(e.target.files); e.target.value=""; await procesarArchivosFotos(files); });
+function renderFotosPreview(){ const cont=document.getElementById("fotosPreview"); if(!fotosTemporales.length){ cont.innerHTML=""; return; } cont.innerHTML = fotosTemporales.map((f,i)=>`<div class="foto-thumb" style="animation-delay:${i*70}ms"><img src="${f}" alt="Foto ${i+1}"><button class="del" onclick="eliminarFotoTemp(${i})" title="Eliminar">✕</button></div>`).join(""); }
+function eliminarFotoTemp(i){ fotosTemporales.splice(i,1); renderFotosPreview(); }
 
 /* ============================================================
 NOVEDADES
 ============================================================ */
 function agregarNovedad(){
-const tipo = document.getElementById("novTipo").value;
-const severidad = document.getElementById("novSeveridad").value;
-const ubicacion = document.getElementById("novUbicacion").value.trim();
-const desc = document.getElementById("novDesc").value.trim();
-const accion = document.getElementById("novAccion").value;
-const prioridad = document.getElementById("novPrioridad").value;
-const costo = document.getElementById("novCosto").value.trim();
-
-if(!desc){
-toast("Debe escribir la descripción detallada del problema","err");
-document.getElementById("novDesc").focus();
-return;
-}
-
-novedades.push({
-id: "NOV-" + Date.now(),
-tipo, severidad, ubicacion, descripcion: desc,
-accion, prioridad, costo,
-fotos: [...fotosTemporales],
-fecha: new Date().toISOString()
-});
-
-limpiarNovedadForm();
-renderNovedades();
-actualizarEstadoGlobal();
-actualizarCharts();
+const tipo=document.getElementById("novTipo").value;
+const severidad=document.getElementById("novSeveridad").value;
+const ubicacion=document.getElementById("novUbicacion").value.trim();
+const desc=document.getElementById("novDesc").value.trim();
+const accion=document.getElementById("novAccion").value;
+const prioridad=document.getElementById("novPrioridad").value;
+const costo=document.getElementById("novCosto").value.trim();
+if(!desc){ toast("Debe escribir la descripción detallada","err"); document.getElementById("novDesc").focus(); return; }
+novedades.push({id:"NOV-"+Date.now(),tipo,severidad,ubicacion,descripcion:desc,accion,prioridad,costo,fotos:[...fotosTemporales],fecha:new Date().toISOString()});
+limpiarNovedadForm(); renderNovedades(); actualizarEstadoGlobal(); actualizarCharts();
 toast("Novedad agregada al informe","ok");
 }
 function limpiarNovedadForm(){
-document.getElementById("novDesc").value = "";
-document.getElementById("novUbicacion").value = "";
-document.getElementById("novCosto").value = "";
-document.getElementById("novSeveridad").value = "Leve";
-document.getElementById("novPrioridad").value = "Media";
-document.getElementById("novTipo").selectedIndex = 0;
-document.getElementById("novAccion").selectedIndex = 0;
-fotosTemporales = [];
-renderFotosPreview();
+document.getElementById("novDesc").value=""; document.getElementById("novUbicacion").value=""; document.getElementById("novCosto").value="";
+document.getElementById("novSeveridad").value="Leve"; document.getElementById("novPrioridad").value="Media";
+document.getElementById("novTipo").selectedIndex=0; document.getElementById("novAccion").selectedIndex=0;
+fotosTemporales=[]; renderFotosPreview();
 }
-function eliminarNovedad(id){
-novedades = novedades.filter(n=>n.id !== id);
-renderNovedades();
-actualizarEstadoGlobal();
-actualizarCharts();
-toast("Novedad eliminada","warn");
-}
-function claseSeveridad(sev){
-if(sev === "Crítica") return "critica";
-if(sev === "Moderada") return "moderada";
-return "leve";
-}
-function badgeSeveridad(sev){
-const cls = sev==="Crítica" ? "rojo" : sev==="Moderada" ? "amarillo" : "azul";
-return `<span class="badge ${cls}"><span class="bdot"></span>${escapeHtml(sev)}</span>`;
-}
-function badgePrioridad(p){
-const cls = p==="Urgente"?"rojo":p==="Alta"?"amarillo":p==="Media"?"azul":"gris";
-return `<span class="badge ${cls}">${escapeHtml(p)}</span>`;
-}
+function eliminarNovedad(id){ if(!confirm("¿Eliminar esta novedad?")) return; novedades=novedades.filter(n=>n.id!==id); renderNovedades(); actualizarEstadoGlobal(); actualizarCharts(); toast("Novedad eliminada","warn"); }
+function claseSeveridad(s){ return s==="Crítica"?"critica":s==="Moderada"?"moderada":"leve"; }
+function badgeSeveridad(s){ const c=s==="Crítica"?"rojo":s==="Moderada"?"amarillo":"azul"; return `<span class="badge ${c}"><span class="bdot"></span>${escapeHtml(s)}</span>`; }
+function badgePrioridad(p){ const c=p==="Urgente"?"rojo":p==="Alta"?"amarillo":p==="Media"?"azul":"gris"; return `<span class="badge ${c}">${escapeHtml(p)}</span>`; }
 function renderNovedades(){
-const cont = document.getElementById("listaNovedades");
-if(!novedades.length){
-cont.innerHTML = `<div class="empty"><span class="e-ico">🔍</span>
-No hay novedades registradas. Si el vehículo está en perfectas condiciones, continúe y guarde el registro como <strong>APTO</strong>.</div>`;
-return;
-}
+const cont=document.getElementById("listaNovedades");
+if(!novedades.length){ cont.innerHTML=`<div class="empty"><span class="e-ico">🔍</span>No hay novedades registradas. Si el vehículo está en perfectas condiciones, continúe y guarde el registro como <strong>APTO</strong>.</div>`; return; }
 cont.innerHTML = novedades.map((n,i)=>`
-<div class="novedad-card ${claseSeveridad(n.severidad)}" style="animation-delay:${i*60}ms">
+<div class="novedad-card ${claseSeveridad(n.severidad)}" style="animation-delay:${i*60}ms" onclick="verDetalleNovedad('${n.id}')">
 <div class="nov-head">
 <span class="tipo">${escapeHtml(n.tipo)}</span>
-${badgeSeveridad(n.severidad)}
-${badgePrioridad(n.prioridad)}
-${n.ubicacion ? `<span class="badge gris">📍 ${escapeHtml(n.ubicacion)}</span>` : ""}
-${n.accion ? `<span class="badge azul">🔧 ${escapeHtml(n.accion)}</span>` : ""}
-${n.costo ? `<span class="badge gris">💵 ${escapeHtml(money(n.costo))}</span>` : ""}
-<button class="btn btn-danger btn-sm" style="margin-left:auto"
-onclick="eliminarNovedad('${n.id}')">🗑️ Eliminar</button>
+${badgeSeveridad(n.severidad)} ${badgePrioridad(n.prioridad)}
+${n.ubicacion?`<span class="badge gris">📍 ${escapeHtml(n.ubicacion)}</span>`:""}
+${n.accion?`<span class="badge azul">🔧 ${escapeHtml(n.accion)}</span>`:""}
+${n.costo?`<span class="badge gris">💵 ${escapeHtml(money(n.costo))}</span>`:""}
+<button class="btn btn-danger btn-sm" style="margin-left:auto" onclick="event.stopPropagation();eliminarNovedad('${n.id}')">🗑️</button>
 </div>
 <div class="nov-desc">${escapeHtml(n.descripcion)}</div>
-${n.fotos && n.fotos.length ? `
-<div class="fotos-grid">
-${n.fotos.map((f,k)=>`
-<div class="foto-thumb" onclick="verFoto('${n.id}',${k})" style="animation-delay:${k*60}ms">
-<img src="${f}" alt="Evidencia ${k+1}">
-</div>`).join("")}
-</div>` : ""}
-</div>
-`).join("");
+${n.fotos && n.fotos.length ? `<div class="fotos-grid">${n.fotos.map((f,k)=>`<div class="foto-thumb" onclick="event.stopPropagation();verFotoGrande('${n.id}',${k})"><img src="${f}" alt="Evidencia"></div>`).join("")}</div>`:""}
+<p style="font-size:11px;color:var(--muted);margin-top:10px;text-align:right">👆 Clic para ver detalle completo</p>
+</div>`).join("");
 }
-function verFoto(novId, idx){
-const nov = novedades.find(n=>n.id===novId);
-if(!nov) return;
+function verDetalleNovedad(id){
+const n=novedades.find(x=>x.id===id); if(!n) return;
+const cs = n.severidad==="Crítica"?"#dc2626":n.severidad==="Moderada"?"#f59e0b":"#0ea5e9";
+abrirModalCustom("⚠️ Detalle de la novedad",`
+<div class="detail-hero" style="background:linear-gradient(135deg,${cs},#0f172a)">
+<h2>${escapeHtml(n.tipo)}</h2>
+<p>Registrada el ${fechaHoraCompleta(n.fecha)}</p>
+<div class="detail-badges">
+<span class="badge" style="background:rgba(255,255,255,.25);color:#fff">${escapeHtml(n.severidad)}</span>
+<span class="badge" style="background:rgba(255,255,255,.25);color:#fff">Prioridad: ${escapeHtml(n.prioridad)}</span>
+</div>
+</div>
+<div class="detail-body"><h4>Descripción</h4><div class="text">${escapeHtml(n.descripcion)}</div></div>
+<div class="detail-grid" style="margin-bottom:14px">
+<div class="dg-item"><div class="k">Ubicación</div><div class="v">${escapeHtml(n.ubicacion||"No especificada")}</div></div>
+<div class="dg-item"><div class="k">Severidad</div><div class="v">${escapeHtml(n.severidad)}</div></div>
+<div class="dg-item"><div class="k">Prioridad</div><div class="v">${escapeHtml(n.prioridad)}</div></div>
+<div class="dg-item"><div class="k">Acción recomendada</div><div class="v">${escapeHtml(n.accion)}</div></div>
+<div class="dg-item"><div class="k">Costo estimado</div><div class="v">${escapeHtml(money(n.costo))}</div></div>
+</div>
+${n.fotos && n.fotos.length ? `<div class="detail-body"><h4>Evidencia fotográfica (${n.fotos.length})</h4><div class="detail-photos">${n.fotos.map((f,k)=>`<div class="dp-item" onclick="verFotoGrande('${n.id}',${k})"><img src="${f}" alt="Evidencia"></div>`).join("")}</div></div>` : `<div class="detail-body"><div class="text" style="color:var(--muted);text-align:center">Sin evidencia fotográfica adjunta</div></div>`}
+`,"");
+}
+function verFotoGrande(novId, idx){
+const nov=novedades.find(n=>n.id===novId); if(!nov) return;
 const win = window.open("", "_blank");
-win.document.write(`<html><head><title>Evidencia fotográfica</title>
-<style>body{margin:0;background:#0f172a;display:grid;place-items:center;min-height:100vh}
-img{max-width:95vw;max-height:95vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}</style>
-</head><body><img src="${nov.fotos[idx]}"></body></html>`);
+win.document.write(`<html><head><title>Evidencia</title><style>body{margin:0;background:#0f172a;display:grid;place-items:center;min-height:100vh;font-family:sans-serif}img{max-width:95vw;max-height:92vh;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.6)}.info{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);color:#fff;font-size:13px;background:rgba(0,0,0,.5);padding:8px 16px;border-radius:60px}</style></head><body><img src="${nov.fotos[idx]}"><div class="info">${escapeHtml(nov.tipo)} · Foto ${idx+1} de ${nov.fotos.length}</div></body></html>`);
 win.document.close();
 }
 
 /* ============================================================
-ESTADO GENERAL
+ESTADO
 ============================================================ */
 function calcularEstado(){
-const inv = leerInventario();
-const criticas = novedades.filter(n=>n.severidad==="Crítica").length;
-const moderadas = novedades.filter(n=>n.severidad==="Moderada").length;
-const leves = novedades.filter(n=>n.severidad==="Leve").length;
-const malos = inv.filter(i=>i.estado==="Malo").length;
-const faltantes = inv.filter(i=>i.estado==="Faltante").length;
-const regulares = inv.filter(i=>i.estado==="Regular").length;
-
-const motivos = [];
-if(criticas > 0) motivos.push(`${criticas} novedad(es) CRÍTICA(S)`);
-if(moderadas > 0) motivos.push(`${moderadas} novedad(es) moderada(s)`);
-if(leves > 0) motivos.push(`${leves} novedad(es) leve(s)`);
-if(malos > 0) motivos.push(`${malos} implemento(s) en MAL estado`);
-if(faltantes > 0) motivos.push(`${faltantes} implemento(s) FALTANTE(S)`);
-if(regulares > 0) motivos.push(`${regulares} implemento(s) en estado regular`);
-
-let nivel = "verde";
-if(criticas > 0 || (malos + faltantes) >= 2){
-nivel = "rojo";
-} else if(moderadas > 0 || leves > 0 || malos > 0 || faltantes > 0 || regulares > 0){
-nivel = "amarillo";
+const inv=leerInventario();
+const criticas=novedades.filter(n=>n.severidad==="Crítica").length;
+const moderadas=novedades.filter(n=>n.severidad==="Moderada").length;
+const leves=novedades.filter(n=>n.severidad==="Leve").length;
+const malos=inv.filter(i=>i.estado==="Malo").length;
+const faltantes=inv.filter(i=>i.estado==="Faltante").length;
+const regulares=inv.filter(i=>i.estado==="Regular").length;
+const motivos=[];
+if(criticas>0) motivos.push(`${criticas} novedad(es) CRÍTICA(S)`);
+if(moderadas>0) motivos.push(`${moderadas} novedad(es) moderada(s)`);
+if(leves>0) motivos.push(`${leves} novedad(es) leve(s)`);
+if(malos>0) motivos.push(`${malos} implemento(s) en MAL estado`);
+if(faltantes>0) motivos.push(`${faltantes} implemento(s) FALTANTE(S)`);
+if(regulares>0) motivos.push(`${regulares} implemento(s) en estado regular`);
+let nivel="verde";
+if(criticas>0 || (malos+faltantes)>=2) nivel="rojo";
+else if(moderadas>0 || leves>0 || malos>0 || faltantes>0 || regulares>0) nivel="amarillo";
+return {nivel,motivos,resumen:{criticas,moderadas,leves,malos,faltantes,regulares}};
 }
-
-return { nivel, motivos, resumen:{criticas, moderadas, leves, malos, faltantes, regulares} };
-}
-
 function actualizarEstadoGlobal(){
-const { nivel, motivos } = calcularEstado();
-const banner = document.getElementById("estadoBanner");
-if(banner){
-const icono = document.getElementById("estadoIcono");
-const titulo = document.getElementById("estadoTitulo");
-const detalle = document.getElementById("estadoDetalle");
-banner.className = "estado-banner " + nivel;
-if(nivel === "verde"){
-icono.textContent = "✅";
-titulo.textContent = "Estado: ÓPTIMO — APTO PARA OPERAR";
-detalle.textContent = "Sin novedades registradas y todos los implementos en buen estado.";
-} else if(nivel === "amarillo"){
-icono.textContent = "🟡";
-titulo.textContent = "Estado: REQUIERE REVISIÓN PROGRAMADA";
-detalle.textContent = motivos.join(" · ") + ". Programar mantenimiento antes de operación prolongada.";
-} else {
-icono.textContent = "⛔";
-titulo.textContent = "Estado: NO APTO — DETALLES CRÍTICOS";
-detalle.textContent = motivos.join(" · ") + ". El vehículo NO debe salir a operación.";
-}
+const {nivel}=calcularEstado();
+const sg=document.getElementById("statusGlobal"), st=document.getElementById("statusTexto");
+sg.className="status-global "+nivel;
+st.textContent = nivel==="verde"?"🟢 APTO PARA OPERAR":nivel==="amarillo"?"🟡 REVISIÓN PROGRAMADA":"🔴 NO APTO / CRÍTICO";
 }
 
-const sg = document.getElementById("statusGlobal");
-const st = document.getElementById("statusTexto");
-sg.className = "status-global " + nivel;
-st.textContent = nivel === "verde" ? "🟢 APTO PARA OPERAR"
-: nivel === "amarillo" ? "🟡 REVISIÓN PROGRAMADA"
-: "🔴 NO APTO / CRÍTICO";
-}
-
-/* ============================================================
-CHARTS EN VIVO
-============================================================ */
 function actualizarCharts(){
-const inv = leerInventario();
-const bueno = inv.filter(i=>i.estado==="Bueno" || i.estado==="No aplica").length;
-const reg = inv.filter(i=>i.estado==="Regular").length;
-const malo = inv.filter(i=>i.estado==="Malo" || i.estado==="Faltante").length;
-const totalInv = inv.length;
-
-const R = 40, C = 2 * Math.PI * R;
-const pBueno = (bueno/totalInv) * C;
-const pReg = (reg/totalInv) * C;
-const pMalo = (malo/totalInv) * C;
-const d1 = document.getElementById("donutBueno");
-const d2 = document.getElementById("donutRegular");
-const d3 = document.getElementById("donutMalo");
+const inv=leerInventario();
+const bueno=inv.filter(i=>i.estado==="Bueno"||i.estado==="No aplica").length;
+const reg=inv.filter(i=>i.estado==="Regular").length;
+const malo=inv.filter(i=>i.estado==="Malo"||i.estado==="Faltante").length;
+const totalInv=inv.length;
+const R=40, C=2*Math.PI*R;
+const pB=(bueno/totalInv)*C, pR=(reg/totalInv)*C, pM=(malo/totalInv)*C;
+const d1=document.getElementById("donutBueno"), d2=document.getElementById("donutRegular"), d3=document.getElementById("donutMalo");
 if(d1){
-d1.setAttribute("stroke-dasharray", `${pBueno} ${C-pBueno}`);
-d1.setAttribute("stroke-dashoffset", 0);
-d2.setAttribute("stroke-dasharray", `${pReg} ${C-pReg}`);
-d2.setAttribute("stroke-dashoffset", -pBueno);
-d3.setAttribute("stroke-dasharray", `${pMalo} ${C-pMalo}`);
-d3.setAttribute("stroke-dashoffset", -(pBueno + pReg));
-const pct = Math.round((bueno/totalInv)*100);
-document.getElementById("donutPct").textContent = pct + "%";
-document.getElementById("lgBueno").textContent = bueno;
-document.getElementById("lgRegular").textContent = reg;
-document.getElementById("lgMalo").textContent = malo;
-document.getElementById("dashInvTotal").textContent = `${bueno}/${totalInv}`;
+d1.setAttribute("stroke-dasharray",`${pB} ${C-pB}`); d1.setAttribute("stroke-dashoffset",0);
+d2.setAttribute("stroke-dasharray",`${pR} ${C-pR}`); d2.setAttribute("stroke-dashoffset",-pB);
+d3.setAttribute("stroke-dasharray",`${pM} ${C-pM}`); d3.setAttribute("stroke-dashoffset",-(pB+pR));
+document.getElementById("donutPct").textContent=Math.round((bueno/totalInv)*100)+"%";
+document.getElementById("lgBueno").textContent=bueno;
+document.getElementById("lgRegular").textContent=reg;
+document.getElementById("lgMalo").textContent=malo;
+document.getElementById("dashInvTotal").textContent=`${bueno}/${totalInv}`;
+}
+const crit=novedades.filter(n=>n.severidad==="Crítica").length;
+const mod=novedades.filter(n=>n.severidad==="Moderada").length;
+const lev=novedades.filter(n=>n.severidad==="Leve").length;
+const maxN=Math.max(crit,mod,lev,1);
+const bc=document.getElementById("barCrit"), bm=document.getElementById("barMod"), bl=document.getElementById("barLev");
+if(bc){ bc.style.width=(crit/maxN*100)+"%"; bm.style.width=(mod/maxN*100)+"%"; bl.style.width=(lev/maxN*100)+"%"; document.getElementById("barCritVal").textContent=crit; document.getElementById("barModVal").textContent=mod; document.getElementById("barLevVal").textContent=lev; document.getElementById("dashNovTotal").textContent=novedades.length; }
+const {nivel}=calcularEstado();
+let score=100; score-=crit*25; score-=mod*10; score-=lev*3; score-=malo*8; score-=reg*2;
+score=Math.max(0,Math.min(100,score));
+const arc=document.getElementById("gaugeArc");
+if(arc){ arc.setAttribute("stroke-dashoffset",173-(score/100)*173); arc.setAttribute("stroke",nivel==="verde"?"#16a34a":nivel==="amarillo"?"#f59e0b":"#dc2626"); document.getElementById("gaugePct").textContent=score+"%"; document.getElementById("dashScore").textContent=score+"%"; document.getElementById("gaugeLabel").textContent=nivel==="verde"?"APTO":nivel==="amarillo"?"REVISAR":"NO APTO"; }
 }
 
-const crit = novedades.filter(n=>n.severidad==="Crítica").length;
-const mod = novedades.filter(n=>n.severidad==="Moderada").length;
-const lev = novedades.filter(n=>n.severidad==="Leve").length;
-const maxN = Math.max(crit, mod, lev, 1);
-const bc = document.getElementById("barCrit");
-const bm = document.getElementById("barMod");
-const bl = document.getElementById("barLev");
-if(bc){
-bc.style.width = (crit/maxN*100) + "%";
-bm.style.width = (mod/maxN*100) + "%";
-bl.style.width = (lev/maxN*100) + "%";
-document.getElementById("barCritVal").textContent = crit;
-document.getElementById("barModVal").textContent = mod;
-document.getElementById("barLevVal").textContent = lev;
-document.getElementById("dashNovTotal").textContent = novedades.length;
-}
-
-const { nivel } = calcularEstado();
-let score = 100;
-score -= crit * 25;
-score -= mod * 10;
-score -= lev * 3;
-score -= malo * 8;
-score -= reg * 2;
-score = Math.max(0, Math.min(100, score));
-const arc = document.getElementById("gaugeArc");
-if(arc){
-const total = 173;
-arc.setAttribute("stroke-dashoffset", total - (score/100)*total);
-arc.setAttribute("stroke", nivel==="verde" ? "#16a34a" : nivel==="amarillo" ? "#f59e0b" : "#dc2626");
-document.getElementById("gaugePct").textContent = score + "%";
-document.getElementById("dashScore").textContent = score + "%";
-document.getElementById("gaugeLabel").textContent =
-nivel==="verde" ? "APTO" : nivel==="amarillo" ? "REVISAR" : "NO APTO";
-}
-}
-
-document.addEventListener("input", e=>{
-if(e.target.closest("#app")){ actualizarEstadoGlobal(); actualizarCharts(); }
-});
-document.addEventListener("change", e=>{
-if(e.target.closest("#app")){ actualizarEstadoGlobal(); actualizarCharts(); }
-});
+document.addEventListener("input", e=>{ if(e.target.closest("#app")){ actualizarEstadoGlobal(); actualizarCharts(); } });
+document.addEventListener("change", e=>{ if(e.target.closest("#app")){ actualizarEstadoGlobal(); actualizarCharts(); } });
 
 /* ============================================================
 GUARDAR
 ============================================================ */
 function guardarRegistro(){
-const conductor = document.getElementById("conductor").value.trim();
-const marca = document.getElementById("marca").value.trim();
-const modelo = document.getElementById("modelo").value.trim();
-const placa = document.getElementById("placa").value.trim().toUpperCase();
-
-if(!conductor || !marca || !modelo || !placa){
-toast("Complete los campos obligatorios: conductor, marca, modelo y placa","err",4200);
-irTab("datos");
-return;
-}
-
-const { nivel, motivos, resumen } = calcularEstado();
-const codigoRegistro = generarCodigoRegistro();
-
+const conductor=document.getElementById("conductor").value.trim();
+const marca=document.getElementById("marca").value.trim();
+const modelo=document.getElementById("modelo").value.trim();
+const placa=document.getElementById("placa").value.trim().toUpperCase();
+if(!conductor||!marca||!modelo||!placa){ toast("Complete: conductor, marca, modelo y placa","err",4200); irTab("datos"); return; }
+const {nivel,motivos,resumen}=calcularEstado();
+const codigoRegistro=generarCodigoRegistro();
 const reg = {
-id: "REG-" + Date.now(),
-creadoEn: new Date().toISOString(),
-registro: codigoRegistro,
-empresa: document.getElementById("empresa").value.trim(),
-sede: document.getElementById("sede").value.trim(),
-area: document.getElementById("area").value.trim(),
-codFormato: document.getElementById("codFormato").value.trim(),
-conductor, cedula: document.getElementById("cedula").value.trim(),
-licencia: document.getElementById("licencia").value.trim(),
+id:"REG-"+Date.now(), creadoEn:new Date().toISOString(), registro:codigoRegistro,
+empresa:document.getElementById("empresa").value.trim(),
+sede:document.getElementById("sede").value.trim(),
+area:document.getElementById("area").value.trim(),
+codFormato:document.getElementById("codFormato").value.trim(),
+conductor, cedula:document.getElementById("cedula").value.trim(),
+licencia:document.getElementById("licencia").value.trim(),
 marca, modelo, placa,
-anio: document.getElementById("anio").value.trim(),
-km: document.getElementById("km").value.trim(),
-operacion: document.getElementById("operacion").value,
-fecha: document.getElementById("fecha").value,
-hora: document.getElementById("hora").value,
-jefeTaller: document.getElementById("jefeTaller").value.trim(),
-jefeInmediato: document.getElementById("jefeInmediato").value.trim(),
-observaciones: document.getElementById("observaciones").value.trim(),
-inventario: leerInventario(),
-novedades: JSON.parse(JSON.stringify(novedades)),
-estado: nivel,
-motivos, resumen
+anio:document.getElementById("anio").value.trim(),
+km:document.getElementById("km").value.trim(),
+operacion:document.getElementById("operacion").value,
+fecha:document.getElementById("fecha").value, hora:document.getElementById("hora").value,
+jefeTaller:document.getElementById("jefeTaller").value.trim(),
+jefeInmediato:document.getElementById("jefeInmediato").value.trim(),
+observaciones:document.getElementById("observaciones").value.trim(),
+inventario:leerInventario(),
+novedades:JSON.parse(JSON.stringify(novedades)),
+firmas:{conductor:firmas.conductor||null, jefeTaller:firmas.jefeTaller||null, jefeInmediato:firmas.jefeInmediato||null},
+estado:nivel, motivos, resumen
 };
-
 registros.unshift(reg);
-guardarEnStorage();
-renderTablaRegistros();
-renderStats();
-
-toast(`Registro ${reg.registro} guardado · Estado: ${nivel.toUpperCase()}`, "ok", 4000);
-
-setTimeout(()=>{
-if(confirm("✅ Registro guardado correctamente.\n\n¿Desea imprimir el informe empresarial completo ahora?")){
-imprimirRegistro(reg.id);
+guardarEnStorage(); renderTablaRegistros(); renderStats(); renderHome();
+toast(`Registro ${reg.registro} guardado · ${nivel.toUpperCase()}`,"ok",4000);
+setTimeout(()=>{ if(confirm("✅ Registro guardado.\n\n¿Desea imprimir el informe completo ahora?")){ imprimirRegistro(reg.id); } }, 400);
+limpiarFormulario(true); irTab("registros");
 }
-}, 400);
-
-limpiarFormulario(true);
-irTab("registros");
-}
-
-function guardarEnStorage(){
-try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(registros)); }
-catch(e){ toast("Almacenamiento lleno.","err",5000); }
-}
-function cargarDeStorage(){
-try{
-const data = localStorage.getItem(STORAGE_KEY);
-registros = data ? JSON.parse(data) : [];
-// Restaurar contador interno
-contadorRegistro = registros.length;
-}catch(e){ registros = []; }
-}
-
+function guardarEnStorage(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(registros)); }catch(e){ toast("Almacenamiento lleno.","err",5000); } }
+function cargarDeStorage(){ try{ const d=localStorage.getItem(STORAGE_KEY); registros = d?JSON.parse(d):[]; contadorRegistro=registros.length; }catch(e){ registros=[]; } }
 function limpiarFormulario(silencioso){
-["conductor","cedula","licencia","marca","modelo","placa","anio","km",
-"jefeTaller","jefeInmediato","observaciones"]
-.forEach(id => { const el = document.getElementById(id); if(el) el.value = ""; });
-
-const a = ahora();
-document.getElementById("fecha").value = a.fecha;
-document.getElementById("hora").value = a.hora;
-document.getElementById("operacion").selectedIndex = 0;
-
-novedades = [];
-fotosTemporales = [];
-renderNovedades();
-renderFotosPreview();
-
-document.querySelectorAll(".inv-estado").forEach(s => s.value = "Bueno");
-document.querySelectorAll(".inv-obs").forEach(i => i.value = "");
-actualizarResumenInv();
-actualizarEstadoGlobal();
-actualizarCharts();
-
-if(!silencioso){
-toast("Formulario reiniciado","warn");
-irTab("datos");
+["conductor","cedula","licencia","marca","modelo","placa","anio","km","jefeTaller","jefeInmediato","observaciones"].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=""; });
+const a=ahora();
+document.getElementById("fecha").value=a.fecha; document.getElementById("hora").value=a.hora;
+document.getElementById("operacion").selectedIndex=0;
+novedades=[]; fotosTemporales=[]; invExpandido=null;
+renderNovedades(); renderFotosPreview();
+document.querySelectorAll(".inv-estado").forEach(s=>s.value="Bueno");
+document.querySelectorAll(".inv-obs").forEach(i=>i.value="");
+document.querySelectorAll(".inv-detail-row").forEach(r=>r.style.display="none");
+document.querySelectorAll(".inv-row").forEach(r=>r.classList.remove("expanded"));
+limpiarTodasLasFirmas();
+actualizarResumenInv(); actualizarEstadoGlobal(); actualizarCharts();
+if(!silencioso){ toast("Formulario reiniciado","warn"); irTab("datos"); }
 }
+
+/* ============================================================
+HOME
+============================================================ */
+function renderHome(){
+document.getElementById("homeTotal").textContent=registros.length;
+document.getElementById("homeVerde").textContent=registros.filter(r=>r.estado==="verde").length;
+document.getElementById("homeAmarillo").textContent=registros.filter(r=>r.estado==="amarillo").length;
+document.getElementById("homeRojo").textContent=registros.filter(r=>r.estado==="rojo").length;
+const cont=document.getElementById("homeRecent");
+const ult=registros.slice(0,5);
+if(!ult.length){ cont.innerHTML=`<div class="empty"><span class="e-ico">📭</span>Aún no hay registros guardados.<br>Comience con una <strong>nueva inspección</strong>.</div>`; return; }
+cont.innerHTML = ult.map(r=>{
+const ic=r.estado==="verde"?"✅":r.estado==="amarillo"?"🟡":"⛔";
+const lb=r.estado==="verde"?"Apto":r.estado==="amarillo"?"Revisar":"No apto";
+return `<div class="recent-item ${r.estado}" onclick="verRegistro('${r.id}')">
+<div class="recent-ico">${ic}</div>
+<div class="recent-info">
+<div class="r-top"><span class="r-reg">${escapeHtml(r.registro)}</span><span class="badge ${r.estado==="verde"?"verde":r.estado==="amarillo"?"amarillo":"rojo"}"><span class="bdot"></span>${lb}</span></div>
+<div class="r-sub"><b>${escapeHtml(r.placa)}</b> · ${escapeHtml(r.marca)} ${escapeHtml(r.modelo)} · ${escapeHtml(r.conductor)} · ${fechaBonita(r.fecha)} · ${r.novedades.length} novedad(es)</div>
+</div>
+<div class="recent-go">→</div>
+</div>`;
+}).join("");
 }
 
 /* ============================================================
 TABLA REGISTROS
 ============================================================ */
 function renderStats(){
-document.getElementById("statTotal").textContent = registros.length;
-document.getElementById("statVerde").textContent = registros.filter(r=>r.estado==="verde").length;
-document.getElementById("statAmarillo").textContent = registros.filter(r=>r.estado==="amarillo").length;
-document.getElementById("statRojo").textContent = registros.filter(r=>r.estado==="rojo").length;
+document.getElementById("statTotal").textContent=registros.length;
+document.getElementById("statVerde").textContent=registros.filter(r=>r.estado==="verde").length;
+document.getElementById("statAmarillo").textContent=registros.filter(r=>r.estado==="amarillo").length;
+document.getElementById("statRojo").textContent=registros.filter(r=>r.estado==="rojo").length;
 }
-
 function renderTablaRegistros(){
-const tbody = document.getElementById("tablaRegistros");
-const q = (document.getElementById("buscar").value || "").toLowerCase().trim();
-const f = document.getElementById("filtroEstado").value;
-
+const tbody=document.getElementById("tablaRegistros");
+const q=(document.getElementById("buscar").value||"").toLowerCase().trim();
+const f=document.getElementById("filtroEstado").value;
 let lista = registros.filter(r=>{
-const coincide = !q || [r.placa,r.conductor,r.registro,r.marca,r.modelo]
-.join(" ").toLowerCase().includes(q);
-const estadoOk = !f || r.estado === f;
-return coincide && estadoOk;
+const co = !q || [r.placa,r.conductor,r.registro,r.marca,r.modelo].join(" ").toLowerCase().includes(q);
+const eo = !f || r.estado === f;
+return co && eo;
 });
-
-document.getElementById("tablaInfo").textContent = `${lista.length} de ${registros.length} registros`;
-
-if(!lista.length){
-tbody.innerHTML = `<tr><td colspan="8">
-<div class="empty"><span class="e-ico">📭</span>
-No hay registros que coincidan.</div></td></tr>`;
-renderStats();
-return;
-}
-
+document.getElementById("tablaInfo").textContent=`${lista.length} de ${registros.length} registros`;
+if(!lista.length){ tbody.innerHTML=`<tr><td colspan="8"><div class="empty"><span class="e-ico">📭</span>No hay registros que coincidan.</div></td></tr>`; renderStats(); return; }
 tbody.innerHTML = lista.map((r,i)=>`
-<tr style="animation-delay:${i*35}ms">
+<tr style="animation-delay:${i*35}ms;cursor:pointer" onclick="verRegistro('${r.id}')">
 <td><strong>${escapeHtml(r.registro)}</strong></td>
 <td>${fechaBonita(r.fecha)}<br><small style="color:#94a3b8">${escapeHtml(r.hora||"")}</small></td>
 <td><span class="badge gris">${escapeHtml(r.placa)}</span></td>
@@ -1708,154 +1253,112 @@ tbody.innerHTML = lista.map((r,i)=>`
 <td>${escapeHtml(r.conductor)}</td>
 <td>${badgeEstado(r.estado)}</td>
 <td style="text-align:center;font-weight:800">${r.novedades.length}</td>
-<td style="text-align:center;white-space:nowrap">
+<td style="text-align:center;white-space:nowrap" onclick="event.stopPropagation()">
 <button class="btn btn-ghost btn-sm" onclick="verRegistro('${r.id}')">👁️</button>
 <button class="btn btn-print btn-sm" onclick="imprimirRegistro('${r.id}')">🖨️</button>
 <button class="btn btn-danger btn-sm" onclick="eliminarRegistro('${r.id}')">🗑️</button>
 </td>
-</tr>
-`).join("");
+</tr>`).join("");
 renderStats();
 }
-function badgeEstado(nivel){
-if(nivel === "verde") return `<span class="badge verde"><span class="bdot"></span>Apto</span>`;
-if(nivel === "amarillo") return `<span class="badge amarillo"><span class="bdot"></span>Revisar</span>`;
-return `<span class="badge rojo"><span class="bdot"></span>No apto</span>`;
-}
-function eliminarRegistro(id){
-const r = registros.find(x=>x.id===id);
-if(!r) return;
-if(!confirm(`¿Eliminar el registro ${r.registro} de la placa ${r.placa}?`)) return;
-registros = registros.filter(x=>x.id !== id);
-guardarEnStorage();
-renderTablaRegistros();
-toast("Registro eliminado","warn");
-}
-function borrarTodo(){
-if(!registros.length){ toast("No hay registros para borrar","warn"); return; }
-if(!confirm("⚠️ Se eliminarán TODOS los registros. ¿Continuar?")) return;
-registros = [];
-guardarEnStorage();
-renderTablaRegistros();
-toast("Historial eliminado","err");
-}
+function badgeEstado(n){ if(n==="verde") return `<span class="badge verde"><span class="bdot"></span>Apto</span>`; if(n==="amarillo") return `<span class="badge amarillo"><span class="bdot"></span>Revisar</span>`; return `<span class="badge rojo"><span class="bdot"></span>No apto</span>`; }
+function eliminarRegistro(id){ const r=registros.find(x=>x.id===id); if(!r) return; if(!confirm(`¿Eliminar ${r.registro} (${r.placa})?`)) return; registros=registros.filter(x=>x.id!==id); guardarEnStorage(); renderTablaRegistros(); renderHome(); toast("Registro eliminado","warn"); }
+function borrarTodo(){ if(!registros.length){ toast("No hay registros","warn"); return; } if(!confirm("⚠️ Se eliminarán TODOS los registros. ¿Continuar?")) return; registros=[]; guardarEnStorage(); renderTablaRegistros(); renderHome(); toast("Historial eliminado","err"); }
 
 /* ============================================================
 MODAL
 ============================================================ */
 function verRegistro(id){
-const r = registros.find(x=>x.id===id);
-if(!r) return;
+const r=registros.find(x=>x.id===id); if(!r) return;
 registroParaImprimir = r;
 document.getElementById("modalTitulo").textContent = `Informe ${r.registro} — ${r.placa}`;
 document.getElementById("modalBody").innerHTML = generarInformeHTML(r);
+document.getElementById("modalFoot").innerHTML = `<button class="btn btn-ghost" onclick="cerrarModal()">Cerrar</button><button class="btn btn-print" onclick="imprimirDesdeModal()">🖨️ Imprimir</button>`;
 document.getElementById("modal").classList.add("open");
 document.body.style.overflow = "hidden";
 }
-function cerrarModal(){
-document.getElementById("modal").classList.remove("open");
-document.body.style.overflow = "";
+function abrirModalCustom(t, html, foot){
+document.getElementById("modalTitulo").textContent = t;
+document.getElementById("modalBody").innerHTML = html;
+document.getElementById("modalFoot").innerHTML = foot || `<button class="btn btn-ghost" onclick="cerrarModal()">Cerrar</button>`;
+document.getElementById("modal").classList.add("open");
+document.body.style.overflow = "hidden";
 }
-document.getElementById("modal").addEventListener("click", e=>{
-if(e.target.id === "modal") cerrarModal();
-});
-document.addEventListener("keydown", e=>{ if(e.key === "Escape") cerrarModal(); });
+function cerrarModal(){ document.getElementById("modal").classList.remove("open"); document.body.style.overflow=""; }
+document.getElementById("modal").addEventListener("click", e=>{ if(e.target.id==="modal") cerrarModal(); });
+document.addEventListener("keydown", e=>{ if(e.key==="Escape") cerrarModal(); });
 
 /* ============================================================
-INFORME EMPRESARIAL
+INFORME HTML (con firmas y toda la info)
 ============================================================ */
 function generarInformeHTML(r){
-const colores = {
-verde: { bg:"#dcfce7", txt:"#15803d", bd:"#4ade80", label:"APTO PARA OPERAR" },
-amarillo: { bg:"#fef3c7", txt:"#b45309", bd:"#fbbf24", label:"REQUIERE REVISIÓN" },
-rojo: { bg:"#fee2e2", txt:"#b91c1c", bd:"#f87171", label:"NO APTO" }
-};
-const c = colores[r.estado] || colores.verde;
+const colores = { verde:{bg:"#dcfce7",txt:"#15803d",bd:"#4ade80",label:"APTO PARA OPERAR"}, amarillo:{bg:"#fef3c7",txt:"#b45309",bd:"#fbbf24",label:"REQUIERE REVISIÓN"}, rojo:{bg:"#fee2e2",txt:"#b91c1c",bd:"#f87171",label:"NO APTO"} };
+const c = colores[r.estado]||colores.verde;
 const hash = hashCode(r.id + r.placa + r.registro + r.fecha);
-
 const inv = r.inventario;
-const nBueno = inv.filter(i=>i.estado==="Bueno" || i.estado==="No aplica").length;
+const nBueno = inv.filter(i=>i.estado==="Bueno"||i.estado==="No aplica").length;
 const nReg = inv.filter(i=>i.estado==="Regular").length;
 const nMal = inv.filter(i=>i.estado==="Malo").length;
 const nFal = inv.filter(i=>i.estado==="Faltante").length;
-
 const crit = r.novedades.filter(n=>n.severidad==="Crítica").length;
 const mod = r.novedades.filter(n=>n.severidad==="Moderada").length;
 const lev = r.novedades.filter(n=>n.severidad==="Leve").length;
+const costoTotal = r.novedades.reduce((s,n)=>s+(Number(n.costo)||0),0);
+let score=100; score-=crit*25; score-=mod*10; score-=lev*3; score-=nMal*8; score-=nFal*10; score-=nReg*2;
+score=Math.max(0,Math.min(100,score));
+const item=(k,v)=>`<div class="rep-item"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(v||"—")}</div></div>`;
+const maxInv=Math.max(nBueno,nReg,nMal,nFal,1);
+const barInv=(l,v,cl)=>`<div class="rep-bar-row"><span class="lbl">${l}</span><span class="track"><span class="fill ${cl}" style="width:${(v/maxInv)*100}%"></span></span><span class="val">${v}</span></div>`;
+const maxNov=Math.max(crit,mod,lev,1);
+const barNov=(l,v,cl)=>`<div class="rep-bar-row"><span class="lbl">${l}</span><span class="track"><span class="fill ${cl}" style="width:${(v/maxNov)*100}%"></span></span><span class="val">${v}</span></div>`;
+const R=38, C=2*Math.PI*R;
+const pB=(nBueno/inv.length)*C, pR=(nReg/inv.length)*C, pM=((nMal+nFal)/inv.length)*C;
 
-const costoTotal = r.novedades.reduce((s,n)=>s + (Number(n.costo)||0), 0);
-
-let score = 100;
-score -= crit*25; score -= mod*10; score -= lev*3;
-score -= nMal*8; score -= nFal*10; score -= nReg*2;
-score = Math.max(0, Math.min(100, score));
-
-const item = (k,v)=>`<div class="rep-item"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(v||"—")}</div></div>`;
-
-const maxInv = Math.max(nBueno, nReg, nMal, nFal, 1);
-const barInv = (lbl, val, cls) => `
-<div class="rep-bar-row">
-<span class="lbl">${lbl}</span>
-<span class="track"><span class="fill ${cls}" style="width:${(val/maxInv)*100}%"></span></span>
-<span class="val">${val}</span>
-</div>`;
-
-const maxNov = Math.max(crit, mod, lev, 1);
-const barNov = (lbl, val, cls) => `
-<div class="rep-bar-row">
-<span class="lbl">${lbl}</span>
-<span class="track"><span class="fill ${cls}" style="width:${(val/maxNov)*100}%"></span></span>
-<span class="val">${val}</span>
-</div>`;
-
-const R = 38, C = 2*Math.PI*R;
-const pBueno = (nBueno/inv.length)*C;
-const pReg = (nReg/inv.length)*C;
-const pMal = ((nMal+nFal)/inv.length)*C;
-
-const filasInv = inv.map(it=>{
-const esProblema = ["Malo","Faltante"].includes(it.estado);
-const esRegular = it.estado === "Regular";
-const color = esProblema ? "#b91c1c" : esRegular ? "#b45309" : "#15803d";
-const bg = esProblema ? "#fff1f2" : esRegular ? "#fffbeb" : "#f0fdf4";
-return `<tr style="background:${bg}">
-<td>${escapeHtml(it.item)}</td>
-<td style="color:${color};font-weight:800">${escapeHtml(it.estado)}</td>
-<td>${escapeHtml(it.obs || "—")}</td>
-</tr>`;
+const filasInv = inv.map((it, idx)=>{
+const pr = ["Malo","Faltante"].includes(it.estado);
+const re = it.estado==="Regular";
+const col = pr?"#b91c1c":re?"#b45309":"#15803d";
+const bg = pr?"#fff1f2":re?"#fffbeb":"#f0fdf4";
+return `<tr style="background:${bg}"><td style="text-align:center;font-weight:800;color:#64748b;width:32px">${idx+1}</td><td>${escapeHtml(it.item)}</td><td style="color:${col};font-weight:800">${escapeHtml(it.estado)}</td><td>${escapeHtml(it.obs||"—")}</td></tr>`;
 }).join("");
 
 const bloquesNov = r.novedades.length
 ? r.novedades.map((n,i)=>`
 <div class="rep-nov ${claseSeveridad(n.severidad)}">
 <div class="nhead">
-<span class="tag">#${i+1}</span>
-${escapeHtml(n.tipo)}
+<span class="tag">#${i+1}</span>${escapeHtml(n.tipo)}
 <span class="tag" style="background:${n.severidad==="Crítica"?"#dc2626":n.severidad==="Moderada"?"#f59e0b":"#0ea5e9"}">${escapeHtml(n.severidad)}</span>
 <span class="tag" style="background:#334155">Prioridad: ${escapeHtml(n.prioridad||"—")}</span>
-${n.ubicacion ? `<span class="tag" style="background:#475569">📍 ${escapeHtml(n.ubicacion)}</span>` : ""}
+${n.ubicacion?`<span class="tag" style="background:#475569">📍 ${escapeHtml(n.ubicacion)}</span>`:""}
+${n.costo?`<span class="tag" style="background:#065f46">💵 ${escapeHtml(money(n.costo))}</span>`:""}
 </div>
 <div class="ndesc"><strong>Descripción:</strong> ${escapeHtml(n.descripcion)}</div>
-${n.accion ? `<div class="ndesc" style="margin-top:5px"><strong>Acción recomendada:</strong> ${escapeHtml(n.accion)}</div>` : ""}
-${n.costo ? `<div class="ndesc" style="margin-top:5px"><strong>Costo estimado:</strong> ${escapeHtml(money(n.costo))}</div>` : ""}
-${n.fotos && n.fotos.length ? `
-<div class="rep-fotos">
-${n.fotos.map(f=>`<img src="${f}" alt="Evidencia">`).join("")}
-</div>` : ""}
+${n.accion?`<div class="ndesc" style="margin-top:5px"><strong>Acción recomendada:</strong> ${escapeHtml(n.accion)}</div>`:""}
+<div class="ndesc" style="margin-top:5px;font-size:9.5px;color:#64748b"><strong>Fecha de registro:</strong> ${fechaHoraCompleta(n.fecha)}</div>
+${n.fotos && n.fotos.length ? `<div style="margin-top:8px"><div style="font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#475569;margin-bottom:5px">📷 Evidencia fotográfica (${n.fotos.length})</div><div class="rep-fotos">${n.fotos.map(f=>`<img src="${f}" alt="Evidencia">`).join("")}</div></div>`:""}
 </div>`).join("")
-: `<div class="rep-nov leve"><div class="ndesc">Sin novedades registradas. El vehículo se encuentra en condiciones óptimas según la inspección realizada.</div></div>`;
+: `<div class="rep-nov leve"><div class="ndesc">Sin novedades registradas. El vehículo se encuentra en condiciones óptimas.</div></div>`;
+
+const firmaBlq = (tipo, nombre, cargo) => {
+const img = (r.firmas && r.firmas[tipo]) ? `<img src="${r.firmas[tipo]}" alt="Firma">` : "";
+const txt = img ? "" : `<div style="height:58px"></div>`;
+return `<div class="rep-firma">
+<div class="fsign">${img || txt}</div>
+<div class="flinea">${escapeHtml(nombre||cargo)}</div>
+<div class="fcargo">${cargo}</div>
+<div class="fmeta">${img?"✓ Firmado digitalmente":"Pendiente de firma"}</div>
+</div>`;
+};
 
 return `
 <div class="rep">
-
-<!-- ENCABEZADO EMPRESARIAL -->
 <div class="rep-head">
 <div class="rep-empresa">
 <div class="rlogo">🚗</div>
 <div>
-<h1>${escapeHtml(r.empresa || "Empresa de Transporte")}</h1>
-<div class="rsub">Sede: ${escapeHtml(r.sede || "—")}</div>
-<div class="rsub">Área: ${escapeHtml(r.area || "Flota y Transporte")}</div>
+<h1>${escapeHtml(r.empresa||"Empresa de Transporte")}</h1>
+<div class="rsub">Sede: ${escapeHtml(r.sede||"—")}</div>
+<div class="rsub">Área: ${escapeHtml(r.area||"Flota y Transporte")}</div>
 <div class="rtitle">INFORME DE INSPECCIÓN PRE-OPERACIONAL VEHICULAR</div>
 </div>
 </div>
@@ -1867,20 +1370,18 @@ return `
 </div>
 </div>
 
-<!-- ESTADO GENERAL -->
 <div class="rep-estado-box" style="background:${c.bg};color:${c.txt};border:2px solid ${c.bd}">
 <div class="eb-left">
 <div class="eb-ico">${r.estado==="verde"?"✅":r.estado==="amarillo"?"🟡":"⛔"}</div>
 <div>
 <div class="eb-titulo">Concepto técnico final</div>
 <div class="eb-texto">${c.label}</div>
-${r.motivos && r.motivos.length ? `<div class="eb-motivos">${escapeHtml(r.motivos.join(" · "))}</div>` : ""}
+${r.motivos && r.motivos.length ? `<div class="eb-motivos">${escapeHtml(r.motivos.join(" · "))}</div>`:""}
 </div>
 </div>
 <div class="eb-sello">${c.label}</div>
 </div>
 
-<!-- 1. DATOS -->
 <div class="rep-sec">
 <h2><span class="num">1</span> Identificación del Vehículo y Personal Responsable</h2>
 <div class="rep-grid g4">
@@ -1902,7 +1403,6 @@ ${item("Jefe Inmediato / Supervisor", r.jefeInmediato)}
 </div>
 </div>
 
-<!-- 2. GRÁFICAS -->
 <div class="rep-sec">
 <h2><span class="num">2</span> Análisis Gráfico del Estado</h2>
 <div class="rep-charts">
@@ -1911,12 +1411,9 @@ ${item("Jefe Inmediato / Supervisor", r.jefeInmediato)}
 <div style="display:flex;align-items:center;gap:8px;justify-content:center">
 <svg width="95" height="95" viewBox="0 0 100 100">
 <circle cx="50" cy="50" r="${R}" fill="none" stroke="#e2e8f0" stroke-width="14"/>
-<circle cx="50" cy="50" r="${R}" fill="none" stroke="#16a34a" stroke-width="14"
-stroke-dasharray="${pBueno} ${C-pBueno}" transform="rotate(-90 50 50)"/>
-<circle cx="50" cy="50" r="${R}" fill="none" stroke="#f59e0b" stroke-width="14"
-stroke-dasharray="${pReg} ${C-pReg}" stroke-dashoffset="${-pBueno}" transform="rotate(-90 50 50)"/>
-<circle cx="50" cy="50" r="${R}" fill="none" stroke="#dc2626" stroke-width="14"
-stroke-dasharray="${pMal} ${C-pMal}" stroke-dashoffset="${-(pBueno+pReg)}" transform="rotate(-90 50 50)"/>
+<circle cx="50" cy="50" r="${R}" fill="none" stroke="#16a34a" stroke-width="14" stroke-dasharray="${pB} ${C-pB}" transform="rotate(-90 50 50)"/>
+<circle cx="50" cy="50" r="${R}" fill="none" stroke="#f59e0b" stroke-width="14" stroke-dasharray="${pR} ${C-pR}" stroke-dashoffset="${-pB}" transform="rotate(-90 50 50)"/>
+<circle cx="50" cy="50" r="${R}" fill="none" stroke="#dc2626" stroke-width="14" stroke-dasharray="${pM} ${C-pM}" stroke-dashoffset="${-(pB+pR)}" transform="rotate(-90 50 50)"/>
 <text x="50" y="48" text-anchor="middle" font-size="12" font-weight="900" fill="#0f172a">${nBueno}</text>
 <text x="50" y="60" text-anchor="middle" font-size="7" fill="#64748b">BUENOS</text>
 </svg>
@@ -1928,7 +1425,6 @@ stroke-dasharray="${pMal} ${C-pMal}" stroke-dashoffset="${-(pBueno+pReg)}" trans
 </div>
 </div>
 </div>
-
 <div class="rep-chart-box">
 <h4>Inventario por Estado</h4>
 <div class="rep-bars">
@@ -1938,7 +1434,6 @@ ${barInv("Malos", nMal, "rojo")}
 ${barInv("Faltantes", nFal, "rojo")}
 </div>
 </div>
-
 <div class="rep-chart-box">
 <h4>Novedades por Severidad</h4>
 <div class="rep-bars">
@@ -1954,41 +1449,28 @@ ${barNov("Leves", lev, "azul")}
 </div>
 </div>
 
-<!-- 3. INVENTARIO -->
 <div class="rep-sec">
 <h2><span class="num">3</span> Inventario de Accesorios e Implementos <small>${inv.length} ítems evaluados</small></h2>
 <table>
-<thead>
-<tr>
-<th style="width:42%">Accesorio / Implemento</th>
-<th style="width:20%">Estado</th>
-<th>Observación</th>
-</tr>
-</thead>
+<thead><tr><th style="width:32px">#</th><th style="width:42%">Accesorio / Implemento</th><th style="width:18%">Estado</th><th>Observación</th></tr></thead>
 <tbody>${filasInv}</tbody>
 </table>
+<div style="margin-top:10px;padding:10px 14px;background:#f1f5f9;border-radius:8px;font-size:10px;color:#475569">
+<strong>Resumen del inventario:</strong> ${nBueno} en buen estado · ${nReg} regulares · ${nMal} malos · ${nFal} faltantes · Total ${inv.length} ítems.
+</div>
 </div>
 
-<!-- 4. NOVEDADES -->
 <div class="rep-sec">
 <h2><span class="num">4</span> Registro de Novedades, Daños y Pruebas <small>${r.novedades.length} hallazgo(s)</small></h2>
 ${bloquesNov}
-${costoTotal > 0 ? `
-<div style="margin-top:14px;padding:12px 16px;background:#f1f5f9;border-radius:8px;border-left:4px solid #0f172a">
-<div style="font-size:10px;text-transform:uppercase;color:#64748b;font-weight:800;letter-spacing:.5px">Costo total estimado de reparaciones</div>
-<div style="font-size:16px;font-weight:900;color:#0f172a;margin-top:3px">${money(costoTotal)}</div>
-</div>` : ""}
+${costoTotal>0 ? `<div style="margin-top:14px;padding:12px 16px;background:#f1f5f9;border-radius:8px;border-left:4px solid #0f172a"><div style="font-size:10px;text-transform:uppercase;color:#64748b;font-weight:800;letter-spacing:.5px">Costo total estimado de reparaciones</div><div style="font-size:16px;font-weight:900;color:#0f172a;margin-top:3px">${money(costoTotal)}</div></div>`:""}
 </div>
 
-<!-- 5. OBSERVACIONES -->
 <div class="rep-sec">
 <h2><span class="num">5</span> Observaciones y Recomendaciones Generales</h2>
-<div class="rep-nov leve" style="border-left-color:#0f172a">
-<div class="ndesc">${escapeHtml(r.observaciones || "Sin observaciones adicionales.")}</div>
-</div>
+<div class="rep-nov leve" style="border-left-color:#0f172a"><div class="ndesc">${escapeHtml(r.observaciones||"Sin observaciones adicionales.")}</div></div>
 </div>
 
-<!-- 6. RESUMEN -->
 <div class="rep-sec">
 <h2><span class="num">6</span> Resumen Ejecutivo y Concepto Técnico</h2>
 <div class="rep-grid g4">
@@ -1998,169 +1480,227 @@ ${item("Novedades leves", String(lev))}
 ${item("Total novedades", String(r.novedades.length))}
 ${item("Implementos en mal estado", String(nMal))}
 ${item("Implementos faltantes", String(nFal))}
-${item("Índice de aptitud", score + "%")}
-${item("Concepto final", r.estado === "verde" ? "APTO PARA OPERAR"
-: r.estado === "amarillo" ? "APTO CON RESTRICCIÓN"
-: "NO APTO PARA OPERAR")}
+${item("Índice de aptitud", score+"%")}
+${item("Concepto final", r.estado==="verde"?"APTO PARA OPERAR":r.estado==="amarillo"?"APTO CON RESTRICCIÓN":"NO APTO PARA OPERAR")}
 </div>
-${r.motivos && r.motivos.length ? `
-<p style="margin-top:11px;font-size:10.5px;color:#334155;padding:10px 12px;background:#fef9c3;border-left:3px solid #eab308;border-radius:6px">
-<strong>Hallazgos determinantes:</strong> ${escapeHtml(r.motivos.join(" · "))}
-</p>` : ""}
+${r.motivos && r.motivos.length ? `<p style="margin-top:11px;font-size:10.5px;color:#334155;padding:10px 12px;background:#fef9c3;border-left:3px solid #eab308;border-radius:6px"><strong>Hallazgos determinantes:</strong> ${escapeHtml(r.motivos.join(" · "))}</p>`:""}
 </div>
 
-<!-- FIRMAS -->
 <div class="rep-firmas">
-<div class="rep-firma">
-<div class="fspace"></div>
-<div class="flinea">${escapeHtml(r.conductor || "Conductor")}</div>
-<div class="fcargo">Conductor responsable</div>
-</div>
-<div class="rep-firma">
-<div class="fspace"></div>
-<div class="flinea">${escapeHtml(r.jefeTaller || "Jefe de Taller")}</div>
-<div class="fcargo">Jefe de Taller</div>
-</div>
-<div class="rep-firma">
-<div class="fspace"></div>
-<div class="flinea">${escapeHtml(r.jefeInmediato || "Jefe Inmediato / Supervisor")}</div>
-<div class="fcargo">Jefe Inmediato / Supervisor</div>
-</div>
+${firmaBlq("conductor", r.conductor, "Conductor responsable")}
+${firmaBlq("jefeTaller", r.jefeTaller, "Jefe de Taller")}
+${firmaBlq("jefeInmediato", r.jefeInmediato, "Jefe Inmediato / Supervisor")}
 </div>
 
-<!-- PIE -->
 <div class="rep-pie">
-Documento generado automáticamente por el Sistema de Control Operacional Vehicular ·
-${escapeHtml(r.empresa||"—")} · Formato ${escapeHtml(r.codFormato||"—")}<br>
-Este informe certifica el estado del vehículo al momento de la inspección y es válido para auditoría interna y control de flota.
+Documento generado por el Sistema de Control Operacional Vehicular · ${escapeHtml(r.empresa||"—")} · Formato ${escapeHtml(r.codFormato||"—")}<br>
+Certifica el estado del vehículo al momento de la inspección · Válido para auditoría interna y control de flota.
 <div class="hash">Código de verificación: ${hash} · ID: ${escapeHtml(r.id)} · Generado: ${fechaHoraCompleta(new Date().toISOString())}</div>
 </div>
 </div>`;
 }
 
 /* ============================================================
+EXPORTAR A EXCEL
+============================================================ */
+function exportarExcel(){
+if(!registros.length){ toast("No hay registros para exportar","warn"); return; }
+if(typeof XLSX === "undefined"){ toast("Cargando librería Excel... intente de nuevo","err"); return; }
+
+const f = document.getElementById("filtroEstado").value;
+const q = (document.getElementById("buscar").value||"").toLowerCase().trim();
+let lista = registros.filter(r=>{
+const co = !q || [r.placa,r.conductor,r.registro,r.marca,r.modelo].join(" ").toLowerCase().includes(q);
+const eo = !f || r.estado === f;
+return co && eo;
+});
+if(!lista.length){ toast("No hay registros que coincidan con el filtro","warn"); return; }
+
+// Hoja 1: Registros
+const ws1Data = lista.map(r=>{
+const crit=r.novedades.filter(n=>n.severidad==="Crítica").length;
+const mod=r.novedades.filter(n=>n.severidad==="Moderada").length;
+const lev=r.novedades.filter(n=>n.severidad==="Leve").length;
+const mal=r.inventario.filter(i=>i.estado==="Malo"||i.estado==="Faltante").length;
+let sc=100-crit*25-mod*10-lev*3-mal*8; sc=Math.max(0,Math.min(100,sc));
+const firmasTxt = [r.firmas?.conductor?"Conductor":null, r.firmas?.jefeTaller?"Jefe Taller":null, r.firmas?.jefeInmediato?"Jefe Inmediato":null].filter(Boolean).join(", ")||"Sin firmar";
+return {
+"N.º Registro": r.registro,
+"Fecha": fechaBonita(r.fecha),
+"Hora": r.hora||"",
+"Empresa": r.empresa||"",
+"Sede": r.sede||"",
+"Área": r.area||"",
+"Formato": r.codFormato||"",
+"Conductor": r.conductor||"",
+"Cédula": r.cedula||"",
+"Licencia": r.licencia||"",
+"Marca": r.marca||"",
+"Modelo": r.modelo||"",
+"Placa": r.placa||"",
+"Año": r.anio||"",
+"Kilometraje": r.km||"",
+"Operación": r.operacion||"",
+"Jefe Taller": r.jefeTaller||"",
+"Jefe Inmediato": r.jefeInmediato||"",
+"Estado": r.estado==="verde"?"APTO":r.estado==="amarillo"?"REVISAR":"NO APTO",
+"Índice Aptitud (%)": sc,
+"Novedades Críticas": crit,
+"Novedades Moderadas": mod,
+"Novedades Leves": lev,
+"Total Novedades": r.novedades.length,
+"Implementos Malos": r.inventario.filter(i=>i.estado==="Malo").length,
+"Implementos Faltantes": r.inventario.filter(i=>i.estado==="Faltante").length,
+"Implementos Regulares": r.inventario.filter(i=>i.estado==="Regular").length,
+"Costo Estimado Total": r.novedades.reduce((s,n)=>s+(Number(n.costo)||0),0),
+"Firmas": firmasTxt,
+"Observaciones": r.observaciones||"",
+"Creado": fechaHoraCompleta(r.creadoEn)
+};
+});
+const ws1 = XLSX.utils.json_to_sheet(ws1Data);
+ws1["!cols"] = [{wch:18},{wch:12},{wch:8},{wch:24},{wch:22},{wch:18},{wch:14},{wch:22},{wch:16},{wch:18},{wch:14},{wch:18},{wch:12},{wch:8},{wch:12},{wch:20},{wch:22},{wch:22},{wch:12},{wch:14},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:20},{wch:40},{wch:20}];
+
+// Hoja 2: Inventario detallado
+const ws2Data = [];
+lista.forEach(r=>{
+r.inventario.forEach((it, idx)=>{
+ws2Data.push({
+"Registro": r.registro,
+"Placa": r.placa,
+"Conductor": r.conductor,
+"Fecha": fechaBonita(r.fecha),
+"#": idx+1,
+"Ítem": it.item,
+"Estado": it.estado,
+"Observación": it.obs||""
+});
+});
+});
+const ws2 = XLSX.utils.json_to_sheet(ws2Data);
+ws2["!cols"] = [{wch:18},{wch:12},{wch:22},{wch:12},{wch:5},{wch:42},{wch:12},{wch:36}];
+
+// Hoja 3: Novedades detalladas
+const ws3Data = [];
+lista.forEach(r=>{
+r.novedades.forEach((n, idx)=>{
+ws3Data.push({
+"Registro": r.registro,
+"Placa": r.placa,
+"Conductor": r.conductor,
+"Fecha": fechaBonita(r.fecha),
+"#": idx+1,
+"Tipo": n.tipo,
+"Severidad": n.severidad,
+"Prioridad": n.prioridad||"",
+"Ubicación": n.ubicacion||"",
+"Descripción": n.descripcion,
+"Acción": n.accion||"",
+"Costo": Number(n.costo)||0,
+"Fecha registro": fechaHoraCompleta(n.fecha),
+"Fotos": (n.fotos||[]).length
+});
+});
+});
+const ws3 = XLSX.utils.json_to_sheet(ws3Data);
+ws3["!cols"] = [{wch:18},{wch:12},{wch:22},{wch:12},{wch:5},{wch:30},{wch:12},{wch:12},{wch:24},{wch:60},{wch:24},{wch:14},{wch:20},{wch:8}];
+
+// Hoja 4: Resumen ejecutivo
+const ws4Data = [
+["INDICADOR","VALOR"],
+["Total registros exportados", lista.length],
+["Aptos (verde)", lista.filter(r=>r.estado==="verde").length],
+["Requieren revisión (amarillo)", lista.filter(r=>r.estado==="amarillo").length],
+["No aptos (rojo)", lista.filter(r=>r.estado==="rojo").length],
+["Total novedades registradas", lista.reduce((s,r)=>s+r.novedades.length,0)],
+["Novedades críticas", lista.reduce((s,r)=>s+r.novedades.filter(n=>n.severidad==="Crítica").length,0)],
+["Novedades moderadas", lista.reduce((s,r)=>s+r.novedades.filter(n=>n.severidad==="Moderada").length,0)],
+["Novedades leves", lista.reduce((s,r)=>s+r.novedades.filter(n=>n.severidad==="Leve").length,0)],
+["Costo total estimado", lista.reduce((s,r)=>s+r.novedades.reduce((ss,n)=>ss+(Number(n.costo)||0),0),0)],
+["Registros con firma completa", lista.filter(r=>r.firmas?.conductor && r.firmas?.jefeTaller && r.firmas?.jefeInmediato).length],
+["Fecha de exportación", fechaHoraCompleta(new Date().toISOString())]
+];
+const ws4 = XLSX.utils.aoa_to_sheet(ws4Data);
+ws4["!cols"] = [{wch:40},{wch:22}];
+
+const wb = XLSX.utils.book_new();
+XLSX.utils.book_append_sheet(wb, ws1, "Registros");
+XLSX.utils.book_append_sheet(wb, ws2, "Inventario");
+XLSX.utils.book_append_sheet(wb, ws3, "Novedades");
+XLSX.utils.book_append_sheet(wb, ws4, "Resumen");
+
+const d = new Date();
+const pad = n=>String(n).padStart(2,"0");
+const fname = `Control_Vehicular_${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}.xlsx`;
+XLSX.writeFile(wb, fname);
+toast(`Excel generado: ${fname} · ${lista.length} registros`,"ok",4500);
+}
+
+/* ============================================================
 IMPRESIÓN
 ============================================================ */
-function imprimirRegistro(id){
-const r = registros.find(x=>x.id===id);
-if(!r){ toast("Registro no encontrado","err"); return; }
-document.getElementById("printArea").innerHTML = generarInformeHTML(r);
-setTimeout(()=>window.print(), 250);
-}
-function imprimirDesdeModal(){
-if(!registroParaImprimir){ toast("No hay informe seleccionado","err"); return; }
-document.getElementById("printArea").innerHTML = generarInformeHTML(registroParaImprimir);
-cerrarModal();
-setTimeout(()=>window.print(), 320);
-}
+function imprimirRegistro(id){ const r=registros.find(x=>x.id===id); if(!r){ toast("Registro no encontrado","err"); return; } document.getElementById("printArea").innerHTML = generarInformeHTML(r); setTimeout(()=>window.print(), 350); }
+function imprimirDesdeModal(){ if(!registroParaImprimir){ toast("Sin informe","err"); return; } document.getElementById("printArea").innerHTML = generarInformeHTML(registroParaImprimir); cerrarModal(); setTimeout(()=>window.print(), 450); }
 
 function imprimirTodos(){
-if(!registros.length){ toast("No hay registros para imprimir","warn"); return; }
+if(!registros.length){ toast("No hay registros","warn"); return; }
 const hoy = fechaHoraCompleta(new Date().toISOString());
-const empresa = registros[0].empresa || "Empresa de Transporte";
-const cod = registros[0].codFormato || "—";
-
+const empresa = registros[0].empresa||"Empresa de Transporte";
+const cod = registros[0].codFormato||"—";
 const nV = registros.filter(r=>r.estado==="verde").length;
 const nA = registros.filter(r=>r.estado==="amarillo").length;
 const nR = registros.filter(r=>r.estado==="rojo").length;
-const totalNov = registros.reduce((s,r)=>s + r.novedades.length, 0);
+const totalNov = registros.reduce((s,r)=>s+r.novedades.length,0);
 
-const portada = `
-<div class="rep">
-<div class="rep-portada">
+const portada = `<div class="rep"><div class="rep-portada">
 <div class="rlogo" style="width:80px;height:80px;font-size:40px;margin:0 auto 20px;border-radius:20px">🚗</div>
 <div style="font-size:11px;letter-spacing:2px;color:#64748b;font-weight:800;text-transform:uppercase">${escapeHtml(empresa)}</div>
 <h1 style="margin-top:26px">INFORME GENERAL DE FLOTA</h1>
 <h2>CONTROL OPERACIONAL VEHICULAR</h2>
-<div class="pbox">
-<div class="pl">Total de registros</div>
-<div class="pv">${registros.length}</div>
-</div>
+<div class="pbox"><div class="pl">Total de registros</div><div class="pv">${registros.length}</div></div>
 <div class="pinfo">
 <div><b>Formato:</b> ${escapeHtml(cod)}</div>
 <div><b>Fecha de emisión:</b> ${hoy}</div>
 <div><b>Resumen:</b> ${nV} aptos · ${nA} por revisar · ${nR} no aptos</div>
-<div><b>Total novedades registradas:</b> ${totalNov}</div>
+<div><b>Total novedades:</b> ${totalNov}</div>
 </div>
 <div style="margin-top:30px;font-size:10px;color:#64748b;max-width:480px;margin-left:auto;margin-right:auto;line-height:1.7">
-Este documento compila la totalidad de las inspecciones pre-operacionales realizadas,
-y está destinado a auditoría interna, jefatura de taller y supervisión operativa.
+Este documento compila la totalidad de las inspecciones pre-operacionales realizadas.
 </div>
-</div>
-</div>
-`;
+</div></div>`;
 
-const resumenGeneral = `
-<div class="rep" style="page-break-after:always">
+const resumenGeneral = `<div class="rep" style="page-break-after:always">
 <div class="rep-head">
-<div class="rep-empresa">
-<div class="rlogo">🚗</div>
-<div>
+<div class="rep-empresa"><div class="rlogo">🚗</div><div>
 <h1>${escapeHtml(empresa)}</h1>
 <div class="rsub">Resumen general de la flota · ${hoy}</div>
 <div class="rtitle">TABLA CONSOLIDADA DE REGISTROS</div>
+</div></div>
+<div class="rep-meta"><div><strong>Total:</strong> ${registros.length} registros</div><div><strong>Formato:</strong> ${escapeHtml(cod)}</div></div>
 </div>
-</div>
-<div class="rep-meta">
-<div><strong>Total:</strong> ${registros.length} registros</div>
-<div><strong>Formato:</strong> ${escapeHtml(cod)}</div>
-</div>
-</div>
-
-<div class="rep-sec">
-<h2><span class="num">§</span> Indicadores Generales</h2>
+<div class="rep-sec"><h2><span class="num">§</span> Indicadores Generales</h2>
 <div class="rep-grid g4">
 <div class="rep-item"><div class="k">Aptos (verde)</div><div class="v" style="color:#15803d;font-size:18px">${nV}</div></div>
 <div class="rep-item"><div class="k">Por revisar (amarillo)</div><div class="v" style="color:#b45309;font-size:18px">${nA}</div></div>
 <div class="rep-item"><div class="k">No aptos (rojo)</div><div class="v" style="color:#b91c1c;font-size:18px">${nR}</div></div>
 <div class="rep-item"><div class="k">Total novedades</div><div class="v" style="color:#0f172a;font-size:18px">${totalNov}</div></div>
-</div>
-</div>
+</div></div>
+<div class="rep-sec"><h2><span class="num">§</span> Consolidado de Registros</h2>
+<table><thead><tr><th>N.º Registro</th><th>Fecha</th><th>Placa</th><th>Vehículo</th><th>Conductor</th><th>Estado</th><th>Novedades</th><th>Índice</th></tr></thead>
+<tbody>${registros.map(r=>{
+const c=r.novedades.filter(n=>n.severidad==="Crítica").length;
+const m=r.novedades.filter(n=>n.severidad==="Moderada").length;
+const l=r.novedades.filter(n=>n.severidad==="Leve").length;
+const mal=r.inventario.filter(i=>i.estado==="Malo"||i.estado==="Faltante").length;
+let sc=100-c*25-m*10-l*3-mal*8; sc=Math.max(0,Math.min(100,sc));
+const col=r.estado==="verde"?"#15803d":r.estado==="amarillo"?"#b45309":"#b91c1c";
+return `<tr><td><b>${escapeHtml(r.registro)}</b></td><td>${fechaBonita(r.fecha)}</td><td>${escapeHtml(r.placa)}</td><td>${escapeHtml(r.marca)} ${escapeHtml(r.modelo)}</td><td>${escapeHtml(r.conductor)}</td><td style="color:${col};font-weight:800">${r.estado.toUpperCase()}</td><td style="text-align:center">${r.novedades.length}</td><td style="text-align:center;font-weight:800">${sc}%</td></tr>`;
+}).join("")}</tbody></table></div></div>`;
 
-<div class="rep-sec">
-<h2><span class="num">§</span> Consolidado de Registros</h2>
-<table>
-<thead>
-<tr>
-<th>N.º Registro</th><th>Fecha</th><th>Placa</th><th>Vehículo</th>
-<th>Conductor</th><th>Estado</th><th>Novedades</th><th>Índice</th>
-</tr>
-</thead>
-<tbody>
-${registros.map(r=>{
-const c = r.novedades.filter(n=>n.severidad==="Crítica").length;
-const m = r.novedades.filter(n=>n.severidad==="Moderada").length;
-const l = r.novedades.filter(n=>n.severidad==="Leve").length;
-const mal = r.inventario.filter(i=>i.estado==="Malo"||i.estado==="Faltante").length;
-let sc = 100 - c*25 - m*10 - l*3 - mal*8;
-sc = Math.max(0, Math.min(100, sc));
-const col = r.estado==="verde"?"#15803d":r.estado==="amarillo"?"#b45309":"#b91c1c";
-return `<tr>
-<td><b>${escapeHtml(r.registro)}</b></td>
-<td>${fechaBonita(r.fecha)}</td>
-<td>${escapeHtml(r.placa)}</td>
-<td>${escapeHtml(r.marca)} ${escapeHtml(r.modelo)}</td>
-<td>${escapeHtml(r.conductor)}</td>
-<td style="color:${col};font-weight:800">${r.estado.toUpperCase()}</td>
-<td style="text-align:center">${r.novedades.length}</td>
-<td style="text-align:center;font-weight:800">${sc}%</td>
-</tr>`;
-}).join("")}
-</tbody>
-</table>
-</div>
-</div>
-`;
-
-const cuerpos = registros.map((r,i)=>{
-return `<div style="${i < registros.length-1 ? "page-break-after:always;" : ""}">
-${generarInformeHTML(r)}
-</div>`;
-}).join("");
-
+const cuerpos = registros.map((r,i)=>`<div style="${i<registros.length-1?"page-break-after:always;":""}">${generarInformeHTML(r)}</div>`).join("");
 document.getElementById("printArea").innerHTML = portada + resumenGeneral + cuerpos;
-setTimeout(()=>window.print(), 400);
-toast(`Preparando informe general de ${registros.length} registros...`,"ok");
+setTimeout(()=>window.print(), 500);
+toast(`Preparando informe de ${registros.length} registros...`,"ok");
 }
 
 /* ============================================================
@@ -2177,45 +1717,22 @@ renderFotosPreview();
 cargarDeStorage();
 renderTablaRegistros();
 renderStats();
+renderHome();
 actualizarEstadoGlobal();
 actualizarCharts();
 
-// Drag & drop
-const uploadBox = document.querySelector(".upload-box");
-["dragenter","dragover"].forEach(ev=>{
-uploadBox.addEventListener(ev, e=>{
-e.preventDefault();
-uploadBox.style.borderColor = "#2563eb";
-uploadBox.style.background = "#eff6ff";
-});
-});
-["dragleave","drop"].forEach(ev=>{
-uploadBox.addEventListener(ev, e=>{
-e.preventDefault();
-uploadBox.style.borderColor = "#cbd5e1";
-uploadBox.style.background = "#fff";
-});
-});
-uploadBox.addEventListener("drop", async e=>{
-const files = Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith("image/"));
-if(!files.length) return;
-const espacio = 4 - fotosTemporales.length;
-for(const f of files.slice(0, espacio)){
-try{ fotosTemporales.push(await comprimirImagen(f)); }catch(err){}
-}
-renderFotosPreview();
-toast("Fotos cargadas","ok");
-});
+// Inicializar firmas
+initSignaturePad("conductor");
+initSignaturePad("jefeTaller");
+initSignaturePad("jefeInmediato");
 
-// Auto-formato placa
 const placaInput = document.getElementById("placa");
-placaInput.addEventListener("input", ()=>{
-placaInput.value = placaInput.value.toUpperCase().replace(/[^A-Z0-9-]/g,"");
-});
+placaInput.addEventListener("input", ()=>{ placaInput.value = placaInput.value.toUpperCase().replace(/[^A-Z0-9-]/g,""); });
 
-console.log("%c🚗 Sistema Empresarial de Control Vehicular listo","color:#2563eb;font-weight:bold;font-size:14px");
+if("serviceWorker" in navigator){ window.addEventListener("load", ()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }); }
+
+console.log("%c🚗 Sistema Empresarial de Control Vehicular v4.0 listo","color:#2563eb;font-weight:bold;font-size:14px");
 })();
 </script>
 </body>
 </html>
-
