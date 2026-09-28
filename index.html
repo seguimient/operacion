@@ -77,7 +77,6 @@ button,input,select,textarea{font-family:inherit;font-size:14px}
 .card:hover .card-title span.ico{transform:rotate(-8deg) scale(1.06)}
 .card-title small{font-weight:500;color:var(--muted);font-size:12px;margin-left:auto}
 
-/* HERO / HOME */
 .hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#1e3a8a 0%,#4c1d95 50%,#be185d 100%);background-size:200% 200%;animation:gradientMove 12s ease infinite;color:#fff;border-radius:24px;padding:38px 32px;margin-bottom:22px;box-shadow:0 24px 60px rgba(30,58,138,.35)}
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 15% 20%,rgba(255,255,255,.15),transparent 40%),radial-gradient(circle at 85% 80%,rgba(255,255,255,.1),transparent 45%)}
 .hero::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.12),transparent);background-size:200% 100%;animation:shine 5s linear infinite}
@@ -178,6 +177,9 @@ tbody td{padding:13px 15px;border-bottom:1px solid #f1f5f9;vertical-align:middle
 tbody tr{transition:background var(--t-fast);animation:rowIn .4s ease both}
 tbody tr:last-child td{border-bottom:none}
 .item-name{font-weight:600;color:#334155}
+.crit-badge{display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:2px 7px;background:#fee2e2;color:#b91c1c;border:1px solid #fca5a5;border-radius:60px;font-weight:800;letter-spacing:.4px;margin-left:8px;text-transform:uppercase;vertical-align:middle}
+.inv-row.crit-row{background:linear-gradient(90deg,#fffbfb,#fff)}
+.inv-row.crit-row:hover{background:#fef2f2 !important}
 .inv-row{cursor:pointer;transition:all var(--t-fast)}
 .inv-row:hover{background:#f0f7ff !important;transform:translateX(3px)}
 .inv-row:hover .item-name{color:var(--acento)}
@@ -225,8 +227,9 @@ tbody tr:last-child td{border-bottom:none}
 .gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:6px}
 .gauge-wrap .gauge-label{font-size:12.5px;font-weight:800;letter-spacing:.3px}
 
-/* FIRMA DIGITAL */
-.signature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.signature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media(max-width:820px){.signature-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.signature-grid{grid-template-columns:1fr}}
 .signature-pad{background:linear-gradient(155deg,#fbfdff,#f1f5f9);border:2px dashed var(--borde);border-radius:16px;padding:16px;transition:all var(--t)}
 .signature-pad:hover{border-color:var(--acento);background:#f0f7ff}
 .signature-pad.firmado{border-style:solid;border-color:var(--verde);background:linear-gradient(155deg,#f0fdf4,#dcfce7)}
@@ -237,7 +240,6 @@ tbody tr:last-child td{border-bottom:none}
 .signature-actions{display:flex;gap:8px;margin-top:10px;justify-content:space-between;align-items:center;flex-wrap:wrap}
 .signature-hint{font-size:10.5px;color:var(--muted);font-weight:600}
 
-/* NOVEDADES */
 .nov-form{background:linear-gradient(135deg,#f8fafc,#eef2f7);border-radius:18px;padding:20px;border:1.5px dashed #cbd5e1;margin-bottom:22px;transition:border-color var(--t)}
 .nov-form:hover{border-color:#94a3b8}
 .novedad-card{border:1.5px solid var(--borde);border-left:6px solid var(--muted);border-radius:14px;padding:17px;margin-bottom:14px;background:#fff;transition:all var(--t);animation:slideInRight .45s ease both;position:relative;cursor:pointer}
@@ -255,18 +257,8 @@ tbody tr:last-child td{border-bottom:none}
 .foto-thumb .del{position:absolute;top:4px;right:4px;width:24px;height:24px;border-radius:50%;background:rgba(220,38,38,.94);color:#fff;border:none;cursor:pointer;font-size:13px;line-height:1;display:grid;place-items:center;opacity:0;transition:all var(--t);transform:scale(.7)}
 .foto-thumb:hover .del{opacity:1;transform:scale(1)}
 
-.upload-box{border:2px dashed #cbd5e1;border-radius:16px;padding:22px;text-align:center;transition:all var(--t);background:#fff;position:relative;overflow:hidden}
-.upload-box:hover{border-color:var(--acento);background:#f0f7ff;box-shadow:0 12px 28px rgba(37,99,235,.15)}
-.upload-box .up-ico{font-size:32px;display:block;margin-bottom:8px;transition:transform var(--t)}
-.upload-box:hover .up-ico{transform:scale(1.15) translateY(-3px)}
-.upload-box p{font-size:12.5px;color:var(--muted);position:relative}
-.upload-box p strong{color:var(--texto)}
 .upload-buttons{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.upload-btn{
-display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-border:2px dashed #cbd5e1;border-radius:16px;padding:22px 16px;cursor:pointer;
-background:#fff;transition:all var(--t);text-align:center;
-}
+.upload-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed #cbd5e1;border-radius:16px;padding:22px 16px;cursor:pointer;background:#fff;transition:all var(--t);text-align:center}
 .upload-btn:hover{border-color:var(--acento);background:#f0f7ff;transform:translateY(-3px);box-shadow:0 12px 28px rgba(37,99,235,.15)}
 .upload-btn .ub-ico{font-size:32px;transition:transform var(--t)}
 .upload-btn:hover .ub-ico{transform:scale(1.15) rotate(-5deg)}
@@ -320,7 +312,6 @@ background:#fff;transition:all var(--t);text-align:center;
 .detail-photos .dp-item:hover{transform:scale(1.05) rotate(1deg);border-color:var(--acento)}
 .detail-photos .dp-item img{width:100%;height:100%;object-fit:cover;display:block}
 
-/* INFORME */
 .rep{font-family:"Inter","Segoe UI",Arial,sans-serif;color:#111;font-size:12px;line-height:1.5;background:#fff;padding:10px}
 .rep *{box-sizing:border-box}
 .rep-head{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:4px solid #0f172a;padding-bottom:16px;margin-bottom:20px;flex-wrap:wrap;position:relative}
@@ -353,7 +344,6 @@ background:#fff;transition:all var(--t);text-align:center;
 .rep table{width:100%;border-collapse:collapse;font-size:11px;min-width:0}
 .rep thead th{background:#0f172a;color:#fff;padding:8px 10px;font-size:9.5px;letter-spacing:.6px;text-transform:uppercase;font-weight:800;text-align:left}
 .rep tbody td{padding:7px 10px;border-bottom:1px solid #e5e9f0;vertical-align:top}
-.rep tbody tr{page-break-inside:avoid}
 .rep-charts{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:8px;page-break-inside:avoid}
 .rep-chart-box{border:1px solid #dbe2ea;border-radius:10px;padding:12px;background:#fbfdff;page-break-inside:avoid}
 .rep-chart-box h4{font-size:10px;text-transform:uppercase;letter-spacing:.7px;color:#475569;font-weight:800;margin-bottom:10px;text-align:center}
@@ -380,7 +370,6 @@ background:#fff;transition:all var(--t);text-align:center;
 .rep-firma{text-align:center;font-size:9.5px;color:#334155}
 .rep-firma .fsign{height:60px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:4px}
 .rep-firma .fsign img{max-height:58px;max-width:100%;object-fit:contain}
-.rep-firma .fspace{height:52px}
 .rep-firma .flinea{border-top:1.5px solid #334155;padding-top:6px;font-weight:700;color:#0f172a;font-size:10px}
 .rep-firma .fcargo{font-size:9px;color:#64748b;margin-top:2px;font-weight:600;letter-spacing:.3px}
 .rep-firma .fmeta{font-size:8.5px;color:#94a3b8;margin-top:3px;font-weight:600}
@@ -394,6 +383,8 @@ background:#fff;transition:all var(--t);text-align:center;
 .rep-portada .pbox .pv{font-size:22px;font-weight:900;color:#0f172a;margin-top:5px}
 .rep-portada .pinfo{margin-top:30px;font-size:12px;color:#334155;line-height:1.9}
 .rep-portada .pinfo b{color:#0f172a}
+.rep-inv-empty{padding:20px 14px;text-align:center;color:#15803d;font-weight:700;background:#f0fdf4;border-radius:8px;border:1px solid #86efac}
+.rep-inv-crit{background:#fff1f2;border-left:3px solid #dc2626;padding:10px 14px;border-radius:8px;font-size:10px;color:#b91c1c;margin-top:10px}
 
 #printArea{display:none}
 @media print{
@@ -402,37 +393,30 @@ body{background:#fff !important;background-image:none !important}
 #app,#toast,.modal{display:none !important}
 #printArea{display:block !important}
 .rep{font-size:10.5px;padding:0}
+.rep-firmas{grid-template-columns:repeat(3,1fr) !important;gap:20px !important}
+.rep-charts{grid-template-columns:1fr 1fr 1fr !important}
+.rep-grid{grid-template-columns:repeat(3,1fr) !important}
+.rep-grid.g4{grid-template-columns:repeat(4,1fr) !important}
+.rep-grid.g2{grid-template-columns:repeat(2,1fr) !important}
+.rep-item,.rep-nov,.rep-chart-box,.rep-fotos,.rep-firmas,.rep-estado-box,.rep-firma{page-break-inside:avoid}
 .rep-sec h2{page-break-after:avoid;break-after:avoid}
-.rep tbody tr,.rep-item,.rep-nov,.rep-chart-box,.rep-fotos,.rep-firmas,.rep-estado-box,.rep-firma{page-break-inside:avoid}
+.rep table{width:100%;border-collapse:collapse}
+.rep tbody td{color:#111 !important;padding:6px 8px}
+.rep tbody td *{color:inherit}
 .rep-fotos img{width:100px;height:76px}
 .rep-portada{page-break-after:always}
+.rep-nov .rep-fotos img{width:95px;height:72px}
 }
-
-@media(max-width:820px){
-.rep-charts{grid-template-columns:1fr 1fr}
-.rep-grid,.rep-grid.g4{grid-template-columns:repeat(2,1fr)}
-.rep-firmas{grid-template-columns:1fr 1fr;gap:34px}
-.hero{padding:28px 22px}
-.hero h1{font-size:24px}
-.hero p{font-size:13.5px}
-}
+@media(max-width:820px){.hero{padding:28px 22px}.hero h1{font-size:24px}.hero p{font-size:13.5px}}
 @media(max-width:720px){
 .topbar{padding:16px;border-radius:18px}
-.brand h1{font-size:16.5px}
-.brand p{font-size:11px}
-.brand .logo{width:48px;height:48px;font-size:22px}
+.brand h1{font-size:16.5px}.brand p{font-size:11px}.brand .logo{width:48px;height:48px;font-size:22px}
 .card{padding:18px;border-radius:16px}
 .tabs{gap:4px;padding:6px;border-radius:14px}
 .tab{padding:10px 12px;font-size:11.5px}
 .dash{grid-template-columns:1fr}
-.rep-grid,.rep-grid.g4{grid-template-columns:1fr 1fr}
-.rep-charts{grid-template-columns:1fr}
-.rep-firmas{grid-template-columns:1fr}
 .status-global{font-size:12px;padding:9px 15px}
-.rep-head{flex-direction:column}
-.rep-meta{text-align:left;width:100%}
-.hero h1{font-size:20px}
-.hero{padding:24px 18px}
+.hero h1{font-size:20px}.hero{padding:24px 18px}
 .hero-actions .btn-hero{width:100%;justify-content:center}
 .quick-grid{grid-template-columns:1fr}
 .upload-buttons{grid-template-columns:1fr}
@@ -466,11 +450,10 @@ body{background:#fff !important;background-image:none !important}
 <button class="tab" data-tab="registros">📋 Registros</button>
 </nav>
 
-<!-- ============ INICIO ============ -->
 <section class="panel active" id="panel-inicio">
 <div class="hero">
 <div class="hero-content">
-<div class="hero-badge">⚡ Sistema Empresarial v4.0</div>
+<div class="hero-badge">⚡ Sistema Empresarial v4.2</div>
 <h1>Control Operacional Vehicular</h1>
 <p>Inspecciones completas con firma digital, evidencia fotográfica, exportación a Excel e informes imprimibles con trazabilidad de auditoría.</p>
 <div class="hero-actions">
@@ -483,8 +466,8 @@ body{background:#fff !important;background-image:none !important}
 <div class="kpi-grid">
 <div class="kpi total" onclick="irTab('registros')"><div class="k-ico">📊</div><div class="k-val" id="homeTotal">0</div><div class="k-lbl">Total registros</div><div class="k-sub">Historial completo</div></div>
 <div class="kpi verde" onclick="filtrarEstadoHome('verde')"><div class="k-ico">✅</div><div class="k-val" id="homeVerde">0</div><div class="k-lbl">Aptos</div><div class="k-sub">Listos para operar</div></div>
-<div class="kpi amarillo" onclick="filtrarEstadoHome('amarillo')"><div class="k-ico">🟡</div><div class="k-val" id="homeAmarillo">0</div><div class="k-lbl">Requieren revisión</div><div class="k-sub">Programar mantenimiento</div></div>
-<div class="kpi rojo" onclick="filtrarEstadoHome('rojo')"><div class="k-ico">⛔</div><div class="k-val" id="homeRojo">0</div><div class="k-lbl">No aptos</div><div class="k-sub">Fuera de servicio</div></div>
+<div class="kpi amarillo" onclick="filtrarEstadoHome('amarillo')"><div class="k-ico">🟡</div><div class="k-val" id="homeAmarillo">0</div><div class="k-lbl">Requieren revisión</div><div class="k-sub">Accesorios pendientes</div></div>
+<div class="kpi rojo" onclick="filtrarEstadoHome('rojo')"><div class="k-ico">⛔</div><div class="k-val" id="homeRojo">0</div><div class="k-lbl">No aptos</div><div class="k-sub">Componentes críticos</div></div>
 </div>
 
 <div class="card">
@@ -508,15 +491,14 @@ body{background:#fff !important;background-image:none !important}
 <div class="card-title"><span class="ico">🎯</span> Flujo de trabajo <small>5 pasos simples</small></div>
 <div class="steps-grid">
 <div class="step"><h4>Datos y firmas</h4><p>Conductor, placa, responsables + firma digital.</p></div>
-<div class="step"><h4>Inventario</h4><p>Evaluar los 22 accesorios obligatorios.</p></div>
+<div class="step"><h4>Inventario</h4><p>Evaluar los 22 accesorios. Los críticos están marcados.</p></div>
 <div class="step"><h4>Novedades</h4><p>Registrar daños con fotos (cámara o galería).</p></div>
-<div class="step"><h4>Guardar</h4><p>Calcular estado y guardar con hash de verificación.</p></div>
+<div class="step"><h4>Guardar</h4><p>Estado calculado según componentes críticos.</p></div>
 <div class="step"><h4>Exportar</h4><p>Excel, informe imprimible o PDF con firmas.</p></div>
 </div>
 </div>
 </section>
 
-<!-- ============ DATOS ============ -->
 <section class="panel" id="panel-datos">
 <div class="card">
 <div class="card-title"><span class="ico">🏢</span> Información Corporativa y de Auditoría <small>Encabezado del informe</small></div>
@@ -596,12 +578,11 @@ body{background:#fff !important;background-image:none !important}
 </div>
 </section>
 
-<!-- ============ INVENTARIO ============ -->
 <section class="panel" id="panel-inventario">
 <div class="card">
 <div class="card-title"><span class="ico">🧰</span> Inventario de Accesorios e Implementos <small id="invResumen">0 ítems evaluados</small></div>
-<p style="font-size:12.5px;color:var(--muted);margin-bottom:14px;padding:10px 14px;background:#eff6ff;border-radius:10px;border-left:3px solid var(--acento)">
-💡 <strong>Tip:</strong> Haz clic en cualquier fila para ver el detalle expandido.
+<p style="font-size:12.5px;color:var(--muted);margin-bottom:14px;padding:10px 14px;background:#fef2f2;border-radius:10px;border-left:3px solid #dc2626">
+⚠️ <strong>Importante:</strong> Los ítems marcados como <span class="crit-badge">🚨 CRÍTICO</span> son componentes que hacen funcionar el vehículo. Si alguno está en <strong>Malo</strong> o <strong>Faltante</strong>, el estado global será <strong>NO APTO</strong>. Los demás accesorios solo generan alerta amarilla.
 </p>
 <div class="table-wrap">
 <table>
@@ -656,7 +637,6 @@ body{background:#fff !important;background-image:none !important}
 </div>
 </section>
 
-<!-- ============ NOVEDADES ============ -->
 <section class="panel" id="panel-novedades">
 <div class="card">
 <div class="card-title"><span class="ico">⚠️</span> Registro de Novedades, Daños y Pruebas <small>Fisuras · Desgastes · Fugas · Pruebas</small></div>
@@ -737,7 +717,6 @@ body{background:#fff !important;background-image:none !important}
 </div>
 </section>
 
-<!-- ============ REGISTROS ============ -->
 <section class="panel" id="panel-registros">
 <div class="stats">
 <div class="stat t" onclick="document.getElementById('filtroEstado').value='';renderTablaRegistros()"><h4>Total registros</h4><div class="val" id="statTotal">0</div></div>
@@ -781,7 +760,6 @@ body{background:#fff !important;background-image:none !important}
 </section>
 </div>
 
-<!-- MODAL -->
 <div class="modal" id="modal">
 <div class="modal-box">
 <div class="modal-head">
@@ -804,18 +782,27 @@ body{background:#fff !important;background-image:none !important}
 DATOS BASE
 ============================================================ */
 const INVENTARIO_ITEMS = ["Extintor (vigente y con presión)","Botiquín de primeros auxilios","Llanta de repuesto","Gato hidráulico","Cruceta / llave de ruedas","Triángulos de seguridad","Conos de señalización","Caja de herramientas básica","Linterna / iluminación auxiliar","Cables pasa corriente","Kit de carretera completo","Cinturones de seguridad (todos)","Espejos retrovisores (laterales y central)","Luces delanteras (bajas y altas)","Luces traseras y de freno","Direccionales y luces de emergencia","Limpiaparabrisas y plumillas","Bocina / pito","Tapicería y asientos","Aire acondicionado / ventilación","Documentos: SOAT, tecnomecánica, licencia","Placas y rotulación visibles"];
+
+/* ============================================================
+COMPONENTES CRÍTICOS OPERATIVOS
+Solo estos disparan estado NO APTO (rojo) si están Malo/Faltante
+============================================================ */
+const CRITICAL_OPERATIONAL_INDICES = [
+  13, // Luces delanteras (bajas y altas)
+  14, // Luces traseras y de freno
+  15, // Direccionales y luces de emergencia
+  16, // Limpiaparabrisas y plumillas
+  17, // Bocina / pito
+  20, // Documentos: SOAT, tecnomecánica, licencia
+  21  // Placas y rotulación visibles
+];
+function esItemCritico(idx){ return CRITICAL_OPERATIONAL_INDICES.includes(idx); }
+
 const STORAGE_KEY = "registros_operacionales_vehiculos_v3";
 let novedades = [], fotosTemporales = [], registros = [], registroParaImprimir = null, contadorRegistro = 0, invExpandido = null;
 let firmas = { conductor: null, jefeTaller: null, jefeInmediato: null };
-let firmaDirty = { conductor: false, jefeTaller: false, jefeInmediato: false };
 
-/* ============================================================
-UTILIDADES
-============================================================ */
-function escapeHtml(str){
-if(str === undefined || str === null) return "";
-return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-}
+function escapeHtml(str){ if(str===undefined||str===null) return ""; return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;"); }
 function ahora(){ const d=new Date(); const p=n=>String(n).padStart(2,"0"); return {fecha:`${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())}`,hora:`${p(d.getHours())}:${p(d.getMinutes())}`}; }
 function fechaBonita(iso){ if(!iso) return "—"; const [y,m,d]=iso.split("-"); return `${d}/${m}/${y}`; }
 function fechaHoraCompleta(iso){ try{ return new Date(iso).toLocaleString("es-CO",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"}); }catch(e){ return iso; } }
@@ -824,9 +811,6 @@ function hashCode(str){ let h=0; for(let i=0;i<str.length;i++){ h=((h<<5)-h)+str
 function generarCodigoRegistro(){ const d=new Date(); const p=n=>String(n).padStart(2,"0"); const ymd=`${d.getFullYear()}${p(d.getMonth()+1)}${p(d.getDate())}`; contadorRegistro=(contadorRegistro+1)%1000; return `REG-${ymd}-${String(contadorRegistro).padStart(3,"0")}`; }
 function toast(msg,tipo="ok",dur=3200){ const c=document.getElementById("toast"); const el=document.createElement("div"); el.className=`toast-msg ${tipo}`; const ico=tipo==="ok"?"✅":tipo==="err"?"❌":"⚠️"; el.innerHTML=`<span>${ico}</span><span>${escapeHtml(msg)}</span>`; c.appendChild(el); setTimeout(()=>{el.style.transition=".4s";el.style.opacity="0";el.style.transform="translateX(80px)";setTimeout(()=>el.remove(),400);},dur); }
 
-/* ============================================================
-NAVEGACIÓN
-============================================================ */
 document.querySelectorAll(".tab").forEach(b=>b.addEventListener("click",()=>irTab(b.dataset.tab)));
 function irTab(nombre){
 document.querySelectorAll(".tab").forEach(b=>b.classList.toggle("active", b.dataset.tab===nombre));
@@ -840,28 +824,17 @@ actualizarEstadoGlobal(); actualizarCharts();
 function nuevaInspeccion(){ limpiarFormulario(true); irTab("datos"); toast("Nueva inspección lista.","ok"); }
 function filtrarEstadoHome(estado){ document.getElementById("filtroEstado").value=estado; irTab("registros"); renderTablaRegistros(); }
 
-/* ============================================================
-FIRMA DIGITAL
-============================================================ */
 function initSignaturePad(tipo){
 const canvas = document.getElementById(`sign-${tipo}`);
 const ctx = canvas.getContext("2d");
-ctx.strokeStyle = "#0f172a";
-ctx.lineWidth = 2.6;
-ctx.lineCap = "round";
-ctx.lineJoin = "round";
 let drawing = false, lastX = 0, lastY = 0, hasDrawn = false;
-
 function resizeCanvas(){
 const rect = canvas.getBoundingClientRect();
 const dpr = window.devicePixelRatio || 1;
 canvas.width = rect.width * dpr;
 canvas.height = rect.height * dpr;
 ctx.scale(dpr, dpr);
-ctx.strokeStyle = "#0f172a";
-ctx.lineWidth = 2.6;
-ctx.lineCap = "round";
-ctx.lineJoin = "round";
+ctx.strokeStyle = "#0f172a"; ctx.lineWidth = 2.6; ctx.lineCap = "round"; ctx.lineJoin = "round";
 }
 resizeCanvas();
 window.addEventListener("resize", ()=>{
@@ -869,47 +842,24 @@ const data = canvas.toDataURL();
 resizeCanvas();
 if(hasDrawn){ const img=new Image(); img.onload=()=>ctx.drawImage(img,0,0,canvas.width/(window.devicePixelRatio||1),canvas.height/(window.devicePixelRatio||1)); img.src=data; }
 });
-
-function getPos(e){
-const rect = canvas.getBoundingClientRect();
-return { x: e.clientX - rect.left, y: e.clientY - rect.top };
-}
-function start(e){
-e.preventDefault();
-drawing = true; hasDrawn = true;
-canvas.setPointerCapture(e.pointerId);
-const p = getPos(e);
-lastX = p.x; lastY = p.y;
-ctx.beginPath(); ctx.arc(p.x, p.y, 1.3, 0, Math.PI*2); ctx.fillStyle="#0f172a"; ctx.fill();
-}
-function move(e){
-if(!drawing) return;
-e.preventDefault();
-const p = getPos(e);
-ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y); ctx.stroke();
-lastX = p.x; lastY = p.y;
-}
-function end(e){ drawing = false; try{ canvas.releasePointerCapture(e.pointerId); }catch(err){} finalizarFirma(tipo, hasDrawn); }
-
+function getPos(e){ const rect=canvas.getBoundingClientRect(); return {x:e.clientX-rect.left, y:e.clientY-rect.top}; }
+function start(e){ e.preventDefault(); drawing=true; hasDrawn=true; try{canvas.setPointerCapture(e.pointerId);}catch(err){} const p=getPos(e); lastX=p.x; lastY=p.y; ctx.beginPath(); ctx.arc(p.x,p.y,1.3,0,Math.PI*2); ctx.fillStyle="#0f172a"; ctx.fill(); }
+function move(e){ if(!drawing) return; e.preventDefault(); const p=getPos(e); ctx.beginPath(); ctx.moveTo(lastX,lastY); ctx.lineTo(p.x,p.y); ctx.stroke(); lastX=p.x; lastY=p.y; }
+function end(e){ drawing=false; try{canvas.releasePointerCapture(e.pointerId);}catch(err){} finalizarFirma(tipo, hasDrawn); }
 canvas.addEventListener("pointerdown", start);
 canvas.addEventListener("pointermove", move);
 canvas.addEventListener("pointerup", end);
 canvas.addEventListener("pointercancel", end);
 canvas.addEventListener("pointerleave", e=>{ if(drawing) end(e); });
-
-canvas._hasDrawn = ()=>hasDrawn;
-canvas._reset = ()=>{ hasDrawn = false; firmas[tipo] = null; firmaDirty[tipo] = false; };
+canvas._reset = ()=>{ hasDrawn = false; };
 }
 function finalizarFirma(tipo, hasDrawn){
 if(hasDrawn){
 firmas[tipo] = document.getElementById(`sign-${tipo}`).toDataURL("image/png");
-firmaDirty[tipo] = true;
-const pad = document.getElementById(`pad-${tipo}`);
-pad.classList.add("firmado");
+document.getElementById(`pad-${tipo}`).classList.add("firmado");
 document.getElementById(`hint-${tipo}`).textContent = "✓ Firma registrada";
 } else {
 firmas[tipo] = null;
-firmaDirty[tipo] = false;
 document.getElementById(`pad-${tipo}`).classList.remove("firmado");
 document.getElementById(`hint-${tipo}`).textContent = "Firme aquí";
 }
@@ -917,23 +867,22 @@ document.getElementById(`hint-${tipo}`).textContent = "Firme aquí";
 function clearSignature(tipo){
 const canvas = document.getElementById(`sign-${tipo}`);
 const ctx = canvas.getContext("2d");
-ctx.clearRect(0, 0, canvas.width, canvas.height);
+ctx.clearRect(0,0,canvas.width,canvas.height);
 if(canvas._reset) canvas._reset();
-firmas[tipo] = null; firmaDirty[tipo] = false;
+firmas[tipo] = null;
 document.getElementById(`pad-${tipo}`).classList.remove("firmado");
 document.getElementById(`hint-${tipo}`).textContent = "Firme aquí";
 toast("Firma eliminada","warn");
 }
-function limpiarTodasLasFirmas(){ ["conductor","jefeTaller","jefeInmediato"].forEach(t=>{ const c=document.getElementById(`sign-${t}`); const ctx=c.getContext("2d"); ctx.clearRect(0,0,c.width,c.height); if(c._reset) c._reset(); firmas[t]=null; firmaDirty[t]=false; document.getElementById(`pad-${t}`).classList.remove("firmado"); document.getElementById(`hint-${t}`).textContent="Firme aquí"; }); }
+function limpiarTodasLasFirmas(){ ["conductor","jefeTaller","jefeInmediato"].forEach(t=>{ const c=document.getElementById(`sign-${t}`); const ctx=c.getContext("2d"); ctx.clearRect(0,0,c.width,c.height); if(c._reset) c._reset(); firmas[t]=null; document.getElementById(`pad-${t}`).classList.remove("firmado"); document.getElementById(`hint-${t}`).textContent="Firme aquí"; }); }
 
-/* ============================================================
-INVENTARIO
-============================================================ */
 function renderInventario(){
 const tbody = document.getElementById("inventarioBody");
-tbody.innerHTML = INVENTARIO_ITEMS.map((item, i)=>`
-<tr class="inv-row" data-idx="${i}" onclick="toggleInvRow(${i})" style="animation-delay:${i*18}ms">
-<td class="item-name">${escapeHtml(item)}</td>
+tbody.innerHTML = INVENTARIO_ITEMS.map((item, i)=>{
+const crit = esItemCritico(i);
+return `
+<tr class="inv-row ${crit?'crit-row':''}" data-idx="${i}" onclick="toggleInvRow(${i})" style="animation-delay:${i*18}ms">
+<td class="item-name">${escapeHtml(item)}${crit?'<span class="crit-badge">🚨 CRÍTICO</span>':''}</td>
 <td onclick="event.stopPropagation()">
 <select class="inv-estado" data-item="${i}" onchange="actualizarEstadoGlobal(); actualizarResumenInv(); actualizarCharts();">
 <option value="Bueno">✅ Bueno</option><option value="Regular">🟡 Regular</option><option value="Malo">🟠 Malo</option><option value="Faltante">🔴 Faltante</option><option value="No aplica">➖ No aplica</option>
@@ -942,7 +891,8 @@ tbody.innerHTML = INVENTARIO_ITEMS.map((item, i)=>`
 <td onclick="event.stopPropagation()"><input class="inv-obs" data-item="${i}" placeholder="Observación opcional..." onchange="actualizarResumenInv()"></td>
 </tr>
 <tr class="inv-detail-row" id="inv-detail-${i}" style="display:none"><td colspan="3"><div class="inv-detail"><h4>📋 Detalle del ítem #${i+1}</h4><div class="inv-detail-grid" id="inv-detail-content-${i}"></div></div></td></tr>
-`).join("");
+`;
+}).join("");
 actualizarResumenInv();
 }
 function toggleInvRow(i){
@@ -958,8 +908,10 @@ const estado = sel ? sel.value : "Bueno";
 const observacion = obs ? obs.value.trim() : "";
 const estadoIcono = estado==="Bueno"?"✅":estado==="Regular"?"🟡":estado==="Malo"?"🟠":estado==="Faltante"?"🔴":"➖";
 const estadoColor = estado==="Bueno"?"#15803d":estado==="Regular"?"#b45309":(estado==="Malo"||estado==="Faltante")?"#b91c1c":"#475569";
+const esCrit = esItemCritico(i);
 document.getElementById(`inv-detail-content-${i}`).innerHTML = `
 <div class="inv-detail-item"><div class="k">Ítem #</div><div class="v">${i+1} de ${INVENTARIO_ITEMS.length}</div></div>
+<div class="inv-detail-item"><div class="k">Tipo</div><div class="v" style="color:${esCrit?'#b91c1c':'#475569'}">${esCrit?'🚨 Componente crítico operativo':'🧰 Accesorio / Implemento'}</div></div>
 <div class="inv-detail-item"><div class="k">Accesorio / Implemento</div><div class="v">${escapeHtml(item)}</div></div>
 <div class="inv-detail-item"><div class="k">Estado actual</div><div class="v" style="color:${estadoColor}">${estadoIcono} ${escapeHtml(estado)}</div></div>
 <div class="inv-detail-item"><div class="k">Observación registrada</div><div class="v">${escapeHtml(observacion || "Sin observación")}</div></div>
@@ -968,11 +920,8 @@ document.getElementById(`inv-detail-content-${i}`).innerHTML = `
 invExpandido = i;
 }
 function leerInventario(){ return INVENTARIO_ITEMS.map((item, i)=>{ const sel=document.querySelector(`.inv-estado[data-item="${i}"]`); const obs=document.querySelector(`.inv-obs[data-item="${i}"]`); return {item, estado: sel?sel.value:"Bueno", obs: obs?obs.value.trim():""}; }); }
-function actualizarResumenInv(){ const inv=leerInventario(); const m=inv.filter(i=>i.estado==="Malo"||i.estado==="Faltante").length; const r=inv.filter(i=>i.estado==="Regular").length; document.getElementById("invResumen").textContent=`${inv.length} ítems · ${m} mal/faltantes · ${r} regulares`; }
+function actualizarResumenInv(){ const inv=leerInventario(); const m=inv.filter(i=>i.estado==="Malo"||i.estado==="Faltante").length; const r=inv.filter(i=>i.estado==="Regular").length; const cm=inv.filter((i,idx)=>esItemCritico(idx)&&(i.estado==="Malo"||i.estado==="Faltante")).length; document.getElementById("invResumen").textContent=`${inv.length} ítems · ${m} mal/faltantes (${cm} críticos) · ${r} regulares`; }
 
-/* ============================================================
-FOTOS
-============================================================ */
 function comprimirImagen(file, maxDim=1000, calidad=0.72){
 return new Promise((resolve, reject)=>{
 const reader = new FileReader();
@@ -1004,9 +953,6 @@ document.getElementById("novFotosGaleria").addEventListener("change", async e=>{
 function renderFotosPreview(){ const cont=document.getElementById("fotosPreview"); if(!fotosTemporales.length){ cont.innerHTML=""; return; } cont.innerHTML = fotosTemporales.map((f,i)=>`<div class="foto-thumb" style="animation-delay:${i*70}ms"><img src="${f}" alt="Foto ${i+1}"><button class="del" onclick="eliminarFotoTemp(${i})" title="Eliminar">✕</button></div>`).join(""); }
 function eliminarFotoTemp(i){ fotosTemporales.splice(i,1); renderFotosPreview(); }
 
-/* ============================================================
-NOVEDADES
-============================================================ */
 function agregarNovedad(){
 const tipo=document.getElementById("novTipo").value;
 const severidad=document.getElementById("novSeveridad").value;
@@ -1079,35 +1025,76 @@ win.document.close();
 }
 
 /* ============================================================
-ESTADO
+CÁLCULO DEL ESTADO GLOBAL - REGLA ACTUALIZADA
 ============================================================ */
 function calcularEstado(){
-const inv=leerInventario();
-const criticas=novedades.filter(n=>n.severidad==="Crítica").length;
-const moderadas=novedades.filter(n=>n.severidad==="Moderada").length;
-const leves=novedades.filter(n=>n.severidad==="Leve").length;
-const malos=inv.filter(i=>i.estado==="Malo").length;
-const faltantes=inv.filter(i=>i.estado==="Faltante").length;
-const regulares=inv.filter(i=>i.estado==="Regular").length;
-const motivos=[];
-if(criticas>0) motivos.push(`${criticas} novedad(es) CRÍTICA(S)`);
-if(moderadas>0) motivos.push(`${moderadas} novedad(es) moderada(s)`);
-if(leves>0) motivos.push(`${leves} novedad(es) leve(s)`);
-if(malos>0) motivos.push(`${malos} implemento(s) en MAL estado`);
-if(faltantes>0) motivos.push(`${faltantes} implemento(s) FALTANTE(S)`);
-if(regulares>0) motivos.push(`${regulares} implemento(s) en estado regular`);
-let nivel="verde";
-if(criticas>0 || (malos+faltantes)>=2) nivel="rojo";
-else if(moderadas>0 || leves>0 || malos>0 || faltantes>0 || regulares>0) nivel="amarillo";
-return {nivel,motivos,resumen:{criticas,moderadas,leves,malos,faltantes,regulares}};
+const inv = leerInventario();
+
+/* Separar componentes críticos operativos de accesorios */
+const criticosMalos = inv.filter((i,idx)=> esItemCritico(idx) && (i.estado==="Malo" || i.estado==="Faltante"));
+const criticosRegulares = inv.filter((i,idx)=> esItemCritico(idx) && i.estado==="Regular");
+const accesoriosMalos = inv.filter((i,idx)=> !esItemCritico(idx) && (i.estado==="Malo" || i.estado==="Faltante"));
+const accesoriosRegulares = inv.filter((i,idx)=> !esItemCritico(idx) && i.estado==="Regular");
+
+const criticas = novedades.filter(n=>n.severidad==="Crítica").length;
+const moderadas = novedades.filter(n=>n.severidad==="Moderada").length;
+const leves = novedades.filter(n=>n.severidad==="Leve").length;
+
+const nCriticosMalos = criticosMalos.length;
+const nCriticosReg = criticosRegulares.length;
+const nAccMalos = accesoriosMalos.length;
+const nAccReg = accesoriosRegulares.length;
+
+const motivos = [];
+
+/* Motivos que generan ROJO */
+if(criticas > 0) motivos.push(`🔴 ${criticas} novedad(es) CRÍTICA(S) registrada(s)`);
+if(nCriticosMalos > 0){
+const nombres = criticosMalos.map(c=>c.item).slice(0,3).join(", ");
+motivos.push(`🔴 ${nCriticosMalos} componente(s) CRÍTICO(S) en mal estado o faltante: ${nombres}${nCriticosMalos>3?"...":""}`);
 }
+
+/* Motivos que generan AMARILLO */
+if(moderadas > 0) motivos.push(`🟡 ${moderadas} novedad(es) moderada(s)`);
+if(leves > 0) motivos.push(`🔵 ${leves} novedad(es) leve(s)`);
+if(nCriticosReg > 0) motivos.push(`🟡 ${nCriticosReg} componente(s) crítico(s) en estado regular`);
+if(nAccMalos > 0) motivos.push(`🟠 ${nAccMalos} accesorio(s)/implemento(s) en mal estado o faltante`);
+if(nAccReg > 0) motivos.push(`🟡 ${nAccReg} accesorio(s)/implemento(s) en estado regular`);
+
+/* REGLA: 
+   - ROJO si hay novedad crítica O un componente crítico operativo malo/faltante
+   - AMARILLO si hay cualquier otra observación
+   - VERDE si todo está bien
+*/
+let nivel = "verde";
+if(criticas > 0 || nCriticosMalos > 0){
+nivel = "rojo";
+} else if(moderadas > 0 || leves > 0 || nCriticosReg > 0 || nAccMalos > 0 || nAccReg > 0){
+nivel = "amarillo";
+}
+
+return {
+nivel,
+motivos,
+resumen:{
+criticas, moderadas, leves,
+criticosMalos: nCriticosMalos,
+criticosRegulares: nCriticosReg,
+accesoriosMalos: nAccMalos,
+accesoriosRegulares: nAccReg,
+malos: nCriticosMalos + nAccMalos,
+faltantes: 0,
+regulares: nCriticosReg + nAccReg
+}
+};
+}
+
 function actualizarEstadoGlobal(){
 const {nivel}=calcularEstado();
 const sg=document.getElementById("statusGlobal"), st=document.getElementById("statusTexto");
 sg.className="status-global "+nivel;
 st.textContent = nivel==="verde"?"🟢 APTO PARA OPERAR":nivel==="amarillo"?"🟡 REVISIÓN PROGRAMADA":"🔴 NO APTO / CRÍTICO";
 }
-
 function actualizarCharts(){
 const inv=leerInventario();
 const bueno=inv.filter(i=>i.estado==="Bueno"||i.estado==="No aplica").length;
@@ -1134,18 +1121,18 @@ const maxN=Math.max(crit,mod,lev,1);
 const bc=document.getElementById("barCrit"), bm=document.getElementById("barMod"), bl=document.getElementById("barLev");
 if(bc){ bc.style.width=(crit/maxN*100)+"%"; bm.style.width=(mod/maxN*100)+"%"; bl.style.width=(lev/maxN*100)+"%"; document.getElementById("barCritVal").textContent=crit; document.getElementById("barModVal").textContent=mod; document.getElementById("barLevVal").textContent=lev; document.getElementById("dashNovTotal").textContent=novedades.length; }
 const {nivel}=calcularEstado();
-let score=100; score-=crit*25; score-=mod*10; score-=lev*3; score-=malo*8; score-=reg*2;
+let score=100; score-=crit*25; score-=mod*10; score-=lev*3;
+const inv2 = leerInventario();
+const critMalos = inv2.filter((i,idx)=>esItemCritico(idx)&&(i.estado==="Malo"||i.estado==="Faltante")).length;
+const accMalos = inv2.filter((i,idx)=>!esItemCritico(idx)&&(i.estado==="Malo"||i.estado==="Faltante")).length;
+score -= critMalos*15; score -= accMalos*5; score -= reg*2;
 score=Math.max(0,Math.min(100,score));
 const arc=document.getElementById("gaugeArc");
 if(arc){ arc.setAttribute("stroke-dashoffset",173-(score/100)*173); arc.setAttribute("stroke",nivel==="verde"?"#16a34a":nivel==="amarillo"?"#f59e0b":"#dc2626"); document.getElementById("gaugePct").textContent=score+"%"; document.getElementById("dashScore").textContent=score+"%"; document.getElementById("gaugeLabel").textContent=nivel==="verde"?"APTO":nivel==="amarillo"?"REVISAR":"NO APTO"; }
 }
-
 document.addEventListener("input", e=>{ if(e.target.closest("#app")){ actualizarEstadoGlobal(); actualizarCharts(); } });
 document.addEventListener("change", e=>{ if(e.target.closest("#app")){ actualizarEstadoGlobal(); actualizarCharts(); } });
 
-/* ============================================================
-GUARDAR
-============================================================ */
 function guardarRegistro(){
 const conductor=document.getElementById("conductor").value.trim();
 const marca=document.getElementById("marca").value.trim();
@@ -1199,9 +1186,6 @@ actualizarResumenInv(); actualizarEstadoGlobal(); actualizarCharts();
 if(!silencioso){ toast("Formulario reiniciado","warn"); irTab("datos"); }
 }
 
-/* ============================================================
-HOME
-============================================================ */
 function renderHome(){
 document.getElementById("homeTotal").textContent=registros.length;
 document.getElementById("homeVerde").textContent=registros.filter(r=>r.estado==="verde").length;
@@ -1224,9 +1208,6 @@ return `<div class="recent-item ${r.estado}" onclick="verRegistro('${r.id}')">
 }).join("");
 }
 
-/* ============================================================
-TABLA REGISTROS
-============================================================ */
 function renderStats(){
 document.getElementById("statTotal").textContent=registros.length;
 document.getElementById("statVerde").textContent=registros.filter(r=>r.estado==="verde").length;
@@ -1265,9 +1246,6 @@ function badgeEstado(n){ if(n==="verde") return `<span class="badge verde"><span
 function eliminarRegistro(id){ const r=registros.find(x=>x.id===id); if(!r) return; if(!confirm(`¿Eliminar ${r.registro} (${r.placa})?`)) return; registros=registros.filter(x=>x.id!==id); guardarEnStorage(); renderTablaRegistros(); renderHome(); toast("Registro eliminado","warn"); }
 function borrarTodo(){ if(!registros.length){ toast("No hay registros","warn"); return; } if(!confirm("⚠️ Se eliminarán TODOS los registros. ¿Continuar?")) return; registros=[]; guardarEnStorage(); renderTablaRegistros(); renderHome(); toast("Historial eliminado","err"); }
 
-/* ============================================================
-MODAL
-============================================================ */
 function verRegistro(id){
 const r=registros.find(x=>x.id===id); if(!r) return;
 registroParaImprimir = r;
@@ -1289,7 +1267,7 @@ document.getElementById("modal").addEventListener("click", e=>{ if(e.target.id==
 document.addEventListener("keydown", e=>{ if(e.key==="Escape") cerrarModal(); });
 
 /* ============================================================
-INFORME HTML (con firmas y toda la info)
+INFORME HTML
 ============================================================ */
 function generarInformeHTML(r){
 const colores = { verde:{bg:"#dcfce7",txt:"#15803d",bd:"#4ade80",label:"APTO PARA OPERAR"}, amarillo:{bg:"#fef3c7",txt:"#b45309",bd:"#fbbf24",label:"REQUIERE REVISIÓN"}, rojo:{bg:"#fee2e2",txt:"#b91c1c",bd:"#f87171",label:"NO APTO"} };
@@ -1300,11 +1278,31 @@ const nBueno = inv.filter(i=>i.estado==="Bueno"||i.estado==="No aplica").length;
 const nReg = inv.filter(i=>i.estado==="Regular").length;
 const nMal = inv.filter(i=>i.estado==="Malo").length;
 const nFal = inv.filter(i=>i.estado==="Faltante").length;
+const nTotal = inv.length;
 const crit = r.novedades.filter(n=>n.severidad==="Crítica").length;
 const mod = r.novedades.filter(n=>n.severidad==="Moderada").length;
 const lev = r.novedades.filter(n=>n.severidad==="Leve").length;
 const costoTotal = r.novedades.reduce((s,n)=>s+(Number(n.costo)||0),0);
-let score=100; score-=crit*25; score-=mod*10; score-=lev*3; score-=nMal*8; score-=nFal*10; score-=nReg*2;
+
+/* Componentes críticos del inventario */
+const criticosConProblema = [];
+inv.forEach((it, idx)=>{
+if(esItemCritico(idx) && it.estado !== "Bueno" && it.estado !== "No aplica"){
+criticosConProblema.push({...it, originalIdx: idx});
+}
+});
+
+/* Componentes NO críticos con problema */
+const accesoriosConProblema = [];
+inv.forEach((it, idx)=>{
+if(!esItemCritico(idx) && it.estado !== "Bueno" && it.estado !== "No aplica"){
+accesoriosConProblema.push({...it, originalIdx: idx});
+}
+});
+
+let score=100; score-=crit*25; score-=mod*10; score-=lev*3;
+score -= criticosConProblema.length*15;
+score -= accesoriosConProblema.length*5;
 score=Math.max(0,Math.min(100,score));
 const item=(k,v)=>`<div class="rep-item"><div class="k">${escapeHtml(k)}</div><div class="v">${escapeHtml(v||"—")}</div></div>`;
 const maxInv=Math.max(nBueno,nReg,nMal,nFal,1);
@@ -1312,15 +1310,15 @@ const barInv=(l,v,cl)=>`<div class="rep-bar-row"><span class="lbl">${l}</span><s
 const maxNov=Math.max(crit,mod,lev,1);
 const barNov=(l,v,cl)=>`<div class="rep-bar-row"><span class="lbl">${l}</span><span class="track"><span class="fill ${cl}" style="width:${(v/maxNov)*100}%"></span></span><span class="val">${v}</span></div>`;
 const R=38, C=2*Math.PI*R;
-const pB=(nBueno/inv.length)*C, pR=(nReg/inv.length)*C, pM=((nMal+nFal)/inv.length)*C;
+const pB=(nBueno/nTotal)*C, pR=(nReg/nTotal)*C, pM=((nMal+nFal)/nTotal)*C;
 
-const filasInv = inv.map((it, idx)=>{
-const pr = ["Malo","Faltante"].includes(it.estado);
-const re = it.estado==="Regular";
-const col = pr?"#b91c1c":re?"#b45309":"#15803d";
-const bg = pr?"#fff1f2":re?"#fffbeb":"#f0fdf4";
-return `<tr style="background:${bg}"><td style="text-align:center;font-weight:800;color:#64748b;width:32px">${idx+1}</td><td>${escapeHtml(it.item)}</td><td style="color:${col};font-weight:800">${escapeHtml(it.estado)}</td><td>${escapeHtml(it.obs||"—")}</td></tr>`;
-}).join("");
+const filaCrit = (it) => {
+const esProblema = ["Malo","Faltante"].includes(it.estado);
+const esRegular = it.estado === "Regular";
+const color = esProblema ? "#b91c1c" : esRegular ? "#b45309" : "#15803d";
+const bg = esProblema ? "#fff1f2" : esRegular ? "#fffbeb" : "#f0fdf4";
+return `<tr style="background:${bg}"><td style="text-align:center;font-weight:800;color:#64748b;width:32px">${it.originalIdx+1}</td><td>${escapeHtml(it.item)}</td><td style="color:${color};font-weight:800">${escapeHtml(it.estado)}</td><td>${escapeHtml(it.obs||"—")}</td></tr>`;
+};
 
 const bloquesNov = r.novedades.length
 ? r.novedades.map((n,i)=>`
@@ -1341,9 +1339,8 @@ ${n.fotos && n.fotos.length ? `<div style="margin-top:8px"><div style="font-size
 
 const firmaBlq = (tipo, nombre, cargo) => {
 const img = (r.firmas && r.firmas[tipo]) ? `<img src="${r.firmas[tipo]}" alt="Firma">` : "";
-const txt = img ? "" : `<div style="height:58px"></div>`;
 return `<div class="rep-firma">
-<div class="fsign">${img || txt}</div>
+<div class="fsign">${img}</div>
 <div class="flinea">${escapeHtml(nombre||cargo)}</div>
 <div class="fcargo">${cargo}</div>
 <div class="fmeta">${img?"✓ Firmado digitalmente":"Pendiente de firma"}</div>
@@ -1450,36 +1447,64 @@ ${barNov("Leves", lev, "azul")}
 </div>
 
 <div class="rep-sec">
-<h2><span class="num">3</span> Inventario de Accesorios e Implementos <small>${inv.length} ítems evaluados</small></h2>
+<h2><span class="num">3</span> Componentes Críticos Operativos <small>${criticosConProblema.length} de ${CRITICAL_OPERATIONAL_INDICES.length} con problema</small></h2>
+${criticosConProblema.length ? `
+<table>
+<thead><tr><th style="width:32px">#</th><th style="width:42%">Componente Crítico</th><th style="width:18%">Estado</th><th>Observación</th></tr></thead>
+<tbody>${criticosConProblema.map(filaCrit).join("")}</tbody>
+</table>
+<div class="rep-inv-crit">
+⚠️ Estos componentes son esenciales para la operación del vehículo. Su mal estado o ausencia impide la circulación segura y legal.
+</div>
+` : `
+<table>
+<thead><tr><th style="width:32px">#</th><th style="width:42%">Componente Crítico</th><th style="width:18%">Estado</th><th>Observación</th></tr></thead>
+<tbody><tr><td colspan="4" class="rep-inv-empty">✅ Todos los componentes críticos operativos se encuentran en buen estado</td></tr></tbody>
+</table>
+`}
+</div>
+
+<div class="rep-sec">
+<h2><span class="num">4</span> Accesorios e Implementos <small>${accesoriosConProblema.length} de ${nTotal - CRITICAL_OPERATIONAL_INDICES.length} con problema</small></h2>
+${accesoriosConProblema.length ? `
 <table>
 <thead><tr><th style="width:32px">#</th><th style="width:42%">Accesorio / Implemento</th><th style="width:18%">Estado</th><th>Observación</th></tr></thead>
-<tbody>${filasInv}</tbody>
+<tbody>${accesoriosConProblema.map(filaCrit).join("")}</tbody>
 </table>
+<div style="margin-top:10px;padding:10px 14px;background:#fffbeb;border-radius:8px;font-size:10px;color:#b45309;border-left:3px solid #f59e0b">
+ℹ️ Estos ítems son complementarios. Su ausencia o mal estado NO impide la operación del vehículo, pero debe programarse su reposición.
+</div>
+` : `
+<table>
+<thead><tr><th style="width:32px">#</th><th style="width:42%">Accesorio / Implemento</th><th style="width:18%">Estado</th><th>Observación</th></tr></thead>
+<tbody><tr><td colspan="4" class="rep-inv-empty">✅ Todos los accesorios e implementos están en buen estado</td></tr></tbody>
+</table>
+`}
 <div style="margin-top:10px;padding:10px 14px;background:#f1f5f9;border-radius:8px;font-size:10px;color:#475569">
-<strong>Resumen del inventario:</strong> ${nBueno} en buen estado · ${nReg} regulares · ${nMal} malos · ${nFal} faltantes · Total ${inv.length} ítems.
+<strong>Resumen del inventario:</strong> ${nBueno} en buen estado · ${nReg} regulares · ${nMal} malos · ${nFal} faltantes · Total ${nTotal} ítems evaluados.
 </div>
 </div>
 
 <div class="rep-sec">
-<h2><span class="num">4</span> Registro de Novedades, Daños y Pruebas <small>${r.novedades.length} hallazgo(s)</small></h2>
+<h2><span class="num">5</span> Registro de Novedades, Daños y Pruebas <small>${r.novedades.length} hallazgo(s)</small></h2>
 ${bloquesNov}
 ${costoTotal>0 ? `<div style="margin-top:14px;padding:12px 16px;background:#f1f5f9;border-radius:8px;border-left:4px solid #0f172a"><div style="font-size:10px;text-transform:uppercase;color:#64748b;font-weight:800;letter-spacing:.5px">Costo total estimado de reparaciones</div><div style="font-size:16px;font-weight:900;color:#0f172a;margin-top:3px">${money(costoTotal)}</div></div>`:""}
 </div>
 
 <div class="rep-sec">
-<h2><span class="num">5</span> Observaciones y Recomendaciones Generales</h2>
+<h2><span class="num">6</span> Observaciones y Recomendaciones Generales</h2>
 <div class="rep-nov leve" style="border-left-color:#0f172a"><div class="ndesc">${escapeHtml(r.observaciones||"Sin observaciones adicionales.")}</div></div>
 </div>
 
 <div class="rep-sec">
-<h2><span class="num">6</span> Resumen Ejecutivo y Concepto Técnico</h2>
+<h2><span class="num">7</span> Resumen Ejecutivo y Concepto Técnico</h2>
 <div class="rep-grid g4">
 ${item("Novedades críticas", String(crit))}
 ${item("Novedades moderadas", String(mod))}
 ${item("Novedades leves", String(lev))}
 ${item("Total novedades", String(r.novedades.length))}
-${item("Implementos en mal estado", String(nMal))}
-${item("Implementos faltantes", String(nFal))}
+${item("Componentes críticos con problema", String(criticosConProblema.length))}
+${item("Accesorios con problema", String(accesoriosConProblema.length))}
 ${item("Índice de aptitud", score+"%")}
 ${item("Concepto final", r.estado==="verde"?"APTO PARA OPERAR":r.estado==="amarillo"?"APTO CON RESTRICCIÓN":"NO APTO PARA OPERAR")}
 </div>
@@ -1506,7 +1531,6 @@ EXPORTAR A EXCEL
 function exportarExcel(){
 if(!registros.length){ toast("No hay registros para exportar","warn"); return; }
 if(typeof XLSX === "undefined"){ toast("Cargando librería Excel... intente de nuevo","err"); return; }
-
 const f = document.getElementById("filtroEstado").value;
 const q = (document.getElementById("buscar").value||"").toLowerCase().trim();
 let lista = registros.filter(r=>{
@@ -1516,96 +1540,45 @@ return co && eo;
 });
 if(!lista.length){ toast("No hay registros que coincidan con el filtro","warn"); return; }
 
-// Hoja 1: Registros
 const ws1Data = lista.map(r=>{
 const crit=r.novedades.filter(n=>n.severidad==="Crítica").length;
 const mod=r.novedades.filter(n=>n.severidad==="Moderada").length;
 const lev=r.novedades.filter(n=>n.severidad==="Leve").length;
-const mal=r.inventario.filter(i=>i.estado==="Malo"||i.estado==="Faltante").length;
-let sc=100-crit*25-mod*10-lev*3-mal*8; sc=Math.max(0,Math.min(100,sc));
+const critMal = r.inventario.filter((i,idx)=>esItemCritico(idx)&&(i.estado==="Malo"||i.estado==="Faltante")).length;
+const accMal = r.inventario.filter((i,idx)=>!esItemCritico(idx)&&(i.estado==="Malo"||i.estado==="Faltante")).length;
+let sc=100-crit*25-mod*10-lev*3-critMal*15-accMal*5; sc=Math.max(0,Math.min(100,sc));
 const firmasTxt = [r.firmas?.conductor?"Conductor":null, r.firmas?.jefeTaller?"Jefe Taller":null, r.firmas?.jefeInmediato?"Jefe Inmediato":null].filter(Boolean).join(", ")||"Sin firmar";
 return {
-"N.º Registro": r.registro,
-"Fecha": fechaBonita(r.fecha),
-"Hora": r.hora||"",
-"Empresa": r.empresa||"",
-"Sede": r.sede||"",
-"Área": r.area||"",
-"Formato": r.codFormato||"",
-"Conductor": r.conductor||"",
-"Cédula": r.cedula||"",
-"Licencia": r.licencia||"",
-"Marca": r.marca||"",
-"Modelo": r.modelo||"",
-"Placa": r.placa||"",
-"Año": r.anio||"",
-"Kilometraje": r.km||"",
-"Operación": r.operacion||"",
-"Jefe Taller": r.jefeTaller||"",
-"Jefe Inmediato": r.jefeInmediato||"",
+"N.º Registro": r.registro, "Fecha": fechaBonita(r.fecha), "Hora": r.hora||"",
+"Empresa": r.empresa||"", "Sede": r.sede||"", "Área": r.area||"", "Formato": r.codFormato||"",
+"Conductor": r.conductor||"", "Cédula": r.cedula||"", "Licencia": r.licencia||"",
+"Marca": r.marca||"", "Modelo": r.modelo||"", "Placa": r.placa||"", "Año": r.anio||"",
+"Kilometraje": r.km||"", "Operación": r.operacion||"",
+"Jefe Taller": r.jefeTaller||"", "Jefe Inmediato": r.jefeInmediato||"",
 "Estado": r.estado==="verde"?"APTO":r.estado==="amarillo"?"REVISAR":"NO APTO",
 "Índice Aptitud (%)": sc,
-"Novedades Críticas": crit,
-"Novedades Moderadas": mod,
-"Novedades Leves": lev,
+"Novedades Críticas": crit, "Novedades Moderadas": mod, "Novedades Leves": lev,
 "Total Novedades": r.novedades.length,
-"Implementos Malos": r.inventario.filter(i=>i.estado==="Malo").length,
-"Implementos Faltantes": r.inventario.filter(i=>i.estado==="Faltante").length,
-"Implementos Regulares": r.inventario.filter(i=>i.estado==="Regular").length,
+"Componentes Críticos Malos": critMal,
+"Accesorios Malos": accMal,
 "Costo Estimado Total": r.novedades.reduce((s,n)=>s+(Number(n.costo)||0),0),
-"Firmas": firmasTxt,
-"Observaciones": r.observaciones||"",
+"Firmas": firmasTxt, "Observaciones": r.observaciones||"",
 "Creado": fechaHoraCompleta(r.creadoEn)
 };
 });
 const ws1 = XLSX.utils.json_to_sheet(ws1Data);
-ws1["!cols"] = [{wch:18},{wch:12},{wch:8},{wch:24},{wch:22},{wch:18},{wch:14},{wch:22},{wch:16},{wch:18},{wch:14},{wch:18},{wch:12},{wch:8},{wch:12},{wch:20},{wch:22},{wch:22},{wch:12},{wch:14},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:12},{wch:20},{wch:40},{wch:20}];
+ws1["!cols"] = [{wch:18},{wch:12},{wch:8},{wch:24},{wch:22},{wch:18},{wch:14},{wch:22},{wch:16},{wch:18},{wch:14},{wch:18},{wch:12},{wch:8},{wch:12},{wch:20},{wch:22},{wch:22},{wch:12},{wch:14},{wch:12},{wch:12},{wch:12},{wch:12},{wch:14},{wch:14},{wch:20},{wch:40},{wch:20}];
 
-// Hoja 2: Inventario detallado
 const ws2Data = [];
-lista.forEach(r=>{
-r.inventario.forEach((it, idx)=>{
-ws2Data.push({
-"Registro": r.registro,
-"Placa": r.placa,
-"Conductor": r.conductor,
-"Fecha": fechaBonita(r.fecha),
-"#": idx+1,
-"Ítem": it.item,
-"Estado": it.estado,
-"Observación": it.obs||""
-});
-});
-});
+lista.forEach(r=>{ r.inventario.forEach((it, idx)=>{ ws2Data.push({"Registro":r.registro,"Placa":r.placa,"Conductor":r.conductor,"Fecha":fechaBonita(r.fecha),"#":idx+1,"Tipo":esItemCritico(idx)?"CRÍTICO":"Accesorio","Ítem":it.item,"Estado":it.estado,"Observación":it.obs||""}); }); });
 const ws2 = XLSX.utils.json_to_sheet(ws2Data);
-ws2["!cols"] = [{wch:18},{wch:12},{wch:22},{wch:12},{wch:5},{wch:42},{wch:12},{wch:36}];
+ws2["!cols"] = [{wch:18},{wch:12},{wch:22},{wch:12},{wch:5},{wch:12},{wch:42},{wch:12},{wch:36}];
 
-// Hoja 3: Novedades detalladas
 const ws3Data = [];
-lista.forEach(r=>{
-r.novedades.forEach((n, idx)=>{
-ws3Data.push({
-"Registro": r.registro,
-"Placa": r.placa,
-"Conductor": r.conductor,
-"Fecha": fechaBonita(r.fecha),
-"#": idx+1,
-"Tipo": n.tipo,
-"Severidad": n.severidad,
-"Prioridad": n.prioridad||"",
-"Ubicación": n.ubicacion||"",
-"Descripción": n.descripcion,
-"Acción": n.accion||"",
-"Costo": Number(n.costo)||0,
-"Fecha registro": fechaHoraCompleta(n.fecha),
-"Fotos": (n.fotos||[]).length
-});
-});
-});
+lista.forEach(r=>{ r.novedades.forEach((n, idx)=>{ ws3Data.push({"Registro":r.registro,"Placa":r.placa,"Conductor":r.conductor,"Fecha":fechaBonita(r.fecha),"#":idx+1,"Tipo":n.tipo,"Severidad":n.severidad,"Prioridad":n.prioridad||"","Ubicación":n.ubicacion||"","Descripción":n.descripcion,"Acción":n.accion||"","Costo":Number(n.costo)||0,"Fecha registro":fechaHoraCompleta(n.fecha),"Fotos":(n.fotos||[]).length}); }); });
 const ws3 = XLSX.utils.json_to_sheet(ws3Data);
 ws3["!cols"] = [{wch:18},{wch:12},{wch:22},{wch:12},{wch:5},{wch:30},{wch:12},{wch:12},{wch:24},{wch:60},{wch:24},{wch:14},{wch:20},{wch:8}];
 
-// Hoja 4: Resumen ejecutivo
 const ws4Data = [
 ["INDICADOR","VALOR"],
 ["Total registros exportados", lista.length],
@@ -1614,9 +1587,6 @@ const ws4Data = [
 ["No aptos (rojo)", lista.filter(r=>r.estado==="rojo").length],
 ["Total novedades registradas", lista.reduce((s,r)=>s+r.novedades.length,0)],
 ["Novedades críticas", lista.reduce((s,r)=>s+r.novedades.filter(n=>n.severidad==="Crítica").length,0)],
-["Novedades moderadas", lista.reduce((s,r)=>s+r.novedades.filter(n=>n.severidad==="Moderada").length,0)],
-["Novedades leves", lista.reduce((s,r)=>s+r.novedades.filter(n=>n.severidad==="Leve").length,0)],
-["Costo total estimado", lista.reduce((s,r)=>s+r.novedades.reduce((ss,n)=>ss+(Number(n.costo)||0),0),0)],
 ["Registros con firma completa", lista.filter(r=>r.firmas?.conductor && r.firmas?.jefeTaller && r.firmas?.jefeInmediato).length],
 ["Fecha de exportación", fechaHoraCompleta(new Date().toISOString())]
 ];
@@ -1636,9 +1606,6 @@ XLSX.writeFile(wb, fname);
 toast(`Excel generado: ${fname} · ${lista.length} registros`,"ok",4500);
 }
 
-/* ============================================================
-IMPRESIÓN
-============================================================ */
 function imprimirRegistro(id){ const r=registros.find(x=>x.id===id); if(!r){ toast("Registro no encontrado","err"); return; } document.getElementById("printArea").innerHTML = generarInformeHTML(r); setTimeout(()=>window.print(), 350); }
 function imprimirDesdeModal(){ if(!registroParaImprimir){ toast("Sin informe","err"); return; } document.getElementById("printArea").innerHTML = generarInformeHTML(registroParaImprimir); cerrarModal(); setTimeout(()=>window.print(), 450); }
 
@@ -1691,8 +1658,9 @@ const resumenGeneral = `<div class="rep" style="page-break-after:always">
 const c=r.novedades.filter(n=>n.severidad==="Crítica").length;
 const m=r.novedades.filter(n=>n.severidad==="Moderada").length;
 const l=r.novedades.filter(n=>n.severidad==="Leve").length;
-const mal=r.inventario.filter(i=>i.estado==="Malo"||i.estado==="Faltante").length;
-let sc=100-c*25-m*10-l*3-mal*8; sc=Math.max(0,Math.min(100,sc));
+const malC=r.inventario.filter((i,idx)=>esItemCritico(idx)&&(i.estado==="Malo"||i.estado==="Faltante")).length;
+const malA=r.inventario.filter((i,idx)=>!esItemCritico(idx)&&(i.estado==="Malo"||i.estado==="Faltante")).length;
+let sc=100-c*25-m*10-l*3-malC*15-malA*5; sc=Math.max(0,Math.min(100,sc));
 const col=r.estado==="verde"?"#15803d":r.estado==="amarillo"?"#b45309":"#b91c1c";
 return `<tr><td><b>${escapeHtml(r.registro)}</b></td><td>${fechaBonita(r.fecha)}</td><td>${escapeHtml(r.placa)}</td><td>${escapeHtml(r.marca)} ${escapeHtml(r.modelo)}</td><td>${escapeHtml(r.conductor)}</td><td style="color:${col};font-weight:800">${r.estado.toUpperCase()}</td><td style="text-align:center">${r.novedades.length}</td><td style="text-align:center;font-weight:800">${sc}%</td></tr>`;
 }).join("")}</tbody></table></div></div>`;
@@ -1703,14 +1671,10 @@ setTimeout(()=>window.print(), 500);
 toast(`Preparando informe de ${registros.length} registros...`,"ok");
 }
 
-/* ============================================================
-INICIALIZACIÓN
-============================================================ */
 (function init(){
 const a = ahora();
 document.getElementById("fecha").value = a.fecha;
 document.getElementById("hora").value = a.hora;
-
 renderInventario();
 renderNovedades();
 renderFotosPreview();
@@ -1720,18 +1684,13 @@ renderStats();
 renderHome();
 actualizarEstadoGlobal();
 actualizarCharts();
-
-// Inicializar firmas
 initSignaturePad("conductor");
 initSignaturePad("jefeTaller");
 initSignaturePad("jefeInmediato");
-
 const placaInput = document.getElementById("placa");
 placaInput.addEventListener("input", ()=>{ placaInput.value = placaInput.value.toUpperCase().replace(/[^A-Z0-9-]/g,""); });
-
 if("serviceWorker" in navigator){ window.addEventListener("load", ()=>{ navigator.serviceWorker.register("sw.js").catch(()=>{}); }); }
-
-console.log("%c🚗 Sistema Empresarial de Control Vehicular v4.0 listo","color:#2563eb;font-weight:bold;font-size:14px");
+console.log("%c🚗 Sistema Empresarial de Control Vehicular v4.2 listo","color:#2563eb;font-weight:bold;font-size:14px");
 })();
 </script>
 </body>
